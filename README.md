@@ -1,2 +1,2 @@
-# ICONS
+# ICON
 CBB App | Icons included
