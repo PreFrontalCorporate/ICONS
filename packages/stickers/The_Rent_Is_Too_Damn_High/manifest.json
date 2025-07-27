@@ -1,0 +1,17 @@
+[
+  {
+    "id": "The_Rent_Is_Too_Damn_High",
+    "name": "The_Rent_Is_Too_Damn_High",
+    "file": "The_Rent_Is_Too_Damn_High.webp",
+    "width": 350,
+    "height": 350,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "The_Rent_Is_Too_Damn_High-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

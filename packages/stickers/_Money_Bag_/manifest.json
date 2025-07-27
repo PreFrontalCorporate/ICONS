@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Money_Bag_",
+    "name": "_Money_Bag_",
+    "file": "_Money_Bag_.webp",
+    "width": 473,
+    "height": 900,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Money_Bag_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

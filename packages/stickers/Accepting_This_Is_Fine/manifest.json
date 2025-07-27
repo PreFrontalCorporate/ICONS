@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Accepting_This_Is_Fine",
+    "name": "Accepting_This_Is_Fine",
+    "file": "Accepting_This_Is_Fine.webp",
+    "width": 400,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Accepting_This_Is_Fine-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

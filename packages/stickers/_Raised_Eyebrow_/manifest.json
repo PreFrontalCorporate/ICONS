@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Raised_Eyebrow_",
+    "name": "_Raised_Eyebrow_",
+    "file": "_Raised_Eyebrow_.webp",
+    "width": 800,
+    "height": 534,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Raised_Eyebrow_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

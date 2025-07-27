@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Dwight_Schrute",
+    "name": "Dwight_Schrute",
+    "file": "Dwight_Schrute.webp",
+    "width": 265,
+    "height": 375,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Dwight_Schrute-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

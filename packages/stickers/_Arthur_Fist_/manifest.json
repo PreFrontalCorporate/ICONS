@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Arthur_Fist_",
+    "name": "_Arthur_Fist_",
+    "file": "_Arthur_Fist_.webp",
+    "width": 600,
+    "height": 338,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Arthur_Fist_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

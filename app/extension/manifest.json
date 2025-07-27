@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Icon Stickers",
+  "version": "0.1.0",
+  "description": "Bring your purchased stickers onto any webpage.",
+  "action": { "default_popup": "popup.html" },
+  "background": { "service_worker": "background.js" },
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": ["https://icon.cbb.homes/*"],
+  "web_accessible_resources": [
+    { "resources": ["stickers/*"], "matches": ["<all_urls>"] }
+  ]
+}

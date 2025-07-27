@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Bird_Box_Meme_",
+    "name": "_Bird_Box_Meme_",
+    "file": "_Bird_Box_Meme_.webp",
+    "width": 700,
+    "height": 525,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Bird_Box_Meme_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

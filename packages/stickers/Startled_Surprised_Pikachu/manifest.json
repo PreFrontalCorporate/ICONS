@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Startled_Surprised_Pikachu",
+    "name": "Startled_Surprised_Pikachu",
+    "file": "Startled_Surprised_Pikachu.webp",
+    "width": 634,
+    "height": 640,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Startled_Surprised_Pikachu-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Courage_Wolf",
+    "name": "Courage_Wolf",
+    "file": "Courage_Wolf.webp",
+    "width": 576,
+    "height": 576,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Courage_Wolf-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

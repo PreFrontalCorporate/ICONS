@@ -1,0 +1,17 @@
+[
+  {
+    "id": "See_Nobody_Cares",
+    "name": "See_Nobody_Cares",
+    "file": "See_Nobody_Cares.webp",
+    "width": 620,
+    "height": 675,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "See_Nobody_Cares-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

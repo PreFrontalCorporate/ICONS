@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Ceiling_Cat",
+    "name": "Ceiling_Cat",
+    "file": "Ceiling_Cat.webp",
+    "width": 512,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Ceiling_Cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

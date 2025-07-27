@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Rock_On_Hand_Sign_",
+    "name": "_Rock_On_Hand_Sign_",
+    "file": "_Rock_On_Hand_Sign_.webp",
+    "width": 630,
+    "height": 630,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Rock_On_Hand_Sign_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

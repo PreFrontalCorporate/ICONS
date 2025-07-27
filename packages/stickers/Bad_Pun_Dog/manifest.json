@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Bad_Pun_Dog",
+    "name": "Bad_Pun_Dog",
+    "file": "Bad_Pun_Dog.webp",
+    "width": 350,
+    "height": 730,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Bad_Pun_Dog-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

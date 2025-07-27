@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Office_Space_Stapler_Scene",
+    "name": "Office_Space_Stapler_Scene",
+    "file": "Office_Space_Stapler_Scene.webp",
+    "width": 700,
+    "height": 405,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Office_Space_Stapler_Scene-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

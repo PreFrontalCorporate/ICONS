@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Bad_Luck_Brian_",
+    "name": "_Bad_Luck_Brian_",
+    "file": "_Bad_Luck_Brian_.webp",
+    "width": 475,
+    "height": 562,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Bad_Luck_Brian_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

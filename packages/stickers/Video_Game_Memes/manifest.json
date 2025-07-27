@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Video_Game_Memes",
+    "name": "Video_Game_Memes",
+    "file": "Video_Game_Memes.webp",
+    "width": 500,
+    "height": 726,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Video_Game_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

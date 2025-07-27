@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Me_and_the_Boys",
+    "name": "Me_And_The_Boys",
+    "file": "Me_and_the_Boys.webp",
+    "width": 630,
+    "height": 630,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Me_and_the_Boys-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

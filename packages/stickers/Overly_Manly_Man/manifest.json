@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Overly_Manly_Man",
+    "name": "Overly_Manly_Man",
+    "file": "Overly_Manly_Man.webp",
+    "width": 403,
+    "height": 403,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Overly_Manly_Man-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

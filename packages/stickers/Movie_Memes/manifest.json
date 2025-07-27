@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Movie_Memes",
+    "name": "Movie_Memes",
+    "file": "Movie_Memes.webp",
+    "width": 800,
+    "height": 420,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Movie_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

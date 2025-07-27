@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Shocked_Surprised_Pikachu",
+    "name": "Shocked_Surprised_Pikachu",
+    "file": "Shocked_Surprised_Pikachu.webp",
+    "width": 500,
+    "height": 437,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Shocked_Surprised_Pikachu-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

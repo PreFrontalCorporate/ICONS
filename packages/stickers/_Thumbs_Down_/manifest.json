@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Thumbs_Down_",
+    "name": "_Thumbs_Down_",
+    "file": "_Thumbs_Down_.webp",
+    "width": 480,
+    "height": 270,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Thumbs_Down_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

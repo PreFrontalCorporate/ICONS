@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Gavin",
+    "name": "Gavin",
+    "file": "Gavin.webp",
+    "width": 500,
+    "height": 897,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Gavin-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

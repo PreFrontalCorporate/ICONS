@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Say_What_One_More_Time",
+    "name": "Say_What_One_More_Time",
+    "file": "Say_What_One_More_Time.webp",
+    "width": 940,
+    "height": 464,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Say_What_One_More_Time-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

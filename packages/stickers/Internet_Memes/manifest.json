@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Internet_Memes",
+    "name": "Internet_Memes",
+    "file": "Internet_Memes.webp",
+    "width": 493,
+    "height": 359,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Internet_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

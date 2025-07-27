@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Stonks_variations_",
+    "name": "Stonks_Variations_",
+    "file": "Stonks_variations_.webp",
+    "width": 736,
+    "height": 478,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Stonks_variations_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

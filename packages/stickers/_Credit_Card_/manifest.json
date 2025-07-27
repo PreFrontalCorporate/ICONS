@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Credit_Card_",
+    "name": "_Credit_Card_",
+    "file": "_Credit_Card_.webp",
+    "width": 422,
+    "height": 270,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Credit_Card_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Pooh_Thinking",
+    "name": "Pooh_Thinking",
+    "file": "Pooh_Thinking.webp",
+    "width": 372,
+    "height": 630,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Pooh_Thinking-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Baby_Insanity_Wolf",
+    "name": "Baby_Insanity_Wolf",
+    "file": "Baby_Insanity_Wolf.webp",
+    "width": 608,
+    "height": 463,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Baby_Insanity_Wolf-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

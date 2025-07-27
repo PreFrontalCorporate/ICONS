@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Distracted_Boyfriend",
+    "name": "Distracted_Boyfriend",
+    "file": "Distracted_Boyfriend.webp",
+    "width": 387,
+    "height": 258,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Distracted_Boyfriend-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Literature_Memes",
+    "name": "Literature_Memes",
+    "file": "Literature_Memes.webp",
+    "width": 680,
+    "height": 476,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Literature_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

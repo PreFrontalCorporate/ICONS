@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Sports_Memes",
+    "name": "Sports_Memes",
+    "file": "Sports_Memes.webp",
+    "width": 474,
+    "height": 474,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Sports_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

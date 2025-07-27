@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Thumbs_Up",
+    "name": "Thumbs_Up",
+    "file": "Thumbs_Up.webp",
+    "width": 612,
+    "height": 612,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Thumbs_Up-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

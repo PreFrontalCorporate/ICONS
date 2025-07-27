@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Indeed",
+    "name": "Indeed",
+    "file": "Indeed.webp",
+    "width": 842,
+    "height": 442,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Indeed-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

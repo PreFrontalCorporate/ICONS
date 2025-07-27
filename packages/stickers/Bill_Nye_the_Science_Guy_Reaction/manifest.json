@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Bill_Nye_the_Science_Guy_Reaction",
+    "name": "Bill_Nye_The_Science_Guy_Reaction",
+    "file": "Bill_Nye_the_Science_Guy_Reaction.webp",
+    "width": 270,
+    "height": 350,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Bill_Nye_the_Science_Guy_Reaction-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

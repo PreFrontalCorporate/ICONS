@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Buff_Doge_vs._Cheems",
+    "name": "Buff_Doge_Vs._Cheems",
+    "file": "Buff_Doge_vs._Cheems.webp",
+    "width": 725,
+    "height": 576,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Buff_Doge_vs._Cheems-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

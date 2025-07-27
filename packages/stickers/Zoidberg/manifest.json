@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Zoidberg",
+    "name": "Zoidberg",
+    "file": "Zoidberg.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Zoidberg-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

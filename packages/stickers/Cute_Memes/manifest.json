@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Cute_Memes",
+    "name": "Cute_Memes",
+    "file": "Cute_Memes.webp",
+    "width": 616,
+    "height": 617,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Cute_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

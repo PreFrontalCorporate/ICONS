@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Grumpy_Cat",
+    "name": "Grumpy_Cat",
+    "file": "Grumpy_Cat.webp",
+    "width": 500,
+    "height": 300,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Grumpy_Cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

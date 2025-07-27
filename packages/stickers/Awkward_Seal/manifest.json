@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Awkward_Seal",
+    "name": "Awkward_Seal",
+    "file": "Awkward_Seal.webp",
+    "width": 686,
+    "height": 386,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Awkward_Seal-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

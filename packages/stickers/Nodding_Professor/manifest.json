@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Nodding_Professor",
+    "name": "Nodding_Professor",
+    "file": "Nodding_Professor.webp",
+    "width": 640,
+    "height": 467,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Nodding_Professor-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

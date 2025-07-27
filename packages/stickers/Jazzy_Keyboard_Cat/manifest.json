@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Jazzy_Keyboard_Cat",
+    "name": "Jazzy_Keyboard_Cat",
+    "file": "Jazzy_Keyboard_Cat.webp",
+    "width": 552,
+    "height": 736,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Jazzy_Keyboard_Cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

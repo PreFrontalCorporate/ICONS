@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Condescending_Wonka",
+    "name": "Condescending_Wonka",
+    "file": "Condescending_Wonka.webp",
+    "width": 600,
+    "height": 404,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Condescending_Wonka-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

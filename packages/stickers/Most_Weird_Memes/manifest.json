@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Most_Weird_Memes",
+    "name": "Most_Weird_Memes",
+    "file": "Most_Weird_Memes.webp",
+    "width": 640,
+    "height": 649,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Most_Weird_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

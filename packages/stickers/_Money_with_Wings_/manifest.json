@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Money_with_Wings_",
+    "name": "_Money_With_Wings_",
+    "file": "_Money_with_Wings_.webp",
+    "width": 400,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Money_with_Wings_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

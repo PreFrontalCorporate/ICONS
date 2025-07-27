@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Classic_Memes",
+    "name": "Classic_Memes",
+    "file": "Classic_Memes.webp",
+    "width": 750,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Classic_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

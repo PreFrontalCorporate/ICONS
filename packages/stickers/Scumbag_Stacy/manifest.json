@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Scumbag_Stacy",
+    "name": "Scumbag_Stacy",
+    "file": "Scumbag_Stacy.webp",
+    "width": 477,
+    "height": 733,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Scumbag_Stacy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

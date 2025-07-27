@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Dating_Site_Murderer",
+    "name": "Dating_Site_Murderer",
+    "file": "Dating_Site_Murderer.webp",
+    "width": 560,
+    "height": 373,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Dating_Site_Murderer-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

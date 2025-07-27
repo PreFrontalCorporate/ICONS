@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Angry_Arthur_s_Fist",
+    "name": "Angry_Arthur_S_Fist",
+    "file": "Angry_Arthur_s_Fist.webp",
+    "width": 680,
+    "height": 340,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Angry_Arthur_s_Fist-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

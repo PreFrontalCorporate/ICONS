@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Heart_Eyes_Emoji_",
+    "name": "_Heart_Eyes_Emoji_",
+    "file": "_Heart_Eyes_Emoji_.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Heart_Eyes_Emoji_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

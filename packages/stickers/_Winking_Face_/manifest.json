@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Winking_Face_",
+    "name": "_Winking_Face_",
+    "file": "_Winking_Face_.webp",
+    "width": 626,
+    "height": 626,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Winking_Face_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

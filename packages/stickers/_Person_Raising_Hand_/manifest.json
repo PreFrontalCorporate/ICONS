@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Person_Raising_Hand_",
+    "name": "_Person_Raising_Hand_",
+    "file": "_Person_Raising_Hand_.webp",
+    "width": 512,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Person_Raising_Hand_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

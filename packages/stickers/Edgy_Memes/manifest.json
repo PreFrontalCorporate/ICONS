@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Edgy_Memes",
+    "name": "Edgy_Memes",
+    "file": "Edgy_Memes.webp",
+    "width": 800,
+    "height": 420,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Edgy_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

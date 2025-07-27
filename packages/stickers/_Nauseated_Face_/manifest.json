@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Nauseated_Face_",
+    "name": "_Nauseated_Face_",
+    "file": "_Nauseated_Face_.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Nauseated_Face_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

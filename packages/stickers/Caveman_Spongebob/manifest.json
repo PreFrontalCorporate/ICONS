@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Caveman_Spongebob",
+    "name": "Caveman_Spongebob",
+    "file": "Caveman_Spongebob.webp",
+    "width": 392,
+    "height": 243,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Caveman_Spongebob-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

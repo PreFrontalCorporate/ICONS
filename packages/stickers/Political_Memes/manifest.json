@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Political_Memes",
+    "name": "Political_Memes",
+    "file": "Political_Memes.webp",
+    "width": 577,
+    "height": 324,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Political_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

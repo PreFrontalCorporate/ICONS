@@ -1,0 +1,17 @@
+[
+  {
+    "id": "The_Scroll_of_Truth",
+    "name": "The_Scroll_Of_Truth",
+    "file": "The_Scroll_of_Truth.webp",
+    "width": 640,
+    "height": 616,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "The_Scroll_of_Truth-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

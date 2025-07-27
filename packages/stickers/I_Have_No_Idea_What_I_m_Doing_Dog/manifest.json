@@ -1,0 +1,17 @@
+[
+  {
+    "id": "I_Have_No_Idea_What_I_m_Doing_Dog",
+    "name": "I_Have_No_Idea_What_I_M_Doing_Dog",
+    "file": "I_Have_No_Idea_What_I_m_Doing_Dog.webp",
+    "width": 640,
+    "height": 480,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "I_Have_No_Idea_What_I_m_Doing_Dog-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

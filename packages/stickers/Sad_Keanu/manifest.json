@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Sad_Keanu",
+    "name": "Sad_Keanu",
+    "file": "Sad_Keanu.webp",
+    "width": 307,
+    "height": 409,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Sad_Keanu-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

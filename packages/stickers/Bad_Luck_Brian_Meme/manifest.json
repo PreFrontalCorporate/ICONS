@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Bad_Luck_Brian_Meme",
+    "name": "Bad_Luck_Brian_Meme",
+    "file": "Bad_Luck_Brian_Meme.webp",
+    "width": 475,
+    "height": 562,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Bad_Luck_Brian_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

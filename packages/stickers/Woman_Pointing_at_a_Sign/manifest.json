@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Woman_Pointing_at_a_Sign",
+    "name": "Woman_Pointing_At_A_Sign",
+    "file": "Woman_Pointing_at_a_Sign.webp",
+    "width": 389,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Woman_Pointing_at_a_Sign-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

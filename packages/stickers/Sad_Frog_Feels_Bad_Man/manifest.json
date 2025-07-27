@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Sad_Frog_Feels_Bad_Man",
+    "name": "Sad_Frog_Feels_Bad_Man",
+    "file": "Sad_Frog_Feels_Bad_Man.webp",
+    "width": 312,
+    "height": 320,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Sad_Frog_Feels_Bad_Man-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

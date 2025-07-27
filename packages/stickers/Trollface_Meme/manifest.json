@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Trollface_Meme",
+    "name": "Trollface_Meme",
+    "file": "Trollface_Meme.webp",
+    "width": 400,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Trollface_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Super_Mario_64_Peach_s_Castle",
+    "name": "Super_Mario_64_Peach_S_Castle",
+    "file": "Super_Mario_64_Peach_s_Castle.webp",
+    "width": 640,
+    "height": 480,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Super_Mario_64_Peach_s_Castle-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

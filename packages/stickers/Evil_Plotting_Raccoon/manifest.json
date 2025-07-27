@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Evil_Plotting_Raccoon",
+    "name": "Evil_Plotting_Raccoon",
+    "file": "Evil_Plotting_Raccoon.webp",
+    "width": 611,
+    "height": 408,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Evil_Plotting_Raccoon-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

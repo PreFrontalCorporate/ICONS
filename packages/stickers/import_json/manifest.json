@@ -1,0 +1,17 @@
+[
+  {
+    "id": "import_json",
+    "name": "Import_Json",
+    "file": "import_json.webp",
+    "width": 519,
+    "height": 518,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "import_json-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

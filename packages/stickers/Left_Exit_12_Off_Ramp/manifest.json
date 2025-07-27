@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Left_Exit_12_Off_Ramp",
+    "name": "Left_Exit_12_Off_Ramp",
+    "file": "Left_Exit_12_Off_Ramp.webp",
+    "width": 524,
+    "height": 499,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Left_Exit_12_Off_Ramp-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

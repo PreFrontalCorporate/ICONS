@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Bernie_Sanders_Mittens_Meme",
+    "name": "Bernie_Sanders_Mittens_Meme",
+    "file": "Bernie_Sanders_Mittens_Meme.webp",
+    "width": 770,
+    "height": 513,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Bernie_Sanders_Mittens_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

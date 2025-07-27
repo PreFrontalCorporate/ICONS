@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Chemistry_Cat",
+    "name": "Chemistry_Cat",
+    "file": "Chemistry_Cat.webp",
+    "width": 630,
+    "height": 630,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Chemistry_Cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

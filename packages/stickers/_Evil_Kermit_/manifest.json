@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Evil_Kermit_",
+    "name": "_Evil_Kermit_",
+    "file": "_Evil_Kermit_.webp",
+    "width": 376,
+    "height": 289,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Evil_Kermit_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

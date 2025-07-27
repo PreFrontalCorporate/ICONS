@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Headache",
+    "name": "Headache",
+    "file": "Headache.webp",
+    "width": 400,
+    "height": 320,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Headache-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

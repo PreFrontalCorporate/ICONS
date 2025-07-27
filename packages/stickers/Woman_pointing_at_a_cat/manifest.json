@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Woman_pointing_at_a_cat",
+    "name": "Woman_Pointing_At_A_Cat",
+    "file": "Woman_pointing_at_a_cat.webp",
+    "width": 447,
+    "height": 223,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Woman_pointing_at_a_cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

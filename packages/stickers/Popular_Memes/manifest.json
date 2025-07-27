@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Popular_Memes",
+    "name": "Popular_Memes",
+    "file": "Popular_Memes.webp",
+    "width": 414,
+    "height": 311,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Popular_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Running_Away_Balloon",
+    "name": "Running_Away_Balloon",
+    "file": "Running_Away_Balloon.webp",
+    "width": 300,
+    "height": 403,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Running_Away_Balloon-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

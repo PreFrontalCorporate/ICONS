@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Wholesome_Memes",
+    "name": "Wholesome_Memes",
+    "file": "Wholesome_Memes.webp",
+    "width": 640,
+    "height": 547,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Wholesome_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

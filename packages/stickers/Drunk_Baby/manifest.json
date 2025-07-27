@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Drunk_Baby",
+    "name": "Drunk_Baby",
+    "file": "Drunk_Baby.webp",
+    "width": 638,
+    "height": 424,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Drunk_Baby-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

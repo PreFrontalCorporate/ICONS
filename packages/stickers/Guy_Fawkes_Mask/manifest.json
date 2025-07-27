@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Guy_Fawkes_Mask",
+    "name": "Guy_Fawkes_Mask",
+    "file": "Guy_Fawkes_Mask.webp",
+    "width": 250,
+    "height": 375,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Guy_Fawkes_Mask-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

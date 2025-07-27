@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Heart_with_Ribbon_",
+    "name": "_Heart_With_Ribbon_",
+    "file": "_Heart_with_Ribbon_.webp",
+    "width": 626,
+    "height": 401,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Heart_with_Ribbon_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

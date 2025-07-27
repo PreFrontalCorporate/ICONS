@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Shrugging",
+    "name": "Shrugging",
+    "file": "Shrugging.webp",
+    "width": 612,
+    "height": 471,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Shrugging-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

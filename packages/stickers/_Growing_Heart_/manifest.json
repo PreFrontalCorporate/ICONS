@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Growing_Heart_",
+    "name": "_Growing_Heart_",
+    "file": "_Growing_Heart_.webp",
+    "width": 626,
+    "height": 626,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Growing_Heart_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

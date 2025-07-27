@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Really_High_Guy",
+    "name": "Really_High_Guy",
+    "file": "Really_High_Guy.webp",
+    "width": 400,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Really_High_Guy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

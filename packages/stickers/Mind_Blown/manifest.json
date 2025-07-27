@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Mind_Blown",
+    "name": "Mind_Blown",
+    "file": "Mind_Blown.webp",
+    "width": 498,
+    "height": 701,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Mind_Blown-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

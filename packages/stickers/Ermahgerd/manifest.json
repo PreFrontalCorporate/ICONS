@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Ermahgerd",
+    "name": "Ermahgerd",
+    "file": "Ermahgerd.webp",
+    "width": 550,
+    "height": 445,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Ermahgerd-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

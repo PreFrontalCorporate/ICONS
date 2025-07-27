@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Confession_Kid",
+    "name": "Confession_Kid",
+    "file": "Confession_Kid.webp",
+    "width": 600,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Confession_Kid-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

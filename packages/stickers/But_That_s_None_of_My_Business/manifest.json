@@ -1,0 +1,17 @@
+[
+  {
+    "id": "But_That_s_None_of_My_Business",
+    "name": "But_That_S_None_Of_My_Business",
+    "file": "But_That_s_None_of_My_Business.webp",
+    "width": 570,
+    "height": 525,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "But_That_s_None_of_My_Business-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

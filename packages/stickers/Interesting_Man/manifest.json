@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Interesting_Man",
+    "name": "Interesting_Man",
+    "file": "Interesting_Man.webp",
+    "width": 250,
+    "height": 375,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Interesting_Man-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

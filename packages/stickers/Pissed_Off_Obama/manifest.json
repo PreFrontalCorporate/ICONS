@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Pissed_Off_Obama",
+    "name": "Pissed_Off_Obama",
+    "file": "Pissed_Off_Obama.webp",
+    "width": 630,
+    "height": 354,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Pissed_Off_Obama-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

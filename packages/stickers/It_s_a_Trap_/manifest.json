@@ -1,0 +1,17 @@
+[
+  {
+    "id": "It_s_a_Trap_",
+    "name": "It_S_A_Trap_",
+    "file": "It_s_a_Trap_.webp",
+    "width": 480,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "It_s_a_Trap_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

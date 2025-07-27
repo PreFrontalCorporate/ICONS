@@ -1,0 +1,17 @@
+[
+  {
+    "id": "That_s_Bait",
+    "name": "That_S_Bait",
+    "file": "That_s_Bait.webp",
+    "width": 800,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "That_s_Bait-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

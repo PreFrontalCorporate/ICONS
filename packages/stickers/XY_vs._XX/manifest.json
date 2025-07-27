@@ -1,0 +1,17 @@
+[
+  {
+    "id": "XY_vs._XX",
+    "name": "Xy_Vs._Xx",
+    "file": "XY_vs._XX.webp",
+    "width": 700,
+    "height": 253,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "XY_vs._XX-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

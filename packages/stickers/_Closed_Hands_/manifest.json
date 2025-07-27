@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Closed_Hands_",
+    "name": "_Closed_Hands_",
+    "file": "_Closed_Hands_.webp",
+    "width": 512,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Closed_Hands_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

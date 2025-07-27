@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Inhaling_Seagull",
+    "name": "Inhaling_Seagull",
+    "file": "Inhaling_Seagull.webp",
+    "width": 248,
+    "height": 405,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Inhaling_Seagull-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

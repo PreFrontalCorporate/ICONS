@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Meme_Man",
+    "name": "Meme_Man",
+    "file": "Meme_Man.webp",
+    "width": 316,
+    "height": 316,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Meme_Man-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

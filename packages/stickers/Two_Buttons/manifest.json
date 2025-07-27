@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Two_Buttons",
+    "name": "Two_Buttons",
+    "file": "Two_Buttons.webp",
+    "width": 690,
+    "height": 342,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Two_Buttons-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

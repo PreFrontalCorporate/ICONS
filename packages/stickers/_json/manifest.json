@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_json",
+    "name": "_Json",
+    "file": "_json.webp",
+    "width": 623,
+    "height": 336,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_json-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

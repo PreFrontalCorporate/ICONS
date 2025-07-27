@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Trade_Offer",
+    "name": "Trade_Offer",
+    "file": "Trade_Offer.webp",
+    "width": 505,
+    "height": 660,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Trade_Offer-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

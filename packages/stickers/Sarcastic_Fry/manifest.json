@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Sarcastic_Fry",
+    "name": "Sarcastic_Fry",
+    "file": "Sarcastic_Fry.webp",
+    "width": 600,
+    "height": 600,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Sarcastic_Fry-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

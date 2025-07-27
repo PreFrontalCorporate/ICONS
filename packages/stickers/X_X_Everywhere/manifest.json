@@ -1,0 +1,17 @@
+[
+  {
+    "id": "X_X_Everywhere",
+    "name": "X_X_Everywhere",
+    "file": "X_X_Everywhere.webp",
+    "width": 510,
+    "height": 278,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "X_X_Everywhere-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

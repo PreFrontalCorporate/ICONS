@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Imagination_Spongebob_new_format_",
+    "name": "Imagination_Spongebob_New_Format_",
+    "file": "Imagination_Spongebob_new_format_.webp",
+    "width": 500,
+    "height": 366,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Imagination_Spongebob_new_format_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

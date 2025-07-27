@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Success_Baby",
+    "name": "Success_Baby",
+    "file": "Success_Baby.webp",
+    "width": 600,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Success_Baby-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Handshake_",
+    "name": "_Handshake_",
+    "file": "_Handshake_.webp",
+    "width": 583,
+    "height": 775,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Handshake_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

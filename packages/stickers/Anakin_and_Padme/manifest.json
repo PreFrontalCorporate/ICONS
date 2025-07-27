@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Anakin_and_Padme",
+    "name": "Anakin_And_Padme",
+    "file": "Anakin_and_Padme.webp",
+    "width": 346,
+    "height": 450,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Anakin_and_Padme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

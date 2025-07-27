@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Crying_Laughing_Emoji",
+    "name": "Crying_Laughing_Emoji",
+    "file": "Crying_Laughing_Emoji.webp",
+    "width": 768,
+    "height": 432,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Crying_Laughing_Emoji-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

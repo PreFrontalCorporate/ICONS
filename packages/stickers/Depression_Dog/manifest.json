@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Depression_Dog",
+    "name": "Depression_Dog",
+    "file": "Depression_Dog.webp",
+    "width": 800,
+    "height": 532,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Depression_Dog-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

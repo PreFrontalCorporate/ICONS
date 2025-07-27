@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Laughing_Men_in_Suits",
+    "name": "Laughing_Men_In_Suits",
+    "file": "Laughing_Men_in_Suits.webp",
+    "width": 800,
+    "height": 533,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Laughing_Men_in_Suits-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

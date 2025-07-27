@@ -1,0 +1,17 @@
+[
+  {
+    "id": "I_Am_the_Captain_Now",
+    "name": "I_Am_The_Captain_Now",
+    "file": "I_Am_the_Captain_Now.webp",
+    "width": 500,
+    "height": 478,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "I_Am_the_Captain_Now-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

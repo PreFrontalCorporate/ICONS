@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Super_Cool_Ski_Instructor",
+    "name": "Super_Cool_Ski_Instructor",
+    "file": "Super_Cool_Ski_Instructor.webp",
+    "width": 435,
+    "height": 605,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Super_Cool_Ski_Instructor-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

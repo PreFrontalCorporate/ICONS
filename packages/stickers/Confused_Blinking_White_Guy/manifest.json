@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Confused_Blinking_White_Guy",
+    "name": "Confused_Blinking_White_Guy",
+    "file": "Confused_Blinking_White_Guy.webp",
+    "width": 768,
+    "height": 432,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Confused_Blinking_White_Guy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

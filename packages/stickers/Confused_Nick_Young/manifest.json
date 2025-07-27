@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Confused_Nick_Young",
+    "name": "Confused_Nick_Young",
+    "file": "Confused_Nick_Young.webp",
+    "width": 708,
+    "height": 608,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Confused_Nick_Young-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

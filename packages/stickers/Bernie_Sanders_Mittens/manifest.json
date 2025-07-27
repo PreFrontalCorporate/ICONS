@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Bernie_Sanders_Mittens",
+    "name": "Bernie_Sanders_Mittens",
+    "file": "Bernie_Sanders_Mittens.webp",
+    "width": 400,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Bernie_Sanders_Mittens-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

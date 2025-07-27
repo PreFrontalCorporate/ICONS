@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Gem_Stone_",
+    "name": "_Gem_Stone_",
+    "file": "_Gem_Stone_.webp",
+    "width": 735,
+    "height": 540,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Gem_Stone_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

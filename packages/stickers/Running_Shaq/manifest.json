@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Running_Shaq",
+    "name": "Running_Shaq",
+    "file": "Running_Shaq.webp",
+    "width": 576,
+    "height": 324,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Running_Shaq-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

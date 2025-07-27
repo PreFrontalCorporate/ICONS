@@ -1,0 +1,17 @@
+[
+  {
+    "id": "American_Chopper_Argument",
+    "name": "American_Chopper_Argument",
+    "file": "American_Chopper_Argument.webp",
+    "width": 360,
+    "height": 1024,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "American_Chopper_Argument-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

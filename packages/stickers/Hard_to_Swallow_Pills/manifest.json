@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Hard_to_Swallow_Pills",
+    "name": "Hard_To_Swallow_Pills",
+    "file": "Hard_to_Swallow_Pills.webp",
+    "width": 556,
+    "height": 800,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Hard_to_Swallow_Pills-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

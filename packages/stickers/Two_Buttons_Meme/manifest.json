@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Two_Buttons_Meme",
+    "name": "Two_Buttons_Meme",
+    "file": "Two_Buttons_Meme.webp",
+    "width": 529,
+    "height": 800,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Two_Buttons_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

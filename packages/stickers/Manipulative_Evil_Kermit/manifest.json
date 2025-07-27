@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Manipulative_Evil_Kermit",
+    "name": "Manipulative_Evil_Kermit",
+    "file": "Manipulative_Evil_Kermit.webp",
+    "width": 733,
+    "height": 340,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Manipulative_Evil_Kermit-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

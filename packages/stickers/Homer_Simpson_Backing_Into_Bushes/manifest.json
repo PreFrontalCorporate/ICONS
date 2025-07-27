@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Homer_Simpson_Backing_Into_Bushes",
+    "name": "Homer_Simpson_Backing_Into_Bushes",
+    "file": "Homer_Simpson_Backing_Into_Bushes.webp",
+    "width": 465,
+    "height": 295,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Homer_Simpson_Backing_Into_Bushes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

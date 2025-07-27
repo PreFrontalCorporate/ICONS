@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Doge_Excited_Version_Meme",
+    "name": "Doge_Excited_Version_Meme",
+    "file": "Doge_Excited_Version_Meme.webp",
+    "width": 350,
+    "height": 263,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Doge_Excited_Version_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

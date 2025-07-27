@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Resigned_This_Is_Fine",
+    "name": "Resigned_This_Is_Fine",
+    "file": "Resigned_This_Is_Fine.webp",
+    "width": 686,
+    "height": 386,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Resigned_This_Is_Fine-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

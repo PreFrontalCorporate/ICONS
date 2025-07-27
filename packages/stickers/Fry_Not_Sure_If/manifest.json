@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Fry_Not_Sure_If",
+    "name": "Fry_Not_Sure_If",
+    "file": "Fry_Not_Sure_If.webp",
+    "width": 603,
+    "height": 452,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Fry_Not_Sure_If-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

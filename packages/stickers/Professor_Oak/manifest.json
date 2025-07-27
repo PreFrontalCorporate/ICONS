@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Professor_Oak",
+    "name": "Professor_Oak",
+    "file": "Professor_Oak.webp",
+    "width": 360,
+    "height": 651,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Professor_Oak-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Stonks_with_captions_",
+    "name": "Stonks_With_Captions_",
+    "file": "Stonks_with_captions_.webp",
+    "width": 630,
+    "height": 630,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Stonks_with_captions_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

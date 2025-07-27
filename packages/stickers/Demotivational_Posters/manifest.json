@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Demotivational_Posters",
+    "name": "Demotivational_Posters",
+    "file": "Demotivational_Posters.webp",
+    "width": 350,
+    "height": 296,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Demotivational_Posters-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Business_Cat_",
+    "name": "_Business_Cat_",
+    "file": "_Business_Cat_.webp",
+    "width": 600,
+    "height": 450,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Business_Cat_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Forever_Alone_Christmas",
+    "name": "Forever_Alone_Christmas",
+    "file": "Forever_Alone_Christmas.webp",
+    "width": 651,
+    "height": 721,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Forever_Alone_Christmas-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Back_in_My_Day",
+    "name": "Back_In_My_Day",
+    "file": "Back_in_My_Day.webp",
+    "width": 400,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Back_in_My_Day-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

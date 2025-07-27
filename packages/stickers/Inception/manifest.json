@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Inception",
+    "name": "Inception",
+    "file": "Inception.webp",
+    "width": 320,
+    "height": 320,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Inception-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

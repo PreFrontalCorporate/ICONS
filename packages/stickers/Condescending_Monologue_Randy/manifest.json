@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Condescending_Monologue_Randy",
+    "name": "Condescending_Monologue_Randy",
+    "file": "Condescending_Monologue_Randy.webp",
+    "width": 840,
+    "height": 560,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Condescending_Monologue_Randy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

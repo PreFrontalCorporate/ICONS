@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Two_Buttons_with_captions_",
+    "name": "Two_Buttons_With_Captions_",
+    "file": "Two_Buttons_with_captions_.webp",
+    "width": 500,
+    "height": 756,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Two_Buttons_with_captions_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

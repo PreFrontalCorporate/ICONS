@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Face_Savoring_Food_",
+    "name": "_Face_Savoring_Food_",
+    "file": "_Face_Savoring_Food_.webp",
+    "width": 626,
+    "height": 626,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Face_Savoring_Food_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

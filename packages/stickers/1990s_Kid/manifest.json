@@ -1,0 +1,17 @@
+[
+  {
+    "id": "1990s_Kid",
+    "name": "1990S_Kid",
+    "file": "1990s_Kid.webp",
+    "width": 700,
+    "height": 525,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "1990s_Kid-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

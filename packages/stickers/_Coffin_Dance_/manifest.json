@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Coffin_Dance_",
+    "name": "_Coffin_Dance_",
+    "file": "_Coffin_Dance_.webp",
+    "width": 640,
+    "height": 640,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Coffin_Dance_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

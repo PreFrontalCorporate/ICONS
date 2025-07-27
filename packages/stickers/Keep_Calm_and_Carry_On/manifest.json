@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Keep_Calm_and_Carry_On",
+    "name": "Keep_Calm_And_Carry_On",
+    "file": "Keep_Calm_and_Carry_On.webp",
+    "width": 250,
+    "height": 374,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Keep_Calm_and_Carry_On-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

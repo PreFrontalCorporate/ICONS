@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Skeptical_Condescending_Wonka",
+    "name": "Skeptical_Condescending_Wonka",
+    "file": "Skeptical_Condescending_Wonka.webp",
+    "width": 550,
+    "height": 545,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Skeptical_Condescending_Wonka-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

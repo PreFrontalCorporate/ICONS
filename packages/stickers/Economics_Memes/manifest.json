@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Economics_Memes",
+    "name": "Economics_Memes",
+    "file": "Economics_Memes.webp",
+    "width": 401,
+    "height": 235,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Economics_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

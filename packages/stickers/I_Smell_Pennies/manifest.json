@@ -1,0 +1,17 @@
+[
+  {
+    "id": "I_Smell_Pennies",
+    "name": "I_Smell_Pennies",
+    "file": "I_Smell_Pennies.webp",
+    "width": 480,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "I_Smell_Pennies-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

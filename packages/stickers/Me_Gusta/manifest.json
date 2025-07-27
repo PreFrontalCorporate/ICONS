@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Me_Gusta",
+    "name": "Me_Gusta",
+    "file": "Me_Gusta.webp",
+    "width": 264,
+    "height": 375,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Me_Gusta-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

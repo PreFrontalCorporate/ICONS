@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Annoyed_Picard",
+    "name": "Annoyed_Picard",
+    "file": "Annoyed_Picard.webp",
+    "width": 625,
+    "height": 477,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Annoyed_Picard-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

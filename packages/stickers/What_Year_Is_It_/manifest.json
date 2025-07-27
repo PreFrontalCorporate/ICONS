@@ -1,0 +1,17 @@
+[
+  {
+    "id": "What_Year_Is_It_",
+    "name": "What_Year_Is_It_",
+    "file": "What_Year_Is_It_.webp",
+    "width": 492,
+    "height": 341,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "What_Year_Is_It_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

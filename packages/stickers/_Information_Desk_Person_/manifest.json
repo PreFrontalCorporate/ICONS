@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Information_Desk_Person_",
+    "name": "_Information_Desk_Person_",
+    "file": "_Information_Desk_Person_.webp",
+    "width": 800,
+    "height": 534,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Information_Desk_Person_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

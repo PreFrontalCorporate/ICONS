@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Milk_Carton_Missing_Child",
+    "name": "Milk_Carton_Missing_Child",
+    "file": "Milk_Carton_Missing_Child.webp",
+    "width": 570,
+    "height": 760,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Milk_Carton_Missing_Child-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

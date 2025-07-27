@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Think_Mark_Think",
+    "name": "Think_Mark_Think",
+    "file": "Think_Mark_Think.webp",
+    "width": 800,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Think_Mark_Think-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

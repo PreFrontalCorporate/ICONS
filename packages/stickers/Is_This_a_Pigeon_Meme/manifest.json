@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Is_This_a_Pigeon_Meme",
+    "name": "Is_This_A_Pigeon_Meme",
+    "file": "Is_This_a_Pigeon_Meme.webp",
+    "width": 710,
+    "height": 477,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Is_This_a_Pigeon_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

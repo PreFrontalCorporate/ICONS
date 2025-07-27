@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Speech_Balloon_",
+    "name": "_Speech_Balloon_",
+    "file": "_Speech_Balloon_.webp",
+    "width": 458,
+    "height": 362,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Speech_Balloon_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

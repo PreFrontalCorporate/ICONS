@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Hide_the_Pain_Harold",
+    "name": "Hide_The_Pain_Harold",
+    "file": "Hide_the_Pain_Harold.webp",
+    "width": 600,
+    "height": 507,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Hide_the_Pain_Harold-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Wrapped_Gift_",
+    "name": "_Wrapped_Gift_",
+    "file": "_Wrapped_Gift_.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Wrapped_Gift_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

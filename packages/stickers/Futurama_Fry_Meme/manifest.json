@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Futurama_Fry_Meme",
+    "name": "Futurama_Fry_Meme",
+    "file": "Futurama_Fry_Meme.webp",
+    "width": 552,
+    "height": 414,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Futurama_Fry_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Leonardo_DiCaprio_Wolf_of_Wall_Street",
+    "name": "Leonardo_Dicaprio_Wolf_Of_Wall_Street",
+    "file": "Leonardo_DiCaprio_Wolf_of_Wall_Street.webp",
+    "width": 265,
+    "height": 393,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Leonardo_DiCaprio_Wolf_of_Wall_Street-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

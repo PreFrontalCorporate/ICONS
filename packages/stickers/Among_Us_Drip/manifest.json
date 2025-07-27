@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Among_Us_Drip",
+    "name": "Among_Us_Drip",
+    "file": "Among_Us_Drip.webp",
+    "width": 420,
+    "height": 420,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Among_Us_Drip-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Doge",
+    "name": "Doge",
+    "file": "Doge.webp",
+    "width": 350,
+    "height": 263,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Doge-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

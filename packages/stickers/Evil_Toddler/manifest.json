@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Evil_Toddler",
+    "name": "Evil_Toddler",
+    "file": "Evil_Toddler.webp",
+    "width": 500,
+    "height": 331,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Evil_Toddler-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Captain_Picard_Day",
+    "name": "Captain_Picard_Day",
+    "file": "Captain_Picard_Day.webp",
+    "width": 760,
+    "height": 520,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Captain_Picard_Day-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

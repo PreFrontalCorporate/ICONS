@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Laughing_Shaq_",
+    "name": "_Laughing_Shaq_",
+    "file": "_Laughing_Shaq_.webp",
+    "width": 480,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Laughing_Shaq_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

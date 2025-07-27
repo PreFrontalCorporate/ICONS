@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Ancient_Memes",
+    "name": "Ancient_Memes",
+    "file": "Ancient_Memes.webp",
+    "width": 645,
+    "height": 677,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Ancient_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

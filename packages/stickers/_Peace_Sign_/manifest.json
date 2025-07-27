@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Peace_Sign_",
+    "name": "_Peace_Sign_",
+    "file": "_Peace_Sign_.webp",
+    "width": 570,
+    "height": 470,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Peace_Sign_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

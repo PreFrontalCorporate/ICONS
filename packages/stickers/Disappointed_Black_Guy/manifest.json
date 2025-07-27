@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Disappointed_Black_Guy",
+    "name": "Disappointed_Black_Guy",
+    "file": "Disappointed_Black_Guy.webp",
+    "width": 479,
+    "height": 800,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Disappointed_Black_Guy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

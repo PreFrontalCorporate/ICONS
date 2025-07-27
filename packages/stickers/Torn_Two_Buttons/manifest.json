@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Torn_Two_Buttons",
+    "name": "Torn_Two_Buttons",
+    "file": "Torn_Two_Buttons.webp",
+    "width": 800,
+    "height": 567,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Torn_Two_Buttons-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

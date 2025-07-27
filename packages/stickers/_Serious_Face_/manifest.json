@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Serious_Face_",
+    "name": "_Serious_Face_",
+    "file": "_Serious_Face_.webp",
+    "width": 850,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Serious_Face_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

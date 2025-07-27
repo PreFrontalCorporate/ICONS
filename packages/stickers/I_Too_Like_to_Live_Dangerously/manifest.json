@@ -1,0 +1,17 @@
+[
+  {
+    "id": "I_Too_Like_to_Live_Dangerously",
+    "name": "I_Too_Like_To_Live_Dangerously",
+    "file": "I_Too_Like_to_Live_Dangerously.webp",
+    "width": 650,
+    "height": 433,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "I_Too_Like_to_Live_Dangerously-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

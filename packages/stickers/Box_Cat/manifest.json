@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Box_Cat",
+    "name": "Box_Cat",
+    "file": "Box_Cat.webp",
+    "width": 700,
+    "height": 525,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Box_Cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

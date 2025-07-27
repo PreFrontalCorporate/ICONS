@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Anti-Vax_Mom",
+    "name": "Anti Vax_Mom",
+    "file": "Anti-Vax_Mom.webp",
+    "width": 686,
+    "height": 386,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Anti-Vax_Mom-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

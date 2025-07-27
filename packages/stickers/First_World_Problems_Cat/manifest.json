@@ -1,0 +1,17 @@
+[
+  {
+    "id": "First_World_Problems_Cat",
+    "name": "First_World_Problems_Cat",
+    "file": "First_World_Problems_Cat.webp",
+    "width": 460,
+    "height": 460,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "First_World_Problems_Cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

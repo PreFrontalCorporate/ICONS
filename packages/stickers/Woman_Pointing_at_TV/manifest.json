@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Woman_Pointing_at_TV",
+    "name": "Woman_Pointing_At_Tv",
+    "file": "Woman_Pointing_at_TV.webp",
+    "width": 512,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Woman_Pointing_at_TV-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

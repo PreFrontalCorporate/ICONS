@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Say_That_Again_I_Dare_You",
+    "name": "Say_That_Again_I_Dare_You",
+    "file": "Say_That_Again_I_Dare_You.webp",
+    "width": 299,
+    "height": 828,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Say_That_Again_I_Dare_You-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

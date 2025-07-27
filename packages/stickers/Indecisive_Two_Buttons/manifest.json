@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Indecisive_Two_Buttons",
+    "name": "Indecisive_Two_Buttons",
+    "file": "Indecisive_Two_Buttons.webp",
+    "width": 500,
+    "height": 756,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Indecisive_Two_Buttons-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

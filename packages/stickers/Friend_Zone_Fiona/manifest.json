@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Friend_Zone_Fiona",
+    "name": "Friend_Zone_Fiona",
+    "file": "Friend_Zone_Fiona.webp",
+    "width": 279,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Friend_Zone_Fiona-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

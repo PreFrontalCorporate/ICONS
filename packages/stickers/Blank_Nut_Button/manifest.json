@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Blank_Nut_Button",
+    "name": "Blank_Nut_Button",
+    "file": "Blank_Nut_Button.webp",
+    "width": 600,
+    "height": 446,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Blank_Nut_Button-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

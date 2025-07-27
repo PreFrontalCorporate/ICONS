@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Am_I_the_Only_One_Around_Here",
+    "name": "Am_I_The_Only_One_Around_Here",
+    "file": "Am_I_the_Only_One_Around_Here.webp",
+    "width": 500,
+    "height": 457,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Am_I_the_Only_One_Around_Here-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

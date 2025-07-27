@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Drakeposting_Views_Meme",
+    "name": "Drakeposting_Views_Meme",
+    "file": "Drakeposting_Views_Meme.webp",
+    "width": 550,
+    "height": 550,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Drakeposting_Views_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

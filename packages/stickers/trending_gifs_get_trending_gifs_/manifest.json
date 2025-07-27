@@ -1,0 +1,17 @@
+[
+  {
+    "id": "trending_gifs_get_trending_gifs_",
+    "name": "Trending_Gifs_Get_Trending_Gifs_",
+    "file": "trending_gifs_get_trending_gifs_.webp",
+    "width": 750,
+    "height": 563,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "trending_gifs_get_trending_gifs_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

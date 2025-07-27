@@ -1,0 +1,17 @@
+[
+  {
+    "id": "They_Don_t_Know",
+    "name": "They_Don_T_Know",
+    "file": "They_Don_t_Know.webp",
+    "width": 360,
+    "height": 257,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "They_Don_t_Know-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

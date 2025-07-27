@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Guy_Holding_Cardboard_Sign",
+    "name": "Guy_Holding_Cardboard_Sign",
+    "file": "Guy_Holding_Cardboard_Sign.webp",
+    "width": 621,
+    "height": 621,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Guy_Holding_Cardboard_Sign-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

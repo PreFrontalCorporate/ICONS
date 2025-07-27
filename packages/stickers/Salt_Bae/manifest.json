@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Salt_Bae",
+    "name": "Salt_Bae",
+    "file": "Salt_Bae.webp",
+    "width": 611,
+    "height": 611,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Salt_Bae-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

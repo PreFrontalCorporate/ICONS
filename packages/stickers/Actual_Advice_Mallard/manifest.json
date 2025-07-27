@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Actual_Advice_Mallard",
+    "name": "Actual_Advice_Mallard",
+    "file": "Actual_Advice_Mallard.webp",
+    "width": 460,
+    "height": 330,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Actual_Advice_Mallard-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

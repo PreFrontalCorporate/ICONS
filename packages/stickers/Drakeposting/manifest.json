@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Drakeposting",
+    "name": "Drakeposting",
+    "file": "Drakeposting.webp",
+    "width": 680,
+    "height": 680,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Drakeposting-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

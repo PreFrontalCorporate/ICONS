@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Laughing_Leo",
+    "name": "Laughing_Leo",
+    "file": "Laughing_Leo.webp",
+    "width": 270,
+    "height": 380,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Laughing_Leo-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

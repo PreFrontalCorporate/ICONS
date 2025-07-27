@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Mr._Bean_",
+    "name": "_Mr._Bean_",
+    "file": "_Mr._Bean_.webp",
+    "width": 686,
+    "height": 386,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Mr._Bean_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

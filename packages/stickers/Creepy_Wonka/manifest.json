@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Creepy_Wonka",
+    "name": "Creepy_Wonka",
+    "file": "Creepy_Wonka.webp",
+    "width": 500,
+    "height": 375,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Creepy_Wonka-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

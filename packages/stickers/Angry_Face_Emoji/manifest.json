@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Angry_Face_Emoji",
+    "name": "Angry_Face_Emoji",
+    "file": "Angry_Face_Emoji.webp",
+    "width": 480,
+    "height": 480,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Angry_Face_Emoji-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

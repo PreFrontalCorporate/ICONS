@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Modern_Memes",
+    "name": "Modern_Memes",
+    "file": "Modern_Memes.webp",
+    "width": 718,
+    "height": 650,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Modern_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

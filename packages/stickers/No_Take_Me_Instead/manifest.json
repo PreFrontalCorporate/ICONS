@@ -1,0 +1,17 @@
+[
+  {
+    "id": "No_Take_Me_Instead",
+    "name": "No_Take_Me_Instead",
+    "file": "No_Take_Me_Instead.webp",
+    "width": 260,
+    "height": 395,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "No_Take_Me_Instead-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Middle_Finger_",
+    "name": "_Middle_Finger_",
+    "file": "_Middle_Finger_.webp",
+    "width": 626,
+    "height": 626,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Middle_Finger_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

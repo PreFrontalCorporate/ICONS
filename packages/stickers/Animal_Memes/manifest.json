@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Animal_Memes",
+    "name": "Animal_Memes",
+    "file": "Animal_Memes.webp",
+    "width": 333,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Animal_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Adamant_Change_My_Mind",
+    "name": "Adamant_Change_My_Mind",
+    "file": "Adamant_Change_My_Mind.webp",
+    "width": 504,
+    "height": 481,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Adamant_Change_My_Mind-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

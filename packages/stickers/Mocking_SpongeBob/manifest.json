@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Mocking_SpongeBob",
+    "name": "Mocking_Spongebob",
+    "file": "Mocking_SpongeBob.webp",
+    "width": 640,
+    "height": 445,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Mocking_SpongeBob-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

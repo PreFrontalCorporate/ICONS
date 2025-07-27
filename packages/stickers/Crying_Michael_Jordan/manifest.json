@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Crying_Michael_Jordan",
+    "name": "Crying_Michael_Jordan",
+    "file": "Crying_Michael_Jordan.webp",
+    "width": 273,
+    "height": 364,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Crying_Michael_Jordan-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

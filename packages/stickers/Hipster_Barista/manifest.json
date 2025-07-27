@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Hipster_Barista",
+    "name": "Hipster_Barista",
+    "file": "Hipster_Barista.webp",
+    "width": 750,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Hipster_Barista-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

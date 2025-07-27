@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Sleepy_Face_",
+    "name": "_Sleepy_Face_",
+    "file": "_Sleepy_Face_.webp",
+    "width": 540,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Sleepy_Face_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

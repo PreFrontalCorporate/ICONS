@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Willy_Wonka_Sarcastic",
+    "name": "Willy_Wonka_Sarcastic",
+    "file": "Willy_Wonka_Sarcastic.webp",
+    "width": 660,
+    "height": 652,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Willy_Wonka_Sarcastic-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

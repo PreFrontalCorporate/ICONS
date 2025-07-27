@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Professional_Business_Cat",
+    "name": "Professional_Business_Cat",
+    "file": "Professional_Business_Cat.webp",
+    "width": 570,
+    "height": 570,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Professional_Business_Cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

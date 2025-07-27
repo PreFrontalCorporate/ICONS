@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Happy_Crying_Face_",
+    "name": "_Happy_Crying_Face_",
+    "file": "_Happy_Crying_Face_.webp",
+    "width": 614,
+    "height": 480,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Happy_Crying_Face_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

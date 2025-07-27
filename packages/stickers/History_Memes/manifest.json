@@ -1,0 +1,17 @@
+[
+  {
+    "id": "History_Memes",
+    "name": "History_Memes",
+    "file": "History_Memes.webp",
+    "width": 800,
+    "height": 420,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "History_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

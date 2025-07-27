@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Trollface_Angry_Version_Meme",
+    "name": "Trollface_Angry_Version_Meme",
+    "file": "Trollface_Angry_Version_Meme.webp",
+    "width": 600,
+    "height": 600,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Trollface_Angry_Version_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

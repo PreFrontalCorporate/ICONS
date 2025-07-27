@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Gift_",
+    "name": "_Gift_",
+    "file": "_Gift_.webp",
+    "width": 610,
+    "height": 610,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Gift_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

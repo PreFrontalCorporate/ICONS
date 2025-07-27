@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Curious_Ceiling_Cat",
+    "name": "Curious_Ceiling_Cat",
+    "file": "Curious_Ceiling_Cat.webp",
+    "width": 470,
+    "height": 626,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Curious_Ceiling_Cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

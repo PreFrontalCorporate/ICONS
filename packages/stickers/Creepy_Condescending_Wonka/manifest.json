@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Creepy_Condescending_Wonka",
+    "name": "Creepy_Condescending_Wonka",
+    "file": "Creepy_Condescending_Wonka.webp",
+    "width": 640,
+    "height": 366,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Creepy_Condescending_Wonka-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

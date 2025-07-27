@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Walter_White_Breaking_Bad",
+    "name": "Walter_White_Breaking_Bad",
+    "file": "Walter_White_Breaking_Bad.webp",
+    "width": 273,
+    "height": 365,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Walter_White_Breaking_Bad-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

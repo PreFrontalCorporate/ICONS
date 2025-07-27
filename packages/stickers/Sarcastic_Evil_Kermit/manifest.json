@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Sarcastic_Evil_Kermit",
+    "name": "Sarcastic_Evil_Kermit",
+    "file": "Sarcastic_Evil_Kermit.webp",
+    "width": 710,
+    "height": 370,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Sarcastic_Evil_Kermit-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

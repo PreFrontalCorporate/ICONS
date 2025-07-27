@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Funny_Memes",
+    "name": "Funny_Memes",
+    "file": "Funny_Memes.webp",
+    "width": 564,
+    "height": 626,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Funny_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Check_Mark_Button_",
+    "name": "_Check_Mark_Button_",
+    "file": "_Check_Mark_Button_.webp",
+    "width": 512,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Check_Mark_Button_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

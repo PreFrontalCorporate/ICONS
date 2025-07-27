@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Blinking_White_Guy",
+    "name": "Blinking_White_Guy",
+    "file": "Blinking_White_Guy.webp",
+    "width": 768,
+    "height": 432,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Blinking_White_Guy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

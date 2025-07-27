@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Blizzard_Wizard",
+    "name": "Blizzard_Wizard",
+    "file": "Blizzard_Wizard.webp",
+    "width": 600,
+    "height": 600,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Blizzard_Wizard-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

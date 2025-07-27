@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Man_Looking_at_Other_Woman",
+    "name": "Man_Looking_At_Other_Woman",
+    "file": "Man_Looking_at_Other_Woman.webp",
+    "width": 700,
+    "height": 420,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Man_Looking_at_Other_Woman-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Insanity_Wolf_",
+    "name": "_Insanity_Wolf_",
+    "file": "_Insanity_Wolf_.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Insanity_Wolf_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

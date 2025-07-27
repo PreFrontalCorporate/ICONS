@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Unsettled_Tom",
+    "name": "Unsettled_Tom",
+    "file": "Unsettled_Tom.webp",
+    "width": 600,
+    "height": 470,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Unsettled_Tom-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

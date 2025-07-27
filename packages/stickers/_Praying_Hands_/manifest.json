@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Praying_Hands_",
+    "name": "_Praying_Hands_",
+    "file": "_Praying_Hands_.webp",
+    "width": 570,
+    "height": 570,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Praying_Hands_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

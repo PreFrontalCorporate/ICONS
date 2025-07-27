@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Art_Memes",
+    "name": "Art_Memes",
+    "file": "Art_Memes.webp",
+    "width": 600,
+    "height": 750,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Art_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Grinning_Face_with_Big_Eyes_",
+    "name": "_Grinning_Face_With_Big_Eyes_",
+    "file": "_Grinning_Face_with_Big_Eyes_.webp",
+    "width": 512,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Grinning_Face_with_Big_Eyes_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

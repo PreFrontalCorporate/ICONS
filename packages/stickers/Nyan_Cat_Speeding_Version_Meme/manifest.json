@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Nyan_Cat_Speeding_Version_Meme",
+    "name": "Nyan_Cat_Speeding_Version_Meme",
+    "file": "Nyan_Cat_Speeding_Version_Meme.webp",
+    "width": 780,
+    "height": 438,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Nyan_Cat_Speeding_Version_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

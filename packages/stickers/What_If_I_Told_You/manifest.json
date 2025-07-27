@@ -1,0 +1,17 @@
+[
+  {
+    "id": "What_If_I_Told_You",
+    "name": "What_If_I_Told_You",
+    "file": "What_If_I_Told_You.webp",
+    "width": 552,
+    "height": 334,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "What_If_I_Told_You-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

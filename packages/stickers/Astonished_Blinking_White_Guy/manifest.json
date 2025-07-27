@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Astonished_Blinking_White_Guy",
+    "name": "Astonished_Blinking_White_Guy",
+    "file": "Astonished_Blinking_White_Guy.webp",
+    "width": 720,
+    "height": 480,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Astonished_Blinking_White_Guy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

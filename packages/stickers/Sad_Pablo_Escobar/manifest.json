@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Sad_Pablo_Escobar",
+    "name": "Sad_Pablo_Escobar",
+    "file": "Sad_Pablo_Escobar.webp",
+    "width": 507,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Sad_Pablo_Escobar-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Oprah_Giving_Away_Cars",
+    "name": "Oprah_Giving_Away_Cars",
+    "file": "Oprah_Giving_Away_Cars.webp",
+    "width": 640,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Oprah_Giving_Away_Cars-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

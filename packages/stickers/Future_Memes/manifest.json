@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Future_Memes",
+    "name": "Future_Memes",
+    "file": "Future_Memes.webp",
+    "width": 593,
+    "height": 658,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Future_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

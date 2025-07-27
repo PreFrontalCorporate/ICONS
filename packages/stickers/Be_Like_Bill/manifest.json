@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Be_Like_Bill",
+    "name": "Be_Like_Bill",
+    "file": "Be_Like_Bill.webp",
+    "width": 640,
+    "height": 420,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Be_Like_Bill-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

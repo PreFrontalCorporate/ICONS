@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Keyboard_Cat",
+    "name": "Keyboard_Cat",
+    "file": "Keyboard_Cat.webp",
+    "width": 480,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Keyboard_Cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

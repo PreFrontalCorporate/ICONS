@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Captain_Picard_Facepalm",
+    "name": "Captain_Picard_Facepalm",
+    "file": "Captain_Picard_Facepalm.webp",
+    "width": 600,
+    "height": 200,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Captain_Picard_Facepalm-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

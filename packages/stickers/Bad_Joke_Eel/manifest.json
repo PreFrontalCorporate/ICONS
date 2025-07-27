@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Bad_Joke_Eel",
+    "name": "Bad_Joke_Eel",
+    "file": "Bad_Joke_Eel.webp",
+    "width": 607,
+    "height": 451,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Bad_Joke_Eel-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

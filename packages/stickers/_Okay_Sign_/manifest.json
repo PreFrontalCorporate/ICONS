@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Okay_Sign_",
+    "name": "_Okay_Sign_",
+    "file": "_Okay_Sign_.webp",
+    "width": 347,
+    "height": 280,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Okay_Sign_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Chill_Bro",
+    "name": "Chill_Bro",
+    "file": "Chill_Bro.webp",
+    "width": 389,
+    "height": 550,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Chill_Bro-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

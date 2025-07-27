@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Handsome_Squidward",
+    "name": "Handsome_Squidward",
+    "file": "Handsome_Squidward.webp",
+    "width": 600,
+    "height": 414,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Handsome_Squidward-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

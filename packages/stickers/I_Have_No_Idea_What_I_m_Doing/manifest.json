@@ -1,0 +1,17 @@
+[
+  {
+    "id": "I_Have_No_Idea_What_I_m_Doing",
+    "name": "I_Have_No_Idea_What_I_M_Doing",
+    "file": "I_Have_No_Idea_What_I_m_Doing.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "I_Have_No_Idea_What_I_m_Doing-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

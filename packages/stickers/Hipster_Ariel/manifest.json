@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Hipster_Ariel",
+    "name": "Hipster_Ariel",
+    "file": "Hipster_Ariel.webp",
+    "width": 216,
+    "height": 461,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Hipster_Ariel-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

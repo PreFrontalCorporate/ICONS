@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Pepe_the_Frog",
+    "name": "Pepe_The_Frog",
+    "file": "Pepe_the_Frog.webp",
+    "width": 550,
+    "height": 530,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Pepe_the_Frog-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

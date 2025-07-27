@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Culture_Memes",
+    "name": "Culture_Memes",
+    "file": "Culture_Memes.webp",
+    "width": 600,
+    "height": 315,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Culture_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

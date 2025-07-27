@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Homer_Simpson_Disappearing_Into_Bushes",
+    "name": "Homer_Simpson_Disappearing_Into_Bushes",
+    "file": "Homer_Simpson_Disappearing_Into_Bushes.webp",
+    "width": 700,
+    "height": 467,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Homer_Simpson_Disappearing_Into_Bushes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

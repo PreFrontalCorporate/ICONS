@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Tom_and_Jerry_Handshake_",
+    "name": "_Tom_And_Jerry_Handshake_",
+    "file": "_Tom_and_Jerry_Handshake_.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Tom_and_Jerry_Handshake_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

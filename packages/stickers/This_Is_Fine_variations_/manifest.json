@@ -1,0 +1,17 @@
+[
+  {
+    "id": "This_Is_Fine_variations_",
+    "name": "This_Is_Fine_Variations_",
+    "file": "This_Is_Fine_variations_.webp",
+    "width": 550,
+    "height": 309,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "This_Is_Fine_variations_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

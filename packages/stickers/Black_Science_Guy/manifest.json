@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Black_Science_Guy",
+    "name": "Black_Science_Guy",
+    "file": "Black_Science_Guy.webp",
+    "width": 484,
+    "height": 417,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Black_Science_Guy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

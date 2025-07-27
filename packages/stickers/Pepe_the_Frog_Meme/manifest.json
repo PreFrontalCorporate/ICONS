@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Pepe_the_Frog_Meme",
+    "name": "Pepe_The_Frog_Meme",
+    "file": "Pepe_the_Frog_Meme.webp",
+    "width": 600,
+    "height": 600,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Pepe_the_Frog_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

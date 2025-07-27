@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Pepperidge_Farm_Remembers",
+    "name": "Pepperidge_Farm_Remembers",
+    "file": "Pepperidge_Farm_Remembers.webp",
+    "width": 460,
+    "height": 577,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Pepperidge_Farm_Remembers-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

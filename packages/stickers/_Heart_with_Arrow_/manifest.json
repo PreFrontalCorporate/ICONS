@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Heart_with_Arrow_",
+    "name": "_Heart_With_Arrow_",
+    "file": "_Heart_with_Arrow_.webp",
+    "width": 626,
+    "height": 417,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Heart_with_Arrow_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Crazy_Girlfriend_Praying_Mantis",
+    "name": "Crazy_Girlfriend_Praying_Mantis",
+    "file": "Crazy_Girlfriend_Praying_Mantis.webp",
+    "width": 640,
+    "height": 640,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Crazy_Girlfriend_Praying_Mantis-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Mr._Krabs_Blur_Meme",
+    "name": "Mr._Krabs_Blur_Meme",
+    "file": "Mr._Krabs_Blur_Meme.webp",
+    "width": 708,
+    "height": 495,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Mr._Krabs_Blur_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

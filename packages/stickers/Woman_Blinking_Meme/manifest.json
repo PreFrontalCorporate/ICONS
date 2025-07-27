@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Woman_Blinking_Meme",
+    "name": "Woman_Blinking_Meme",
+    "file": "Woman_Blinking_Meme.webp",
+    "width": 306,
+    "height": 352,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Woman_Blinking_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

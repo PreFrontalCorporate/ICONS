@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Why_Not_Both_",
+    "name": "Why_Not_Both_",
+    "file": "Why_Not_Both_.webp",
+    "width": 640,
+    "height": 528,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Why_Not_Both_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

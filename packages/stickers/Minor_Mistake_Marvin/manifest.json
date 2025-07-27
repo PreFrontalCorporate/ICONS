@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Minor_Mistake_Marvin",
+    "name": "Minor_Mistake_Marvin",
+    "file": "Minor_Mistake_Marvin.webp",
+    "width": 380,
+    "height": 430,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Minor_Mistake_Marvin-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

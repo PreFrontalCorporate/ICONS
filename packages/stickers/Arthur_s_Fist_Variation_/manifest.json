@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Arthur_s_Fist_Variation_",
+    "name": "Arthur_S_Fist_Variation_",
+    "file": "Arthur_s_Fist_Variation_.webp",
+    "width": 500,
+    "height": 750,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Arthur_s_Fist_Variation_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

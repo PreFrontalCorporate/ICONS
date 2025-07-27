@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Trollface_Smiling_Version_Meme",
+    "name": "Trollface_Smiling_Version_Meme",
+    "file": "Trollface_Smiling_Version_Meme.webp",
+    "width": 360,
+    "height": 450,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Trollface_Smiling_Version_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

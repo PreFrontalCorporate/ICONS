@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Good_Luck_Chuck",
+    "name": "Good_Luck_Chuck",
+    "file": "Good_Luck_Chuck.webp",
+    "width": 450,
+    "height": 666,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Good_Luck_Chuck-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

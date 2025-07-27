@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Hundred_Points_Symbol_",
+    "name": "_Hundred_Points_Symbol_",
+    "file": "_Hundred_Points_Symbol_.webp",
+    "width": 640,
+    "height": 320,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Hundred_Points_Symbol_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

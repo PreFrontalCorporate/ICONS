@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Milk_Was_a_Bad_Choice",
+    "name": "Milk_Was_A_Bad_Choice",
+    "file": "Milk_Was_a_Bad_Choice.webp",
+    "width": 611,
+    "height": 409,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Milk_Was_a_Bad_Choice-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

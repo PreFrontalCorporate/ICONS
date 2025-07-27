@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Heavy_Breathing_Cat",
+    "name": "Heavy_Breathing_Cat",
+    "file": "Heavy_Breathing_Cat.webp",
+    "width": 500,
+    "height": 474,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Heavy_Breathing_Cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

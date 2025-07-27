@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Pawn_Stars",
+    "name": "Pawn_Stars",
+    "file": "Pawn_Stars.webp",
+    "width": 446,
+    "height": 223,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Pawn_Stars-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

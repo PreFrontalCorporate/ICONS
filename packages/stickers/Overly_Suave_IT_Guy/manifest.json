@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Overly_Suave_IT_Guy",
+    "name": "Overly_Suave_It_Guy",
+    "file": "Overly_Suave_IT_Guy.webp",
+    "width": 580,
+    "height": 580,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Overly_Suave_IT_Guy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

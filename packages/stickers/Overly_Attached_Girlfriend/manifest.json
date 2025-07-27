@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Overly_Attached_Girlfriend",
+    "name": "Overly_Attached_Girlfriend",
+    "file": "Overly_Attached_Girlfriend.webp",
+    "width": 600,
+    "height": 417,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Overly_Attached_Girlfriend-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

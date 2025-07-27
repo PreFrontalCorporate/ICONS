@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Ironic_Stonks",
+    "name": "Ironic_Stonks",
+    "file": "Ironic_Stonks.webp",
+    "width": 350,
+    "height": 350,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Ironic_Stonks-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

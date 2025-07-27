@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Dat_Boi",
+    "name": "Dat_Boi",
+    "file": "Dat_Boi.webp",
+    "width": 359,
+    "height": 450,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Dat_Boi-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

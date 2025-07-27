@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Foul_Bachelor_Frog",
+    "name": "Foul_Bachelor_Frog",
+    "file": "Foul_Bachelor_Frog.webp",
+    "width": 407,
+    "height": 405,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Foul_Bachelor_Frog-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

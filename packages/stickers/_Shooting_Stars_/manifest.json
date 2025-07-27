@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Shooting_Stars_",
+    "name": "_Shooting_Stars_",
+    "file": "_Shooting_Stars_.webp",
+    "width": 440,
+    "height": 230,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Shooting_Stars_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Laughing_Goat",
+    "name": "Laughing_Goat",
+    "file": "Laughing_Goat.webp",
+    "width": 340,
+    "height": 270,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Laughing_Goat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

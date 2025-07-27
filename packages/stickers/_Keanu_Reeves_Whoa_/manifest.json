@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Keanu_Reeves_Whoa_",
+    "name": "_Keanu_Reeves_Whoa_",
+    "file": "_Keanu_Reeves_Whoa_.webp",
+    "width": 480,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Keanu_Reeves_Whoa_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

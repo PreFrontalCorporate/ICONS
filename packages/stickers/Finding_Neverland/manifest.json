@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Finding_Neverland",
+    "name": "Finding_Neverland",
+    "file": "Finding_Neverland.webp",
+    "width": 316,
+    "height": 316,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Finding_Neverland-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Good_Guy_Greg_Meme",
+    "name": "Good_Guy_Greg_Meme",
+    "file": "Good_Guy_Greg_Meme.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Good_Guy_Greg_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Donald_Trump",
+    "name": "Donald_Trump",
+    "file": "Donald_Trump.webp",
+    "width": 640,
+    "height": 640,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Donald_Trump-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

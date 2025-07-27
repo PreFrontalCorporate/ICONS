@@ -1,0 +1,17 @@
+[
+  {
+    "id": "McKayla_Maroney_Not_Impressed",
+    "name": "Mckayla_Maroney_Not_Impressed",
+    "file": "McKayla_Maroney_Not_Impressed.webp",
+    "width": 600,
+    "height": 370,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "McKayla_Maroney_Not_Impressed-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

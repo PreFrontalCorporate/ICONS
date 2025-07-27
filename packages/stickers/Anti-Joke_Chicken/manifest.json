@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Anti-Joke_Chicken",
+    "name": "Anti Joke_Chicken",
+    "file": "Anti-Joke_Chicken.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Anti-Joke_Chicken-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

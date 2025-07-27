@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Nodding",
+    "name": "Nodding",
+    "file": "Nodding.webp",
+    "width": 640,
+    "height": 362,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Nodding-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

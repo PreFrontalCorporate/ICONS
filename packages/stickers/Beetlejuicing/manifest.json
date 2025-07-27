@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Beetlejuicing",
+    "name": "Beetlejuicing",
+    "file": "Beetlejuicing.webp",
+    "width": 640,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Beetlejuicing-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Raised_Hands_",
+    "name": "_Raised_Hands_",
+    "file": "_Raised_Hands_.webp",
+    "width": 840,
+    "height": 453,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Raised_Hands_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

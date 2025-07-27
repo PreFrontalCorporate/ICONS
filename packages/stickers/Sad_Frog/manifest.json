@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Sad_Frog",
+    "name": "Sad_Frog",
+    "file": "Sad_Frog.webp",
+    "width": 636,
+    "height": 432,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Sad_Frog-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

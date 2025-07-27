@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Hannibal_Buress_Why",
+    "name": "Hannibal_Buress_Why",
+    "file": "Hannibal_Buress_Why.webp",
+    "width": 500,
+    "height": 375,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Hannibal_Buress_Why-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

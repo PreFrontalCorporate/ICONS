@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Furious_Arthur_s_Fist",
+    "name": "Furious_Arthur_S_Fist",
+    "file": "Furious_Arthur_s_Fist.webp",
+    "width": 480,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Furious_Arthur_s_Fist-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

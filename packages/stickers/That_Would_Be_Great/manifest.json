@@ -1,0 +1,17 @@
+[
+  {
+    "id": "That_Would_Be_Great",
+    "name": "That_Would_Be_Great",
+    "file": "That_Would_Be_Great.webp",
+    "width": 728,
+    "height": 410,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "That_Would_Be_Great-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

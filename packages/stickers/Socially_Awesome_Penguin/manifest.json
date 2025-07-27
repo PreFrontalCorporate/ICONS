@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Socially_Awesome_Penguin",
+    "name": "Socially_Awesome_Penguin",
+    "file": "Socially_Awesome_Penguin.webp",
+    "width": 460,
+    "height": 919,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Socially_Awesome_Penguin-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

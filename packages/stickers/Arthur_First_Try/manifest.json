@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Arthur_First_Try",
+    "name": "Arthur_First_Try",
+    "file": "Arthur_First_Try.webp",
+    "width": 640,
+    "height": 644,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Arthur_First_Try-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

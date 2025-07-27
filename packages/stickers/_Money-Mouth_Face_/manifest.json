@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Money-Mouth_Face_",
+    "name": "_Money Mouth_Face_",
+    "file": "_Money-Mouth_Face_.webp",
+    "width": 480,
+    "height": 270,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Money-Mouth_Face_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

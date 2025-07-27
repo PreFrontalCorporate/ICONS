@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Among_Us_memes",
+    "name": "Among_Us_Memes",
+    "file": "Among_Us_memes.webp",
+    "width": 512,
+    "height": 677,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Among_Us_memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Sociology_Memes",
+    "name": "Sociology_Memes",
+    "file": "Sociology_Memes.webp",
+    "width": 500,
+    "height": 656,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Sociology_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

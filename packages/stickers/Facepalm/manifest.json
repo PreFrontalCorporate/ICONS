@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Facepalm",
+    "name": "Facepalm",
+    "file": "Facepalm.webp",
+    "width": 550,
+    "height": 440,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Facepalm-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

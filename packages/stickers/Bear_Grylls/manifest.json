@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Bear_Grylls",
+    "name": "Bear_Grylls",
+    "file": "Bear_Grylls.webp",
+    "width": 250,
+    "height": 376,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Bear_Grylls-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

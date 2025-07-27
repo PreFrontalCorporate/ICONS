@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Science_Memes",
+    "name": "Science_Memes",
+    "file": "Science_Memes.webp",
+    "width": 506,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Science_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

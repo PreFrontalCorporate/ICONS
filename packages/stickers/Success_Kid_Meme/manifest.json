@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Success_Kid_Meme",
+    "name": "Success_Kid_Meme",
+    "file": "Success_Kid_Meme.webp",
+    "width": 600,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Success_Kid_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

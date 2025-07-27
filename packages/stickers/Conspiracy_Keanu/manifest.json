@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Conspiracy_Keanu",
+    "name": "Conspiracy_Keanu",
+    "file": "Conspiracy_Keanu.webp",
+    "width": 650,
+    "height": 648,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Conspiracy_Keanu-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

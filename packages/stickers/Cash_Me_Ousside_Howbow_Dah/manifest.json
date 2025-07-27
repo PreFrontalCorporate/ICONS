@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Cash_Me_Ousside_Howbow_Dah",
+    "name": "Cash_Me_Ousside_Howbow_Dah",
+    "file": "Cash_Me_Ousside_Howbow_Dah.webp",
+    "width": 330,
+    "height": 330,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Cash_Me_Ousside_Howbow_Dah-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "The_Rock_Eyebrow_Raise",
+    "name": "The_Rock_Eyebrow_Raise",
+    "file": "The_Rock_Eyebrow_Raise.webp",
+    "width": 568,
+    "height": 720,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "The_Rock_Eyebrow_Raise-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

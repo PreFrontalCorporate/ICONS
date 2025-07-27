@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Not_Sure_if_X",
+    "name": "Not_Sure_If_X",
+    "file": "Not_Sure_if_X.webp",
+    "width": 640,
+    "height": 480,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Not_Sure_if_X-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

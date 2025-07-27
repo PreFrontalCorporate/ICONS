@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Party_Parrot",
+    "name": "Party_Parrot",
+    "file": "Party_Parrot.webp",
+    "width": 360,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Party_Parrot-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

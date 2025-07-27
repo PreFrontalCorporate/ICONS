@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Grandma_Finds_the_Internet_",
+    "name": "_Grandma_Finds_The_Internet_",
+    "file": "_Grandma_Finds_the_Internet_.webp",
+    "width": 640,
+    "height": 480,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Grandma_Finds_the_Internet_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_High_Five_",
+    "name": "_High_Five_",
+    "file": "_High_Five_.webp",
+    "width": 512,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_High_Five_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

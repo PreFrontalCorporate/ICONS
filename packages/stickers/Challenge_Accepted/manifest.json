@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Challenge_Accepted",
+    "name": "Challenge_Accepted",
+    "file": "Challenge_Accepted.webp",
+    "width": 500,
+    "height": 282,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Challenge_Accepted-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Stonks_Meme",
+    "name": "Stonks_Meme",
+    "file": "Stonks_Meme.webp",
+    "width": 700,
+    "height": 524,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Stonks_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

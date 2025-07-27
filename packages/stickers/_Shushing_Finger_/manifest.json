@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Shushing_Finger_",
+    "name": "_Shushing_Finger_",
+    "file": "_Shushing_Finger_.webp",
+    "width": 740,
+    "height": 493,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Shushing_Finger_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

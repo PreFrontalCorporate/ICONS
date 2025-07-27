@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Grumpy_Cat_Displeased_Version_Meme",
+    "name": "Grumpy_Cat_Displeased_Version_Meme",
+    "file": "Grumpy_Cat_Displeased_Version_Meme.webp",
+    "width": 640,
+    "height": 640,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Grumpy_Cat_Displeased_Version_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

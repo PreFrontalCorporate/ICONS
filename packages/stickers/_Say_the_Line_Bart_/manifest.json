@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Say_the_Line_Bart_",
+    "name": "_Say_The_Line_Bart_",
+    "file": "_Say_the_Line_Bart_.webp",
+    "width": 700,
+    "height": 393,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Say_the_Line_Bart_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

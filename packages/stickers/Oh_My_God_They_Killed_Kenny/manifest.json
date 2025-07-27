@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Oh_My_God_They_Killed_Kenny",
+    "name": "Oh_My_God_They_Killed_Kenny",
+    "file": "Oh_My_God_They_Killed_Kenny.webp",
+    "width": 640,
+    "height": 390,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Oh_My_God_They_Killed_Kenny-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

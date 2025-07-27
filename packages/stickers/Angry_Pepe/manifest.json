@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Angry_Pepe",
+    "name": "Angry_Pepe",
+    "file": "Angry_Pepe.webp",
+    "width": 270,
+    "height": 380,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Angry_Pepe-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Mischievous_Disaster_Girl",
+    "name": "Mischievous_Disaster_Girl",
+    "file": "Mischievous_Disaster_Girl.webp",
+    "width": 480,
+    "height": 270,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Mischievous_Disaster_Girl-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

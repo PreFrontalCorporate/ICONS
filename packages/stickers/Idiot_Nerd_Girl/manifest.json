@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Idiot_Nerd_Girl",
+    "name": "Idiot_Nerd_Girl",
+    "file": "Idiot_Nerd_Girl.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Idiot_Nerd_Girl-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

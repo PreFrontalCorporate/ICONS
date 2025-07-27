@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Satirical_Mocking_SpongeBob",
+    "name": "Satirical_Mocking_Spongebob",
+    "file": "Satirical_Mocking_SpongeBob.webp",
+    "width": 537,
+    "height": 571,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Satirical_Mocking_SpongeBob-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

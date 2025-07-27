@@ -1,0 +1,17 @@
+[
+  {
+    "id": "I_See_What_You_Did_There",
+    "name": "I_See_What_You_Did_There",
+    "file": "I_See_What_You_Did_There.webp",
+    "width": 480,
+    "height": 270,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "I_See_What_You_Did_There-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

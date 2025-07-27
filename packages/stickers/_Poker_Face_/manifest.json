@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Poker_Face_",
+    "name": "_Poker_Face_",
+    "file": "_Poker_Face_.webp",
+    "width": 480,
+    "height": 336,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Poker_Face_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

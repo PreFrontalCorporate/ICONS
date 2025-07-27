@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Yo_Dawg",
+    "name": "Yo_Dawg",
+    "file": "Yo_Dawg.webp",
+    "width": 500,
+    "height": 323,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Yo_Dawg-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

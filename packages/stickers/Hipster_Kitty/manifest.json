@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Hipster_Kitty",
+    "name": "Hipster_Kitty",
+    "file": "Hipster_Kitty.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Hipster_Kitty-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

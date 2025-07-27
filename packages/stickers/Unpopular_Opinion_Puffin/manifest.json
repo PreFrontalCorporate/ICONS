@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Unpopular_Opinion_Puffin",
+    "name": "Unpopular_Opinion_Puffin",
+    "file": "Unpopular_Opinion_Puffin.webp",
+    "width": 460,
+    "height": 345,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Unpopular_Opinion_Puffin-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

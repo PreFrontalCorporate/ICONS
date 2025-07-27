@@ -1,0 +1,17 @@
+[
+  {
+    "id": "American_Chopper_Argument_Meme",
+    "name": "American_Chopper_Argument_Meme",
+    "file": "American_Chopper_Argument_Meme.webp",
+    "width": 284,
+    "height": 800,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "American_Chopper_Argument_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

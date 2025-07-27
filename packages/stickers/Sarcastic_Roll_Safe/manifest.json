@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Sarcastic_Roll_Safe",
+    "name": "Sarcastic_Roll_Safe",
+    "file": "Sarcastic_Roll_Safe.webp",
+    "width": 350,
+    "height": 350,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Sarcastic_Roll_Safe-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

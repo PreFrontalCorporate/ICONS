@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Neckbeard",
+    "name": "Neckbeard",
+    "file": "Neckbeard.webp",
+    "width": 637,
+    "height": 358,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Neckbeard-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

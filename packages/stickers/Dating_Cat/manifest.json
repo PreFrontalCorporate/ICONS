@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Dating_Cat",
+    "name": "Dating_Cat",
+    "file": "Dating_Cat.webp",
+    "width": 526,
+    "height": 296,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Dating_Cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

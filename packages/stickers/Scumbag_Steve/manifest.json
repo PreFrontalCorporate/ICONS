@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Scumbag_Steve",
+    "name": "Scumbag_Steve",
+    "file": "Scumbag_Steve.webp",
+    "width": 310,
+    "height": 308,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Scumbag_Steve-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

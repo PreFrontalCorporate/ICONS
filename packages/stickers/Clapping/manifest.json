@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Clapping",
+    "name": "Clapping",
+    "file": "Clapping.webp",
+    "width": 408,
+    "height": 728,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Clapping-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

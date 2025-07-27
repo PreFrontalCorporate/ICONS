@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Anger_Symbol_",
+    "name": "_Anger_Symbol_",
+    "file": "_Anger_Symbol_.webp",
+    "width": 512,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Anger_Symbol_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Most_Funny_Memes",
+    "name": "Most_Funny_Memes",
+    "file": "Most_Funny_Memes.webp",
+    "width": 640,
+    "height": 649,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Most_Funny_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

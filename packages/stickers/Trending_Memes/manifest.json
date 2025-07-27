@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Trending_Memes",
+    "name": "Trending_Memes",
+    "file": "Trending_Memes.webp",
+    "width": 640,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Trending_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

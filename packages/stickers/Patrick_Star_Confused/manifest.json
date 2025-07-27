@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Patrick_Star_Confused",
+    "name": "Patrick_Star_Confused",
+    "file": "Patrick_Star_Confused.webp",
+    "width": 640,
+    "height": 548,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Patrick_Star_Confused-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

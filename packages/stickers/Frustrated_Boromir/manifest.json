@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Frustrated_Boromir",
+    "name": "Frustrated_Boromir",
+    "file": "Frustrated_Boromir.webp",
+    "width": 500,
+    "height": 402,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Frustrated_Boromir-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

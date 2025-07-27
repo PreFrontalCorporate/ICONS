@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Worst_Memes",
+    "name": "Worst_Memes",
+    "file": "Worst_Memes.webp",
+    "width": 394,
+    "height": 480,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Worst_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

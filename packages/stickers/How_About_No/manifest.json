@@ -1,0 +1,17 @@
+[
+  {
+    "id": "How_About_No",
+    "name": "How_About_No",
+    "file": "How_About_No.webp",
+    "width": 500,
+    "height": 300,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "How_About_No-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

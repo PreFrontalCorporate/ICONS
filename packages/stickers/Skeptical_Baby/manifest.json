@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Skeptical_Baby",
+    "name": "Skeptical_Baby",
+    "file": "Skeptical_Baby.webp",
+    "width": 421,
+    "height": 237,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Skeptical_Baby-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

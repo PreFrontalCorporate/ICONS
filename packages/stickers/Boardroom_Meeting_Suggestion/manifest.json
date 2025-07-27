@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Boardroom_Meeting_Suggestion",
+    "name": "Boardroom_Meeting_Suggestion",
+    "file": "Boardroom_Meeting_Suggestion.webp",
+    "width": 500,
+    "height": 649,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Boardroom_Meeting_Suggestion-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "10_Guy",
+    "name": "10_Guy",
+    "file": "10_Guy.webp",
+    "width": 660,
+    "height": 371,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "10_Guy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

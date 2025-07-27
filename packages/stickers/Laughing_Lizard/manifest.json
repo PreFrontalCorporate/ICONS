@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Laughing_Lizard",
+    "name": "Laughing_Lizard",
+    "file": "Laughing_Lizard.webp",
+    "width": 683,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Laughing_Lizard-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

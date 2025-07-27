@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Side-Eyeing_Chloe",
+    "name": "Side Eyeing_Chloe",
+    "file": "Side-Eyeing_Chloe.webp",
+    "width": 421,
+    "height": 237,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Side-Eyeing_Chloe-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

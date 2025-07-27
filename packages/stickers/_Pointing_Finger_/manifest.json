@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Pointing_Finger_",
+    "name": "_Pointing_Finger_",
+    "file": "_Pointing_Finger_.webp",
+    "width": 612,
+    "height": 408,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Pointing_Finger_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

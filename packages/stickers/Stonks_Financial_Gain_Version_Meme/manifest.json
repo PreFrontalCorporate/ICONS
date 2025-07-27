@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Stonks_Financial_Gain_Version_Meme",
+    "name": "Stonks_Financial_Gain_Version_Meme",
+    "file": "Stonks_Financial_Gain_Version_Meme.webp",
+    "width": 270,
+    "height": 380,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Stonks_Financial_Gain_Version_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

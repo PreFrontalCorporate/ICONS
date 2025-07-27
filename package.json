@@ -1,0 +1,22 @@
+// package.json (root)
+{
+  "name": "icon-suite",
+  "private": true,
+  "packageManager": "pnpm@9.1.3",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "scripts"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev":   "turbo run dev --parallel",
+    "lint":  "turbo run lint",
+    "release": "tsx scripts/release.ts"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.4",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.4"
+  }
+}

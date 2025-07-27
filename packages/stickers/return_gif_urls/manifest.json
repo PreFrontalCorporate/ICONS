@@ -1,0 +1,17 @@
+[
+  {
+    "id": "return_gif_urls",
+    "name": "Return_Gif_Urls",
+    "file": "return_gif_urls.webp",
+    "width": 959,
+    "height": 331,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "return_gif_urls-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

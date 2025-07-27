@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Language_Memes",
+    "name": "Language_Memes",
+    "file": "Language_Memes.webp",
+    "width": 666,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Language_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

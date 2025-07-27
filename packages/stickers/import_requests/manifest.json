@@ -1,0 +1,17 @@
+[
+  {
+    "id": "import_requests",
+    "name": "Import_Requests",
+    "file": "import_requests.webp",
+    "width": 686,
+    "height": 386,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "import_requests-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

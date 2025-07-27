@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Social_Media_Memes",
+    "name": "Social_Media_Memes",
+    "file": "Social_Media_Memes.webp",
+    "width": 380,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Social_Media_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

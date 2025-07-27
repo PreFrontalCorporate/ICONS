@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Is_This_a_Pigeon_",
+    "name": "_Is_This_A_Pigeon_",
+    "file": "_Is_This_a_Pigeon_.webp",
+    "width": 495,
+    "height": 480,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Is_This_a_Pigeon_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

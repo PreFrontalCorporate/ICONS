@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Annoying_Childhood_Friend",
+    "name": "Annoying_Childhood_Friend",
+    "file": "Annoying_Childhood_Friend.webp",
+    "width": 500,
+    "height": 747,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Annoying_Childhood_Friend-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

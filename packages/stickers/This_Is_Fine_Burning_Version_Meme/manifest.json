@@ -1,0 +1,17 @@
+[
+  {
+    "id": "This_Is_Fine_Burning_Version_Meme",
+    "name": "This_Is_Fine_Burning_Version_Meme",
+    "file": "This_Is_Fine_Burning_Version_Meme.webp",
+    "width": 350,
+    "height": 350,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "This_Is_Fine_Burning_Version_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

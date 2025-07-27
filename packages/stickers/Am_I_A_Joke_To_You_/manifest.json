@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Am_I_A_Joke_To_You_",
+    "name": "Am_I_A_Joke_To_You_",
+    "file": "Am_I_A_Joke_To_You_.webp",
+    "width": 600,
+    "height": 424,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Am_I_A_Joke_To_You_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

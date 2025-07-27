@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Correction_Guy",
+    "name": "Correction_Guy",
+    "file": "Correction_Guy.webp",
+    "width": 660,
+    "height": 372,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Correction_Guy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

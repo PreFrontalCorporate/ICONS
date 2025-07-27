@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Cardboard_Box_Cat",
+    "name": "Cardboard_Box_Cat",
+    "file": "Cardboard_Box_Cat.webp",
+    "width": 700,
+    "height": 525,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Cardboard_Box_Cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

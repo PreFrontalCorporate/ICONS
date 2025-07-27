@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Spongebob_Ight_Imma_Head_Out",
+    "name": "Spongebob_Ight_Imma_Head_Out",
+    "file": "Spongebob_Ight_Imma_Head_Out.webp",
+    "width": 660,
+    "height": 578,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Spongebob_Ight_Imma_Head_Out-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Pedophile_Bear",
+    "name": "Pedophile_Bear",
+    "file": "Pedophile_Bear.webp",
+    "width": 580,
+    "height": 540,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Pedophile_Bear-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

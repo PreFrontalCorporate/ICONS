@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Uncomfortable_",
+    "name": "_Uncomfortable_",
+    "file": "_Uncomfortable_.webp",
+    "width": 750,
+    "height": 629,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Uncomfortable_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

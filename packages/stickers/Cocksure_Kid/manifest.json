@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Cocksure_Kid",
+    "name": "Cocksure_Kid",
+    "file": "Cocksure_Kid.webp",
+    "width": 465,
+    "height": 310,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Cocksure_Kid-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

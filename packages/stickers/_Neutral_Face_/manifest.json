@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Neutral_Face_",
+    "name": "_Neutral_Face_",
+    "file": "_Neutral_Face_.webp",
+    "width": 676,
+    "height": 450,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Neutral_Face_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

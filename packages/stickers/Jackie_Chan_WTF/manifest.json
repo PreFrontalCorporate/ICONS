@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Jackie_Chan_WTF",
+    "name": "Jackie_Chan_Wtf",
+    "file": "Jackie_Chan_WTF.webp",
+    "width": 494,
+    "height": 298,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Jackie_Chan_WTF-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

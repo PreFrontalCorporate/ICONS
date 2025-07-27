@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Forever_Alone",
+    "name": "Forever_Alone",
+    "file": "Forever_Alone.webp",
+    "width": 550,
+    "height": 413,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Forever_Alone-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

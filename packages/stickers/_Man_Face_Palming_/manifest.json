@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Man_Face_Palming_",
+    "name": "_Man_Face_Palming_",
+    "file": "_Man_Face_Palming_.webp",
+    "width": 764,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Man_Face_Palming_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

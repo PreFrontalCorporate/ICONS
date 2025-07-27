@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Philosoraptor",
+    "name": "Philosoraptor",
+    "file": "Philosoraptor.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Philosoraptor-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

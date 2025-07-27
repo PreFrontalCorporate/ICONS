@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Trollface_Variation_",
+    "name": "Trollface_Variation_",
+    "file": "Trollface_Variation_.webp",
+    "width": 734,
+    "height": 310,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Trollface_Variation_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

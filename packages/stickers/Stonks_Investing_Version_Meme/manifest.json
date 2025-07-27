@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Stonks_Investing_Version_Meme",
+    "name": "Stonks_Investing_Version_Meme",
+    "file": "Stonks_Investing_Version_Meme.webp",
+    "width": 700,
+    "height": 390,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Stonks_Investing_Version_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

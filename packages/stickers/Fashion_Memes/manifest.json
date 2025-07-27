@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Fashion_Memes",
+    "name": "Fashion_Memes",
+    "file": "Fashion_Memes.webp",
+    "width": 600,
+    "height": 617,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Fashion_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

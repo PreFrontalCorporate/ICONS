@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Box_Cat_variations_",
+    "name": "Box_Cat_Variations_",
+    "file": "Box_Cat_variations_.webp",
+    "width": 570,
+    "height": 570,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Box_Cat_variations_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

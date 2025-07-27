@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Xzibit_Yo_Dawg",
+    "name": "Xzibit_Yo_Dawg",
+    "file": "Xzibit_Yo_Dawg.webp",
+    "width": 800,
+    "height": 532,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Xzibit_Yo_Dawg-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

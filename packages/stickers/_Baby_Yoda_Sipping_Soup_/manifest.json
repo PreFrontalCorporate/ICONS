@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Baby_Yoda_Sipping_Soup_",
+    "name": "_Baby_Yoda_Sipping_Soup_",
+    "file": "_Baby_Yoda_Sipping_Soup_.webp",
+    "width": 600,
+    "height": 600,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Baby_Yoda_Sipping_Soup_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

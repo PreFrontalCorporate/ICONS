@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Green_M_M",
+    "name": "Green_M_M",
+    "file": "Green_M_M.webp",
+    "width": 818,
+    "height": 545,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Green_M_M-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

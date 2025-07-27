@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_OK_Hand_Sign_Emoji_",
+    "name": "_Ok_Hand_Sign_Emoji_",
+    "file": "_OK_Hand_Sign_Emoji_.webp",
+    "width": 360,
+    "height": 313,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_OK_Hand_Sign_Emoji_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

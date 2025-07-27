@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Monkey_Puppet",
+    "name": "Monkey_Puppet",
+    "file": "Monkey_Puppet.webp",
+    "width": 310,
+    "height": 501,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Monkey_Puppet-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

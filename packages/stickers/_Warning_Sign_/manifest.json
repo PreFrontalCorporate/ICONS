@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Warning_Sign_",
+    "name": "_Warning_Sign_",
+    "file": "_Warning_Sign_.webp",
+    "width": 358,
+    "height": 358,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Warning_Sign_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Overly_Attached_Girlfriend_Meme",
+    "name": "Overly_Attached_Girlfriend_Meme",
+    "file": "Overly_Attached_Girlfriend_Meme.webp",
+    "width": 800,
+    "height": 533,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Overly_Attached_Girlfriend_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

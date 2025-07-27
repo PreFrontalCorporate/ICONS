@@ -1,0 +1,17 @@
+[
+  {
+    "id": "I_Should_Buy_a_Boat",
+    "name": "I_Should_Buy_A_Boat",
+    "file": "I_Should_Buy_a_Boat.webp",
+    "width": 700,
+    "height": 394,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "I_Should_Buy_a_Boat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Yao_Ming_Face",
+    "name": "Yao_Ming_Face",
+    "file": "Yao_Ming_Face.webp",
+    "width": 360,
+    "height": 286,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Yao_Ming_Face-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Change_My_Mind_Meme",
+    "name": "Change_My_Mind_Meme",
+    "file": "Change_My_Mind_Meme.webp",
+    "width": 482,
+    "height": 361,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Change_My_Mind_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

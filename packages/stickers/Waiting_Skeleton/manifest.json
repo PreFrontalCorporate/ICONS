@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Waiting_Skeleton",
+    "name": "Waiting_Skeleton",
+    "file": "Waiting_Skeleton.webp",
+    "width": 372,
+    "height": 498,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Waiting_Skeleton-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

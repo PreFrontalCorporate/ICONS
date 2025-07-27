@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Butthurt_Dweller",
+    "name": "Butthurt_Dweller",
+    "file": "Butthurt_Dweller.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Butthurt_Dweller-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

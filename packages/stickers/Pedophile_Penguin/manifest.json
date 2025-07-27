@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Pedophile_Penguin",
+    "name": "Pedophile_Penguin",
+    "file": "Pedophile_Penguin.webp",
+    "width": 620,
+    "height": 349,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Pedophile_Penguin-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

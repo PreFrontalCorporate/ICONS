@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Smirking_Face_Emoji",
+    "name": "Smirking_Face_Emoji",
+    "file": "Smirking_Face_Emoji.webp",
+    "width": 380,
+    "height": 380,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Smirking_Face_Emoji-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

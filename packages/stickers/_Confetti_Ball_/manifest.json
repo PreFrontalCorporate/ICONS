@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Confetti_Ball_",
+    "name": "_Confetti_Ball_",
+    "file": "_Confetti_Ball_.webp",
+    "width": 512,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Confetti_Ball_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

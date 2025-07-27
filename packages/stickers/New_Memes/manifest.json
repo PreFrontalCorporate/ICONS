@@ -1,0 +1,17 @@
+[
+  {
+    "id": "New_Memes",
+    "name": "New_Memes",
+    "file": "New_Memes.webp",
+    "width": 537,
+    "height": 631,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "New_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

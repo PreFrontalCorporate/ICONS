@@ -1,0 +1,17 @@
+[
+  {
+    "id": "The_Most_Interesting_Man_in_the_World",
+    "name": "The_Most_Interesting_Man_In_The_World",
+    "file": "The_Most_Interesting_Man_in_the_World.webp",
+    "width": 600,
+    "height": 752,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "The_Most_Interesting_Man_in_the_World-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

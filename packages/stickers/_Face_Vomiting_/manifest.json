@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Face_Vomiting_",
+    "name": "_Face_Vomiting_",
+    "file": "_Face_Vomiting_.webp",
+    "width": 400,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Face_Vomiting_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

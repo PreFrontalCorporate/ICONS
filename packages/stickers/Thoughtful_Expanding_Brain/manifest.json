@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Thoughtful_Expanding_Brain",
+    "name": "Thoughtful_Expanding_Brain",
+    "file": "Thoughtful_Expanding_Brain.webp",
+    "width": 500,
+    "height": 701,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Thoughtful_Expanding_Brain-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

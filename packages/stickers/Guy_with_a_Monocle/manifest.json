@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Guy_with_a_Monocle",
+    "name": "Guy_With_A_Monocle",
+    "file": "Guy_with_a_Monocle.webp",
+    "width": 568,
+    "height": 347,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Guy_with_a_Monocle-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

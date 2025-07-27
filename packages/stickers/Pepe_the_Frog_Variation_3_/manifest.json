@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Pepe_the_Frog_Variation_3_",
+    "name": "Pepe_The_Frog_Variation_3_",
+    "file": "Pepe_the_Frog_Variation_3_.webp",
+    "width": 640,
+    "height": 474,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Pepe_the_Frog_Variation_3_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

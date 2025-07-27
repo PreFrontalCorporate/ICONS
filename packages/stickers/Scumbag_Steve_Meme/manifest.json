@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Scumbag_Steve_Meme",
+    "name": "Scumbag_Steve_Meme",
+    "file": "Scumbag_Steve_Meme.webp",
+    "width": 480,
+    "height": 323,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Scumbag_Steve_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

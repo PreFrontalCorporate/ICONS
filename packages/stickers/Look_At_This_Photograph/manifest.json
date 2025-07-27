@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Look_At_This_Photograph",
+    "name": "Look_At_This_Photograph",
+    "file": "Look_At_This_Photograph.webp",
+    "width": 686,
+    "height": 386,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Look_At_This_Photograph-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

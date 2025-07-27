@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Smiling_Friends_",
+    "name": "_Smiling_Friends_",
+    "file": "_Smiling_Friends_.webp",
+    "width": 700,
+    "height": 394,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Smiling_Friends_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

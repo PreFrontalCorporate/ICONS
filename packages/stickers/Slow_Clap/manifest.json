@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Slow_Clap",
+    "name": "Slow_Clap",
+    "file": "Slow_Clap.webp",
+    "width": 374,
+    "height": 404,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Slow_Clap-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

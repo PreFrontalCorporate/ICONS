@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Forever_Alone_in_a_Crowd",
+    "name": "Forever_Alone_In_A_Crowd",
+    "file": "Forever_Alone_in_a_Crowd.webp",
+    "width": 350,
+    "height": 265,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Forever_Alone_in_a_Crowd-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

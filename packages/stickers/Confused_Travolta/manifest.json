@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Confused_Travolta",
+    "name": "Confused_Travolta",
+    "file": "Confused_Travolta.webp",
+    "width": 800,
+    "height": 450,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Confused_Travolta-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

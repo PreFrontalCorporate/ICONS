@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Surprised_Pikachu_Meme",
+    "name": "Surprised_Pikachu_Meme",
+    "file": "Surprised_Pikachu_Meme.webp",
+    "width": 500,
+    "height": 437,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Surprised_Pikachu_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

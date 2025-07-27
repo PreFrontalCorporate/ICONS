@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Third_World_Success_Kid",
+    "name": "Third_World_Success_Kid",
+    "file": "Third_World_Success_Kid.webp",
+    "width": 401,
+    "height": 396,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Third_World_Success_Kid-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

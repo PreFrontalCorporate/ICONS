@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Thinking_Face_Emoji",
+    "name": "Thinking_Face_Emoji",
+    "file": "Thinking_Face_Emoji.webp",
+    "width": 480,
+    "height": 480,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Thinking_Face_Emoji-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

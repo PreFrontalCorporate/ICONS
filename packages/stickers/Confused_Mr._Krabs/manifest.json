@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Confused_Mr._Krabs",
+    "name": "Confused_Mr._Krabs",
+    "file": "Confused_Mr._Krabs.webp",
+    "width": 378,
+    "height": 378,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Confused_Mr._Krabs-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

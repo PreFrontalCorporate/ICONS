@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Funny_LOLcats",
+    "name": "Funny_Lolcats",
+    "file": "Funny_LOLcats.webp",
+    "width": 571,
+    "height": 639,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Funny_LOLcats-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

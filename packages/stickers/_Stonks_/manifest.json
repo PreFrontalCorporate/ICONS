@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Stonks_",
+    "name": "_Stonks_",
+    "file": "_Stonks_.webp",
+    "width": 571,
+    "height": 800,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Stonks_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

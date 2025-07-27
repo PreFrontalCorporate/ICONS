@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Most_Best_Memes",
+    "name": "Most_Best_Memes",
+    "file": "Most_Best_Memes.webp",
+    "width": 422,
+    "height": 589,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Most_Best_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

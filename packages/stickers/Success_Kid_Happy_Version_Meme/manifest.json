@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Success_Kid_Happy_Version_Meme",
+    "name": "Success_Kid_Happy_Version_Meme",
+    "file": "Success_Kid_Happy_Version_Meme.webp",
+    "width": 650,
+    "height": 366,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Success_Kid_Happy_Version_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

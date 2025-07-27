@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Technology_Memes",
+    "name": "Technology_Memes",
+    "file": "Technology_Memes.webp",
+    "width": 528,
+    "height": 588,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Technology_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

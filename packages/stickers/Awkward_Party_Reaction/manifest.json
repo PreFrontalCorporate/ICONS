@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Awkward_Party_Reaction",
+    "name": "Awkward_Party_Reaction",
+    "file": "Awkward_Party_Reaction.webp",
+    "width": 448,
+    "height": 238,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Awkward_Party_Reaction-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

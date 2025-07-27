@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Smug_Frog",
+    "name": "Smug_Frog",
+    "file": "Smug_Frog.webp",
+    "width": 600,
+    "height": 600,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Smug_Frog-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

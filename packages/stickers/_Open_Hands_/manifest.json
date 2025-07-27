@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Open_Hands_",
+    "name": "_Open_Hands_",
+    "file": "_Open_Hands_.webp",
+    "width": 390,
+    "height": 280,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Open_Hands_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "I_Like_Turtles_Kid",
+    "name": "I_Like_Turtles_Kid",
+    "file": "I_Like_Turtles_Kid.webp",
+    "width": 686,
+    "height": 386,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "I_Like_Turtles_Kid-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

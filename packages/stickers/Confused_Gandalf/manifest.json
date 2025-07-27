@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Confused_Gandalf",
+    "name": "Confused_Gandalf",
+    "file": "Confused_Gandalf.webp",
+    "width": 500,
+    "height": 607,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Confused_Gandalf-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

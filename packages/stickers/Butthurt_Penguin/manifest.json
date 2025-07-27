@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Butthurt_Penguin",
+    "name": "Butthurt_Penguin",
+    "file": "Butthurt_Penguin.webp",
+    "width": 600,
+    "height": 600,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Butthurt_Penguin-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

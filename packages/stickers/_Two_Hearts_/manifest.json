@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Two_Hearts_",
+    "name": "_Two_Hearts_",
+    "file": "_Two_Hearts_.webp",
+    "width": 512,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Two_Hearts_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_The_Office_Stare_",
+    "name": "_The_Office_Stare_",
+    "file": "_The_Office_Stare_.webp",
+    "width": 476,
+    "height": 640,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_The_Office_Stare_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

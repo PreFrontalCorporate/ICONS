@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Neil_deGrasse_Tyson_Reaction",
+    "name": "Neil_Degrasse_Tyson_Reaction",
+    "file": "Neil_deGrasse_Tyson_Reaction.webp",
+    "width": 686,
+    "height": 386,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Neil_deGrasse_Tyson_Reaction-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

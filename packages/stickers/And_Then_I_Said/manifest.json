@@ -1,0 +1,17 @@
+[
+  {
+    "id": "And_Then_I_Said",
+    "name": "And_Then_I_Said",
+    "file": "And_Then_I_Said.webp",
+    "width": 625,
+    "height": 459,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "And_Then_I_Said-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

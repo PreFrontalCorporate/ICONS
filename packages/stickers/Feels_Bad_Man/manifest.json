@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Feels_Bad_Man",
+    "name": "Feels_Bad_Man",
+    "file": "Feels_Bad_Man.webp",
+    "width": 570,
+    "height": 570,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Feels_Bad_Man-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

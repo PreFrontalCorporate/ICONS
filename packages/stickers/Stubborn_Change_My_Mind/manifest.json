@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Stubborn_Change_My_Mind",
+    "name": "Stubborn_Change_My_Mind",
+    "file": "Stubborn_Change_My_Mind.webp",
+    "width": 577,
+    "height": 432,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Stubborn_Change_My_Mind-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

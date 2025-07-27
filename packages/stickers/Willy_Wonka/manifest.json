@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Willy_Wonka",
+    "name": "Willy_Wonka",
+    "file": "Willy_Wonka.webp",
+    "width": 888,
+    "height": 518,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Willy_Wonka-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

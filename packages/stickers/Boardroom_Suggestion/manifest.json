@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Boardroom_Suggestion",
+    "name": "Boardroom_Suggestion",
+    "file": "Boardroom_Suggestion.webp",
+    "width": 300,
+    "height": 393,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Boardroom_Suggestion-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

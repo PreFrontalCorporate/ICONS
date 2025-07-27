@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Relieved_Face_",
+    "name": "_Relieved_Face_",
+    "file": "_Relieved_Face_.webp",
+    "width": 420,
+    "height": 420,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Relieved_Face_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

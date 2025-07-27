@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Picard_Wtf",
+    "name": "Picard_Wtf",
+    "file": "Picard_Wtf.webp",
+    "width": 800,
+    "height": 560,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Picard_Wtf-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

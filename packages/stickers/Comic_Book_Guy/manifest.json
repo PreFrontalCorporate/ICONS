@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Comic_Book_Guy",
+    "name": "Comic_Book_Guy",
+    "file": "Comic_Book_Guy.webp",
+    "width": 250,
+    "height": 369,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Comic_Book_Guy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

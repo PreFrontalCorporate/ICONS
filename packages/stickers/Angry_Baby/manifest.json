@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Angry_Baby",
+    "name": "Angry_Baby",
+    "file": "Angry_Baby.webp",
+    "width": 456,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Angry_Baby-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Woman_Pointing_at_Phone",
+    "name": "Woman_Pointing_At_Phone",
+    "file": "Woman_Pointing_at_Phone.webp",
+    "width": 612,
+    "height": 408,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Woman_Pointing_at_Phone-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

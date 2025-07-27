@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Advice_Animals",
+    "name": "Advice_Animals",
+    "file": "Advice_Animals.webp",
+    "width": 404,
+    "height": 949,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Advice_Animals-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

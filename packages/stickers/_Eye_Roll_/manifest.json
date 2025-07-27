@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Eye_Roll_",
+    "name": "_Eye_Roll_",
+    "file": "_Eye_Roll_.webp",
+    "width": 600,
+    "height": 600,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Eye_Roll_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

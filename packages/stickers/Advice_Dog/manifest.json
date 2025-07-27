@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Advice_Dog",
+    "name": "Advice_Dog",
+    "file": "Advice_Dog.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Advice_Dog-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

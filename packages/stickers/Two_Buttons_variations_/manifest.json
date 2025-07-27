@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Two_Buttons_variations_",
+    "name": "Two_Buttons_Variations_",
+    "file": "Two_Buttons_variations_.webp",
+    "width": 300,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Two_Buttons_variations_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

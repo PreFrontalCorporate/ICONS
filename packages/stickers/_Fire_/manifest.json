@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Fire_",
+    "name": "_Fire_",
+    "file": "_Fire_.webp",
+    "width": 490,
+    "height": 686,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Fire_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

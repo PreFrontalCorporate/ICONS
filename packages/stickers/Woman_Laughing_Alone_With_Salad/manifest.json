@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Woman_Laughing_Alone_With_Salad",
+    "name": "Woman_Laughing_Alone_With_Salad",
+    "file": "Woman_Laughing_Alone_With_Salad.webp",
+    "width": 600,
+    "height": 350,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Woman_Laughing_Alone_With_Salad-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

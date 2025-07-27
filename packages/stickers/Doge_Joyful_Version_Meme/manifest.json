@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Doge_Joyful_Version_Meme",
+    "name": "Doge_Joyful_Version_Meme",
+    "file": "Doge_Joyful_Version_Meme.webp",
+    "width": 567,
+    "height": 808,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Doge_Joyful_Version_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

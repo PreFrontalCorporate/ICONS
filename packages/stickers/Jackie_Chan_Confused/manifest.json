@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Jackie_Chan_Confused",
+    "name": "Jackie_Chan_Confused",
+    "file": "Jackie_Chan_Confused.webp",
+    "width": 494,
+    "height": 298,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Jackie_Chan_Confused-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

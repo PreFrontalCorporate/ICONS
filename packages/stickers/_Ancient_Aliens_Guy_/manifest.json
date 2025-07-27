@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Ancient_Aliens_Guy_",
+    "name": "_Ancient_Aliens_Guy_",
+    "file": "_Ancient_Aliens_Guy_.webp",
+    "width": 630,
+    "height": 630,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Ancient_Aliens_Guy_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

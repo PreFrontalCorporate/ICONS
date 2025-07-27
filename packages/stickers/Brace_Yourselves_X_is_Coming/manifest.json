@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Brace_Yourselves_X_is_Coming",
+    "name": "Brace_Yourselves_X_Is_Coming",
+    "file": "Brace_Yourselves_X_is_Coming.webp",
+    "width": 570,
+    "height": 570,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Brace_Yourselves_X_is_Coming-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

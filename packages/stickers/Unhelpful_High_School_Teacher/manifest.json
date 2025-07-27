@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Unhelpful_High_School_Teacher",
+    "name": "Unhelpful_High_School_Teacher",
+    "file": "Unhelpful_High_School_Teacher.webp",
+    "width": 500,
+    "height": 333,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Unhelpful_High_School_Teacher-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

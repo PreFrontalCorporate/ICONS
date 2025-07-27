@@ -1,0 +1,17 @@
+[
+  {
+    "id": "If_You_Know_What_I_Mean",
+    "name": "If_You_Know_What_I_Mean",
+    "file": "If_You_Know_What_I_Mean.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "If_You_Know_What_I_Mean-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

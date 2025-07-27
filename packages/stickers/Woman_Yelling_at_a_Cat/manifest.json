@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Woman_Yelling_at_a_Cat",
+    "name": "Woman_Yelling_At_A_Cat",
+    "file": "Woman_Yelling_at_a_Cat.webp",
+    "width": 450,
+    "height": 450,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Woman_Yelling_at_a_Cat-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Shocked_Face_",
+    "name": "_Shocked_Face_",
+    "file": "_Shocked_Face_.webp",
+    "width": 488,
+    "height": 280,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Shocked_Face_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

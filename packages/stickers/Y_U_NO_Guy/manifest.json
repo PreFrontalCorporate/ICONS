@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Y_U_NO_Guy",
+    "name": "Y_U_No_Guy",
+    "file": "Y_U_NO_Guy.webp",
+    "width": 600,
+    "height": 622,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Y_U_NO_Guy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

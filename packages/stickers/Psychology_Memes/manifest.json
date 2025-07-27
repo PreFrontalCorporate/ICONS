@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Psychology_Memes",
+    "name": "Psychology_Memes",
+    "file": "Psychology_Memes.webp",
+    "width": 480,
+    "height": 417,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Psychology_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

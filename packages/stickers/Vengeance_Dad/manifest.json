@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Vengeance_Dad",
+    "name": "Vengeance_Dad",
+    "file": "Vengeance_Dad.webp",
+    "width": 458,
+    "height": 574,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Vengeance_Dad-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

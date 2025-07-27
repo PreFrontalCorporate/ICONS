@@ -1,0 +1,17 @@
+[
+  {
+    "id": "LOLcats_variations_",
+    "name": "Lolcats_Variations_",
+    "file": "LOLcats_variations_.webp",
+    "width": 375,
+    "height": 375,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "LOLcats_variations_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

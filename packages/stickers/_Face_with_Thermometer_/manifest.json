@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Face_with_Thermometer_",
+    "name": "_Face_With_Thermometer_",
+    "file": "_Face_with_Thermometer_.webp",
+    "width": 512,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Face_with_Thermometer_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

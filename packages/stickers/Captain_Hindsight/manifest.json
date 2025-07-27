@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Captain_Hindsight",
+    "name": "Captain_Hindsight",
+    "file": "Captain_Hindsight.webp",
+    "width": 291,
+    "height": 539,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Captain_Hindsight-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

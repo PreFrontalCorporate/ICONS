@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Music_Memes",
+    "name": "Music_Memes",
+    "file": "Music_Memes.webp",
+    "width": 600,
+    "height": 643,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Music_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_This_Is_Fine_",
+    "name": "_This_Is_Fine_",
+    "file": "_This_Is_Fine_.webp",
+    "width": 630,
+    "height": 630,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_This_Is_Fine_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

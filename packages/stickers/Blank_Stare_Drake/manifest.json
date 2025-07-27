@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Blank_Stare_Drake",
+    "name": "Blank_Stare_Drake",
+    "file": "Blank_Stare_Drake.webp",
+    "width": 640,
+    "height": 558,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Blank_Stare_Drake-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Mocking_SpongeBob_Ridiculing_Version_Meme",
+    "name": "Mocking_Spongebob_Ridiculing_Version_Meme",
+    "file": "Mocking_SpongeBob_Ridiculing_Version_Meme.webp",
+    "width": 800,
+    "height": 563,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Mocking_SpongeBob_Ridiculing_Version_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

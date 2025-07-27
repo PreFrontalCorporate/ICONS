@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Viral_Memes",
+    "name": "Viral_Memes",
+    "file": "Viral_Memes.webp",
+    "width": 342,
+    "height": 475,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Viral_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Nyan_Cat_",
+    "name": "_Nyan_Cat_",
+    "file": "_Nyan_Cat_.webp",
+    "width": 526,
+    "height": 296,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Nyan_Cat_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

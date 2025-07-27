@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Big_Shaq",
+    "name": "Big_Shaq",
+    "file": "Big_Shaq.webp",
+    "width": 780,
+    "height": 520,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Big_Shaq-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

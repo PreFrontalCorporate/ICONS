@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Socially_Awkward_Penguin",
+    "name": "Socially_Awkward_Penguin",
+    "file": "Socially_Awkward_Penguin.webp",
+    "width": 540,
+    "height": 540,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Socially_Awkward_Penguin-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

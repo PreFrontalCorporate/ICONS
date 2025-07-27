@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Change_My_Mind",
+    "name": "Change_My_Mind",
+    "file": "Change_My_Mind.webp",
+    "width": 768,
+    "height": 568,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Change_My_Mind-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

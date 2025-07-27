@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Archer",
+    "name": "Archer",
+    "file": "Archer.webp",
+    "width": 555,
+    "height": 555,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Archer-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

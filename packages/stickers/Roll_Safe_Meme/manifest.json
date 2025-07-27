@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Roll_Safe_Meme",
+    "name": "Roll_Safe_Meme",
+    "file": "Roll_Safe_Meme.webp",
+    "width": 421,
+    "height": 236,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Roll_Safe_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "So_I_Guess_This_is_Happening",
+    "name": "So_I_Guess_This_Is_Happening",
+    "file": "So_I_Guess_This_is_Happening.webp",
+    "width": 640,
+    "height": 334,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "So_I_Guess_This_is_Happening-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Computer_Guy",
+    "name": "Computer_Guy",
+    "file": "Computer_Guy.webp",
+    "width": 368,
+    "height": 270,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Computer_Guy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "I_Guarantee_It",
+    "name": "I_Guarantee_It",
+    "file": "I_Guarantee_It.webp",
+    "width": 320,
+    "height": 427,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "I_Guarantee_It-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

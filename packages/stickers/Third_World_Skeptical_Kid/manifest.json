@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Third_World_Skeptical_Kid",
+    "name": "Third_World_Skeptical_Kid",
+    "file": "Third_World_Skeptical_Kid.webp",
+    "width": 460,
+    "height": 472,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Third_World_Skeptical_Kid-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

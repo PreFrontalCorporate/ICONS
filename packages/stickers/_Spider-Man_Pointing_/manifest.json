@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Spider-Man_Pointing_",
+    "name": "_Spider Man_Pointing_",
+    "file": "_Spider-Man_Pointing_.webp",
+    "width": 520,
+    "height": 390,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Spider-Man_Pointing_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

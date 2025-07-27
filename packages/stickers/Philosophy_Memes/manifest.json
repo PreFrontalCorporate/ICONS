@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Philosophy_Memes",
+    "name": "Philosophy_Memes",
+    "file": "Philosophy_Memes.webp",
+    "width": 800,
+    "height": 420,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Philosophy_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

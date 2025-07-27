@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Depressed_Hide_the_Pain_Harold",
+    "name": "Depressed_Hide_The_Pain_Harold",
+    "file": "Depressed_Hide_the_Pain_Harold.webp",
+    "width": 390,
+    "height": 280,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Depressed_Hide_the_Pain_Harold-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

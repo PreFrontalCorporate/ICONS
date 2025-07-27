@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Devious_Disaster_Girl",
+    "name": "Devious_Disaster_Girl",
+    "file": "Devious_Disaster_Girl.webp",
+    "width": 577,
+    "height": 433,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Devious_Disaster_Girl-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

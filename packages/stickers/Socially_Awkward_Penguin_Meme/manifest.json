@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Socially_Awkward_Penguin_Meme",
+    "name": "Socially_Awkward_Penguin_Meme",
+    "file": "Socially_Awkward_Penguin_Meme.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Socially_Awkward_Penguin_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

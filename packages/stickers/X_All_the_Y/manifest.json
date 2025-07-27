@@ -1,0 +1,17 @@
+[
+  {
+    "id": "X_All_the_Y",
+    "name": "X_All_The_Y",
+    "file": "X_All_the_Y.webp",
+    "width": 500,
+    "height": 355,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "X_All_the_Y-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

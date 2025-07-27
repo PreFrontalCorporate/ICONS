@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Sheltering_Suburban_Mom",
+    "name": "Sheltering_Suburban_Mom",
+    "file": "Sheltering_Suburban_Mom.webp",
+    "width": 500,
+    "height": 281,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Sheltering_Suburban_Mom-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

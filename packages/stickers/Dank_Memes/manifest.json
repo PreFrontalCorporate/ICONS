@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Dank_Memes",
+    "name": "Dank_Memes",
+    "file": "Dank_Memes.webp",
+    "width": 686,
+    "height": 386,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Dank_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

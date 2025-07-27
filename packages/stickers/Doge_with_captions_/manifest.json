@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Doge_with_captions_",
+    "name": "Doge_With_Captions_",
+    "file": "Doge_with_captions_.webp",
+    "width": 640,
+    "height": 480,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Doge_with_captions_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Disaster_Girl_new_format_",
+    "name": "Disaster_Girl_New_Format_",
+    "file": "Disaster_Girl_new_format_.webp",
+    "width": 480,
+    "height": 270,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Disaster_Girl_new_format_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

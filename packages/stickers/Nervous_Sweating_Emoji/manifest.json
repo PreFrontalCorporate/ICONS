@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Nervous_Sweating_Emoji",
+    "name": "Nervous_Sweating_Emoji",
+    "file": "Nervous_Sweating_Emoji.webp",
+    "width": 512,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Nervous_Sweating_Emoji-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

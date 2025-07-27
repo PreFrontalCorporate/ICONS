@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Wise_Roll_Safe",
+    "name": "Wise_Roll_Safe",
+    "file": "Wise_Roll_Safe.webp",
+    "width": 702,
+    "height": 395,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Wise_Roll_Safe-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

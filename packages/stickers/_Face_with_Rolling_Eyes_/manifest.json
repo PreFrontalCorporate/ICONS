@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Face_with_Rolling_Eyes_",
+    "name": "_Face_With_Rolling_Eyes_",
+    "file": "_Face_with_Rolling_Eyes_.webp",
+    "width": 626,
+    "height": 626,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Face_with_Rolling_Eyes_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

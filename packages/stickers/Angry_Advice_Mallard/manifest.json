@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Angry_Advice_Mallard",
+    "name": "Angry_Advice_Mallard",
+    "file": "Angry_Advice_Mallard.webp",
+    "width": 625,
+    "height": 750,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Angry_Advice_Mallard-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

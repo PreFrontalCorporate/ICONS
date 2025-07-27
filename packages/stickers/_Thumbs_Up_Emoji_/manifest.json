@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Thumbs_Up_Emoji_",
+    "name": "_Thumbs_Up_Emoji_",
+    "file": "_Thumbs_Up_Emoji_.webp",
+    "width": 400,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Thumbs_Up_Emoji_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Drake_Hotline_Bling",
+    "name": "Drake_Hotline_Bling",
+    "file": "Drake_Hotline_Bling.webp",
+    "width": 607,
+    "height": 635,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Drake_Hotline_Bling-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

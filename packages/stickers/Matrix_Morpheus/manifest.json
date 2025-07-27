@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Matrix_Morpheus",
+    "name": "Matrix_Morpheus",
+    "file": "Matrix_Morpheus.webp",
+    "width": 500,
+    "height": 650,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Matrix_Morpheus-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

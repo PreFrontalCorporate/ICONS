@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Okay_Guy",
+    "name": "Okay_Guy",
+    "file": "Okay_Guy.webp",
+    "width": 768,
+    "height": 512,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Okay_Guy-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

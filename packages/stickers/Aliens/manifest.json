@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Aliens",
+    "name": "Aliens",
+    "file": "Aliens.webp",
+    "width": 560,
+    "height": 420,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Aliens-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

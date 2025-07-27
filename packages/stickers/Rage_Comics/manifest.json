@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Rage_Comics",
+    "name": "Rage_Comics",
+    "file": "Rage_Comics.webp",
+    "width": 800,
+    "height": 480,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Rage_Comics-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

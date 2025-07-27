@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Panik_Kalm_Panik",
+    "name": "Panik_Kalm_Panik",
+    "file": "Panik_Kalm_Panik.webp",
+    "width": 500,
+    "height": 688,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Panik_Kalm_Panik-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

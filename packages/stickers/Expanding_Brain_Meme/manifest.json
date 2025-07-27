@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Expanding_Brain_Meme",
+    "name": "Expanding_Brain_Meme",
+    "file": "Expanding_Brain_Meme.webp",
+    "width": 467,
+    "height": 660,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Expanding_Brain_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

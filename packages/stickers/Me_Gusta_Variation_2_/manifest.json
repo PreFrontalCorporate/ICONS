@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Me_Gusta_Variation_2_",
+    "name": "Me_Gusta_Variation_2_",
+    "file": "Me_Gusta_Variation_2_.webp",
+    "width": 270,
+    "height": 350,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Me_Gusta_Variation_2_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Dark_Memes",
+    "name": "Dark_Memes",
+    "file": "Dark_Memes.webp",
+    "width": 600,
+    "height": 699,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Dark_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Crying_Jordan",
+    "name": "Crying_Jordan",
+    "file": "Crying_Jordan.webp",
+    "width": 273,
+    "height": 364,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Crying_Jordan-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

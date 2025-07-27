@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Surreal_Memes",
+    "name": "Surreal_Memes",
+    "file": "Surreal_Memes.webp",
+    "width": 532,
+    "height": 469,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Surreal_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Spongebob_Time_Cards",
+    "name": "Spongebob_Time_Cards",
+    "file": "Spongebob_Time_Cards.webp",
+    "width": 640,
+    "height": 485,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Spongebob_Time_Cards-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

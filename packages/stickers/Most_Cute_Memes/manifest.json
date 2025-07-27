@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Most_Cute_Memes",
+    "name": "Most_Cute_Memes",
+    "file": "Most_Cute_Memes.webp",
+    "width": 564,
+    "height": 552,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Most_Cute_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

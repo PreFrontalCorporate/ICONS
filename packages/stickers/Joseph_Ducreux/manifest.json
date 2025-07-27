@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Joseph_Ducreux",
+    "name": "Joseph_Ducreux",
+    "file": "Joseph_Ducreux.webp",
+    "width": 421,
+    "height": 600,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Joseph_Ducreux-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

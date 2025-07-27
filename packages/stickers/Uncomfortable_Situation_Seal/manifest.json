@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Uncomfortable_Situation_Seal",
+    "name": "Uncomfortable_Situation_Seal",
+    "file": "Uncomfortable_Situation_Seal.webp",
+    "width": 630,
+    "height": 330,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Uncomfortable_Situation_Seal-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

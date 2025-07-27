@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Cool_Memes",
+    "name": "Cool_Memes",
+    "file": "Cool_Memes.webp",
+    "width": 800,
+    "height": 420,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Cool_Memes-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Evil_Patrick_Star",
+    "name": "Evil_Patrick_Star",
+    "file": "Evil_Patrick_Star.webp",
+    "width": 400,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Evil_Patrick_Star-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

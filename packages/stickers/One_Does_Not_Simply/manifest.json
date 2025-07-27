@@ -1,0 +1,17 @@
+[
+  {
+    "id": "One_Does_Not_Simply",
+    "name": "One_Does_Not_Simply",
+    "file": "One_Does_Not_Simply.webp",
+    "width": 256,
+    "height": 400,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "One_Does_Not_Simply-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "The_Rock_Driving",
+    "name": "The_Rock_Driving",
+    "file": "The_Rock_Driving.webp",
+    "width": 480,
+    "height": 360,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "The_Rock_Driving-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

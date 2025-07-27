@@ -1,0 +1,17 @@
+[
+  {
+    "id": "_Partying_Face_",
+    "name": "_Partying_Face_",
+    "file": "_Partying_Face_.webp",
+    "width": 480,
+    "height": 270,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "_Partying_Face_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

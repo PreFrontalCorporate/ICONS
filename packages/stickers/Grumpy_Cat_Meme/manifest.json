@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Grumpy_Cat_Meme",
+    "name": "Grumpy_Cat_Meme",
+    "file": "Grumpy_Cat_Meme.webp",
+    "width": 450,
+    "height": 587,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Grumpy_Cat_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

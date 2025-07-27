@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Good_Guy_Greg_new_format_",
+    "name": "Good_Guy_Greg_New_Format_",
+    "file": "Good_Guy_Greg_new_format_.webp",
+    "width": 500,
+    "height": 500,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Good_Guy_Greg_new_format_-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Futurama_Fry",
+    "name": "Futurama_Fry",
+    "file": "Futurama_Fry.webp",
+    "width": 686,
+    "height": 386,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Futurama_Fry-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]

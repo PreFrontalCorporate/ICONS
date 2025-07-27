@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Stonks_Profitable_Version_Meme",
+    "name": "Stonks_Profitable_Version_Meme",
+    "file": "Stonks_Profitable_Version_Meme.webp",
+    "width": 888,
+    "height": 499,
+    "animated": false,
+    "defaultPosition": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "thumb": "Stonks_Profitable_Version_Meme-thumb.png",
+    "viralityTier": 1,
+    "priceUSD": 1.0
+  }
+]
