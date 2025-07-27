@@ -1,0 +1,9 @@
+on:
+  push:
+    paths:
+      - 'app/desktop/**'
+      - 'packages/**'
+...
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build -F desktop
+        working-directory: app/desktop      # updated

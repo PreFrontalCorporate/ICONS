@@ -1,0 +1,9 @@
+on:
+  push:
+    paths:
+      - 'app/extension/**'
+      - 'packages/**'
+...
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build -F extension
+        working-directory: app/extension    # updated
