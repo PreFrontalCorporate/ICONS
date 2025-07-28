@@ -10,3 +10,25 @@ dist/
 # --- Misc -----------------------------------
 .DS_Store
 *.log
+
+# VS Code remote server artifacts
+.vscode-server*/
+.vscode-remote*/              
+
+.ssh/
+
+.local/
+.turbo/
+# wget & temp folders accidentally staged
+.motd_shown
+.wget-hsts
+tsx-0/
+
+# Node build outputs
+**/dist/
+**/build/
+
+# OS junk
+.DS_Store
+Thumbs.db
+

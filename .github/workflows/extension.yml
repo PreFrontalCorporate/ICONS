@@ -1,9 +1,28 @@
+name: Extension CI
+
 on:
   push:
-    paths:
-      - 'app/extension/**'
-      - 'packages/**'
-...
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run build -F extension
-        working-directory: app/extension    # updated
+    paths: [ 'app/extension/**', 'packages/**', 'pnpm-lock.yaml' ]
+
+jobs:
+  build-extension:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9, run_install: true }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - name: Build & zip
+        run: |
+          pnpm --filter extension run build
+          cd app/extension/dist && zip -r ../../extension.zip .
+      - name: Publish to Chrome Web Store
+        uses: mnao305/chrome-extension-upload-action@v5  # :contentReference[oaicite:9]{index=9}
+        with:
+          client-id:     ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          app-id:        ${{ secrets.CHROME_APP_ID }}
+          file-path:     ./extension.zip
+          publish:       true

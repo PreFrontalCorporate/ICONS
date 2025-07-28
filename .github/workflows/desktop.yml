@@ -1,9 +1,24 @@
+name: Desktop CI
+
 on:
   push:
     paths:
       - 'app/desktop/**'
       - 'packages/**'
-...
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run build -F desktop
-        working-directory: app/desktop      # updated
+      - 'pnpm-lock.yaml'
+
+jobs:
+  build-desktop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9, run_install: true }   # :contentReference[oaicite:7]{index=7}
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - name: Build & package under Xvfb
+        run: xvfb-run --auto-servernum pnpm --filter desktop run build
+      - uses: electron-builder-action@v5   # builds + attaches installers :contentReference[oaicite:8]{index=8}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

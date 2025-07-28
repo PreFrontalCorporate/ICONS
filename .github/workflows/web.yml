@@ -1,8 +1,16 @@
-# .github/workflows/web.yml
+name: Web CI
+
 on:
   push:
-    paths:
-      - 'app/web/**'
-      - 'packages/**'
-...
-        working-directory: app/web
+    paths: [ 'app/web/**', 'packages/**', 'pnpm-lock.yaml' ]
+
+jobs:
+  lint-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 9, run_install: true }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'pnpm' }
+      - run: pnpm --filter web run lint && pnpm --filter web run build
