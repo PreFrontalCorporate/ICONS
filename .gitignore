@@ -32,3 +32,10 @@ tsx-0/
 .DS_Store
 Thumbs.db
 
+
+# Never version-control keys & caches
+.ssh/
+.local/
+.turbo/
+.cache/
+.dotnet/
