@@ -1,21 +1,8 @@
-name: Deploy‑Web
+# .github/workflows/web.yml
 on:
   push:
-    paths:                       # ⬅️  change here
+    paths:
       - 'app/web/**'
       - 'packages/**'
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with: { version: 9.1.3 }
-      - run: pnpm install --frozen-lockfile
-      - name: Next → Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-args: '--prod'
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          working-directory: app/web        # ⬅️  update
+...
+        working-directory: app/web

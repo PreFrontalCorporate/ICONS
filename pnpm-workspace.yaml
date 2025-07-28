@@ -1,0 +1,7 @@
+packages:
+  # all app clients
+  - 'app/*'
+  # shared code & assets
+  - 'packages/*'
+  # build / release helpers
+  - 'scripts'
