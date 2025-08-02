@@ -1,38 +1,47 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { shopifyFetch } from '@/lib/shopify';
 import { serialize } from 'cookie';
+import { shopifyFetch } from '@/lib/shopify';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { email, password } = JSON.parse(req.body ?? '{}');
+  const { email, password } = req.body as { email: string; password: string };
 
-  const { customerAccessTokenCreate } = await shopifyFetch<{
+  // 1. create token -----------------------------------------------------------
+  const data = await shopifyFetch<{
     customerAccessTokenCreate: {
       customerAccessToken: { accessToken: string; expiresAt: string } | null;
-      customerUserErrors: { message: string }[];
+      customerUserErrors:   { message: string }[];
     };
-  }>(`mutation ($email:String!, $password:String!) {
-        customerAccessTokenCreate(input:{email:$email,password:$password}) {
+  }>(
+    `
+      mutation login($email: String!, $password: String!) {
+        customerAccessTokenCreate(input: { email:$email, password:$password }) {
           customerAccessToken { accessToken expiresAt }
           customerUserErrors { message }
         }
-      }`, { email, password });
+      }
+    `,
+    { email, password }
+  );
 
-  const tok = customerAccessTokenCreate.customerAccessToken?.accessToken;
-  if (!tok) return res.status(401).json({ ok:false });
+  const result = data.customerAccessTokenCreate;
 
-  /* ---------- cookie ---------- */
-  const prod  = process.env.NODE_ENV === 'production';
-  const max   = 60 * 60 * 24 * 14;                // 14 days
-  res.setHeader('Set-Cookie', serialize('cat', tok, {
-    httpOnly : true,
-    sameSite : prod ? 'none' : 'lax',
-    secure   : prod,
-    path     : '/',
-    maxAge   : max
-  }));
+  if (!result.customerAccessToken) {
+    const message = result.customerUserErrors[0]?.message ?? 'Login failed';
+    return res.status(401).json({ message });
+  }
 
-  res.json({ ok:true });
+  // 2. set http‑only cookie ---------------------------------------------------
+  res.setHeader(
+    'Set-Cookie',
+    serialize('cat', result.customerAccessToken.accessToken, {
+      httpOnly : true,
+      sameSite : 'lax',          // <-- change to 'none', secure:true when on HTTPS domain
+      path     : '/',
+      maxAge   : 60 * 60 * 24 * 30, // 30 days
+    })
+  );
+
+  res.status(200).end();
 }
-
