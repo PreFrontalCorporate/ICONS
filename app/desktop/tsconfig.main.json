@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "esnext",
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "types": ["node", "electron"],
+    /* Allow import path like '../foo.json' when we get there */
+    "resolveJsonModule": true,
+    /* Don’t look for every @types of transitive deps */
+    "skipLibCheck": true
+  },
+  "include": ["src/main.ts"]
+}
