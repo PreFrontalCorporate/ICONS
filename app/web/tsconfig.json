@@ -1,36 +1,45 @@
 {
   "compilerOptions": {
+    /* ——— language & emit ——— */
+    "module": "esnext",
+    "jsx": "preserve",
     "lib": ["dom", "dom.iterable", "esnext"],
 
-    "allowJs": true,
-    "skipLibCheck": true,          // fast‑build; still gets type‑safety from .d.ts files
+    /* ——— safety ——— */
     "strict": false,
+    "skipLibCheck": true,
     "strictNullChecks": true,
+    "isolatedModules": true,
     "noEmit": true,
     "incremental": true,
 
-    "module": "esnext",
+    /* ——— module resolution & aliases ——— */
     "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-
-    "baseUrl": ".",                // root of the web workspace
+    "baseUrl": ".",                  // root of the web workspace
     "paths": {
-      "@/*": ["./*"]               // e.g. "@/styles/globals.css"
+      "@/*": ["./*"]                 // e.g. "@/components/…"
     },
 
-    "plugins": [{ "name": "next" }]
+    /* ——— 👇  IMPORTANT  ——— */
+    "types": ["node"],               // keep Node globals
+    "typeRoots": [
+      "./types",                     // our local stubs
+      "../node_modules/@types",      // regular DefinitelyTyped pkgs
+      "../../node_modules/@types"    // root‑level (monorepo) pkgs
+    ],
 
+    /* ——— Next.js plugin ——— */
+    "plugins": [{ "name": "next" }]
   },
 
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "types/**/*.d.ts"                // ensure the stub is picked up
   ],
-  "exclude": ["node_modules"],
-  "typeRoots": ["./types", "../../node_modules/@types"]
+  "exclude": ["node_modules"]
 }
