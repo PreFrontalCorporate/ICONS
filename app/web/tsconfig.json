@@ -1,39 +1,35 @@
 {
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
+
     "allowJs": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true,          // fast‑build; still gets type‑safety from .d.ts files
     "strict": false,
+    "strictNullChecks": true,
     "noEmit": true,
     "incremental": true,
+
     "module": "esnext",
-    "esModuleInterop": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "strictNullChecks": true,
-    "baseUrl": ".",                 // <‑‑ root of web workspace
+
+    "baseUrl": ".",                // root of the web workspace
     "paths": {
-      "@/*": ["./*"]                // e.g. '@/styles/globals.css'
+      "@/*": ["./*"]               // e.g. "@/styles/globals.css"
     },
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
+
+    "plugins": [{ "name": "next" }]
+
   },
+
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
