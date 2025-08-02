@@ -1,25 +1,39 @@
 {
-  "name": "icon-suite",
+  "name": "icon-monorepo",
   "private": true,
   "packageManager": "pnpm@9.1.3",
 
+  /* ---------------- workspaces ---------------- */
   "workspaces": [
-    "app/*",
-    "packages/*",
+    "app/*",          // existing (keep)
+    "packages/*",     // web ‑ desktop ‑ extension ‑ shared
     "scripts"
   ],
 
+  /* ---------------- root scripts -------------- */
   "scripts": {
+    /* monorepo orchestration */
     "build":   "turbo run build",
     "dev":     "turbo run dev --parallel",
     "lint":    "turbo run lint",
+    "test":    "turbo run test",
+
+    /* release helper (already in repo) */
     "release": "tsx scripts/release.ts",
+
+    /* stickers index generator (already in repo) */
     "postinstall": "tsx packages/stickers/build_index.ts"
   },
 
+  /* -------------- dev‑only deps --------------- */
   "devDependencies": {
+    /* existing */
     "turbo": "^2.0.4",
     "tsx": "^4.7.0",
-    "typescript": "^5.4.4"
+    "typescript": "^5.4.4",
+
+    /* added for shared tooling */
+    "eslint": "^8.56.0",
+    "vitest": "^1.5.0"
   }
 }
