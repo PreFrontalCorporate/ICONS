@@ -26,6 +26,19 @@ const nextConfig = {
     config.resolve.alias['@'] = path.resolve(
       path.dirname(fileURLToPath(import.meta.url))
     );
+    config.resolve.alias['@shopify/multipass']  = path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      'mocks/empty.js'
+    );
+    config.resolve.alias['@shopify/shopify-api'] = path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      'mocks/empty.js'
+    );
+    // optional: point @/packages/* at the real monorepo folder
+    config.resolve.alias['@/packages'] = path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      '../../packages'
+    );
     return config;
   },
 };
