@@ -1,27 +1,38 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { shopify } from '@/lib/shopify';
-
-const mutation = /* GraphQL */ `
-  mutation login($email: String!, $password: String!) {
-    customerAccessTokenCreate(input: { email: $email, password: $password }) {
-      customerAccessToken { accessToken, expiresAt }
-      userErrors { message }
-    }
-  }
-`;
+import { shopifyFetch } from '@/lib/shopify';
+import { serialize } from 'cookie';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { email, password } = req.body;
-  const data = await shopify(mutation, { email, password } as any);
+  const { email, password } = JSON.parse(req.body ?? '{}');
 
-  const token = data.customerAccessTokenCreate?.customerAccessToken?.accessToken;
-  if (!token) return res.status(401).json({ error: 'Invalid credentials' });
+  const { customerAccessTokenCreate } = await shopifyFetch<{
+    customerAccessTokenCreate: {
+      customerAccessToken: { accessToken: string; expiresAt: string } | null;
+      customerUserErrors: { message: string }[];
+    };
+  }>(`mutation ($email:String!, $password:String!) {
+        customerAccessTokenCreate(input:{email:$email,password:$password}) {
+          customerAccessToken { accessToken expiresAt }
+          customerUserErrors { message }
+        }
+      }`, { email, password });
 
-  // http‑only cookie – expires in 30 days
-  res.setHeader('Set-Cookie',
-    `shop_token=${token}; HttpOnly; Path=/; Max-Age=${60 * 60 * 24 * 30}; SameSite=Lax`
-  );
-  res.status(200).json({ ok: true });
+  const tok = customerAccessTokenCreate.customerAccessToken?.accessToken;
+  if (!tok) return res.status(401).json({ ok:false });
+
+  /* ---------- cookie ---------- */
+  const prod  = process.env.NODE_ENV === 'production';
+  const max   = 60 * 60 * 24 * 14;                // 14 days
+  res.setHeader('Set-Cookie', serialize('cat', tok, {
+    httpOnly : true,
+    sameSite : prod ? 'none' : 'lax',
+    secure   : prod,
+    path     : '/',
+    maxAge   : max
+  }));
+
+  res.json({ ok:true });
 }
+
