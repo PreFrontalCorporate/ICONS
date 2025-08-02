@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap‑6 max‑w‑xl mx‑auto py‑24 text-center">
+    <main className="flex flex-col gap‑6 max‑w‑xl mx‑auto px-4 py‑24 text-center">
       <h1 className="text-3xl font-bold">🖼️ Icon Suite Dev</h1>
       <p className="opacity-90">
         This is the dev build. Use the buttons below to explore.
