@@ -5,17 +5,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const token = req.cookies.cat;
   if (!token) return res.status(401).end();
 
-  type Edge = { node:{ id:string title:string featuredImage:{ url:string altText:string } } };
-  const q = `query ($tok:String!){
-    customer(customerAccessToken:$tok){
-      id
-      orders(first:250){
-        edges{
-          node{
-            lineItems(first:10){
-              edges{
-                node{ id title
-                  variant{ product{ id title featuredImage{url altText} tags } }
+  // ✅ TS now parses: semicolons between fields
+  type Edge = {
+    node: {
+      id: string;
+      title: string;
+      featuredImage: { url: string; altText: string | null };
+    };
+  };
+
+  const q = /* GraphQL */ `
+    query ($tok: String!) {
+      customer(customerAccessToken: $tok) {
+        orders(first: 50, reverse: true) {
+          edges {
+            node {
+              lineItems(first: 10) {
+                edges {
+                  node {
+                    variant {
+                      product {
+                        id
+                        title
+                        featuredImage {
+                          url
+                          altText
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -23,12 +41,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       }
     }
-  }`;
+  `;
 
-  const rsp = await shopifyFetch<any>(q, { tok: token }).catch(() => null);
-  const products: Edge[] = rsp?.customer?.orders?.edges
-    ?.flatMap((o:any) => o.node.lineItems.edges)
-    ?.map((e:any) => e.node.variant.product) ?? [];
+  // narrow generic
+  const { customer } = await shopifyFetch<{
+    customer: {
+      orders: { edges: { node: { lineItems: { edges: { node: { variant: { product: Edge['node'] } } }[] } } }[] };
+    };
+  }>(q, { tok: token });
 
-  return res.json(Array.isArray(products) ? products : []);
+  // flatten to Product[]
+  const products =
+    customer?.orders.edges.flatMap(o =>
+      o.node.lineItems.edges.map(l => l.node.variant.product),
+    ) ?? [];
+
+  res.json(products);
 }
