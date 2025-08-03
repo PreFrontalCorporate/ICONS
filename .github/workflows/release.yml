@@ -1,60 +1,84 @@
-# .github/workflows/release.yml
-name: Desktop build & release
+# .github/workflows/release.yml  –  build desktop app & attach artefacts
+name: Desktop build & release
 
 on:
   push:
-    tags: ['v*.*.*']          # v0.1.0, v1.2.3 …
+    tags: [ 'v*.*.*' ]       # v1.0.1 etc.
 
 permissions:
-  contents: write             # allow creating a GitHub release
-  packages: write             # allow builder to download/publish artefacts
+  contents: write            # upload release assets
+  packages: write
+  actions: read
 
 env:
-  ELECTRON_VERSION: 29.4.6
+  ELECTRON_VERSION: 29.4.6   # pinned for cache key
+  PNPM_VERSION: 9
 
 jobs:
   build:
-    strategy:
-      matrix: { os: [ubuntu-latest, windows-latest, macos-latest] }
     runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
 
-      # ─── Node & pnpm ─────────────────────────────────────────────
+      # ── Node + pnpm ───────────────────────────────────────────────
       - uses: pnpm/action-setup@v2
-        with: { version: 9 }
+        with: { version: ${{ env.PNPM_VERSION }} }
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
 
-      # ─── caches (pnpm store + Electron binaries) ────────────────
+      # ── caches ───────────────────────────────────────────────────
       - uses: actions/cache@v4
-        name: pnpm‑store
+        name: pnpm‑store cache
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
       - uses: actions/cache@v4
-        name: electron‑cache
+        name: electron cache
         with:
           path: ~/.cache/electron
           key: ${{ runner.os }}-electron-${{ env.ELECTRON_VERSION }}
 
-      # ─── Linux AppImage runtime dep ─────────────────────────────
+      # libfuse2 for AppImage
       - if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libfuse2
 
-      # ─── install, compile, package (inside app/desktop) ─────────
-      - name: Install deps
+      # ── build only the desktop workspace ─────────────────────────
+      - name: Install deps (desktop)
         run: pnpm --dir app/desktop install --frozen-lockfile
 
       - name: Compile TypeScript
         run: pnpm --dir app/desktop run build
 
-      - name: Build installers & publish to GitHub Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm --dir app/desktop run dist
+      # we disable auto‑publish and rely on upload‑artifact + next job
+      - name: Build installers
+        run: pnpm --dir app/desktop run dist -- --publish=never
+
+      # ── upload the produced files as Actions artefact ────────────
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installers-${{ runner.os }}
+          path: app/desktop/dist/**/*.{exe,dmg,AppImage,zip,tar.gz,deb}
+          if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { path: installers }
+
+      # softprops merges all installers under the tag that triggered the run
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Icon Stickers ${{ github.ref_name }}
+          files: installers/**/*               # upload everything
+          generate_release_notes: true
