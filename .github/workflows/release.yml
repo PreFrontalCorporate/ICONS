@@ -1,12 +1,17 @@
+# .github/workflows/release.yml
+# Multi‑platform desktop build – Linux (AppImage), Windows (NSIS), macOS (DMG)
 name: Desktop build & release
 
 on:
   push:
-    tags: ["v*.*.*"]     # build only when you push a git tag v0.1.0 etc.
+    tags:
+      - 'v*.*.*'               # v0.1.0, v1.2.3 …
+
+env:
+  ELECTRON_VERSION: 29.4.6
 
 jobs:
   build:
-    # Build once per OS so we get native artefacts
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -14,59 +19,68 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0        # so git describes the tag correctly
 
-    - uses: pnpm/action-setup@v3
-      with: {version: 9}
+      # ---------- pnpm tool-chain ----------
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9            # same major as in repo
 
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: pnpm
+      - name: Use Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
 
-    - name: Install deps
-      run: pnpm install --frozen-lockfile
+      # ---------- caches ----------
+      - name: Restore pnpm store cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
-    # Linux needs wine & nsis to cross‑build Windows from ubuntu
-    - name: Host prerequisites (ubuntu only)
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt update && sudo apt install -y nsis wine64
+      - name: Restore Electron cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/electron
+          key: ${{ runner.os }}-electron-${{ env.ELECTRON_VERSION }}
 
-    - name: Build JS
-      run: pnpm run build
+      # ---------- install & build ----------
+      - name: Install deps (frozen lockfile)
+        run: pnpm install --frozen-lockfile
 
-    - name: Build installers
-      env:
-        # (OPTIONAL) add signing env vars here
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        CSC_LINK: ${{ secrets.CSC_LINK }}         # optional PFX / Apple cert
-        CSC_KEY_PASSWORD: ${{ secrets.CSC_PASS }} # optional
-        APPLE_ID: ${{ secrets.APPLE_ID }}         # optional
-        APPLE_ID_PASS: ${{ secrets.APPLE_PASS }}  # optional
-      run: pnpm run dist
+      - name: Compile TypeScript
+        run: pnpm --filter desktop run build
 
-    # Upload every artefact produced by electron‑builder
-    - uses: actions/upload-artifact@v4
-      with:
-        name: releases-${{ runner.os }}
-        path: |
-          app/desktop/dist/*.dmg
-          app/desktop/dist/*.AppImage
-          app/desktop/dist/*.exe
-          app/desktop/dist/*.yml
-          app/desktop/dist/*.blockmap
+      - name: Build installers
+        run: pnpm --filter desktop run dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # ---------- upload artefacts ----------
+      - name: Upload installers (AppImage | exe | dmg)
+        uses: actions/upload-artifact@v4
+        with:
+          name: installers-${{ runner.os }}
+          path: app/desktop/dist/*.{AppImage,exe,dmg,zip,tar.gz}
+          if-no-files-found: error
+
+  # ---------- create / update GitHub Release and attach artefacts ----------
   release:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v4
-      with: {path: artifacts}
+      - name: Download all artefacts
+        uses: actions/download-artifact@v4
+        with:
+          path: installers
 
-    - name: Create GitHub release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: artifacts/**/*            # attach every file
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Icon Stickers ${{ github.ref_name }}
+          files: installers/**/*.*
