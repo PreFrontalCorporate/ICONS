@@ -1,9 +1,14 @@
+# .github/workflows/release.yml
 name: Desktop build & release
 
 on:
   push:
-    tags:
-      - 'v*.*.*'          # v0.1.0, v1.2.3 …
+    tags: ['v*.*.*']   # v0.1.0, v1.2.3 …
+
+# ── 1️⃣  let the automatic GITHUB_TOKEN create releases ────────────
+permissions:
+  contents: write       # create release & upload assets
+  packages: write       # (unused, but keeps electron‑builder happy)
 
 env:
   ELECTRON_VERSION: 29.4.6
@@ -11,44 +16,39 @@ env:
 jobs:
   build:
     strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+      matrix: { os: [ubuntu-latest, windows-latest, macos-latest] }
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        with: { fetch-depth: 0 }
 
-      # ─── PNPM + Node ─────────────────────────────────────────────
+      # ── PNPM & Node ──────────────────────────────────────────────
       - uses: pnpm/action-setup@v2
-        with:
-          version: 9
-
+        with: { version: 9 }
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
 
-      # ─── caches ─────────────────────────────────────────────────
-      - name: pnpm store cache
-        uses: actions/cache@v4
+      # ── caches ──────────────────────────────────────────────────
+      - uses: actions/cache@v4
+        name: pnpm store cache
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - name: electron cache
-        uses: actions/cache@v4
+      - uses: actions/cache@v4
+        name: electron cache
         with:
           path: ~/.cache/electron
           key: ${{ runner.os }}-electron-${{ env.ELECTRON_VERSION }}
 
-      # ─── Linux deps for AppImage ────────────────────────────────
+      # ── Linux AppImage runtime dep ──────────────────────────────
       - if: runner.os == 'Linux'
-        name: Install libfuse2
         run: sudo apt-get update && sudo apt-get install -y libfuse2
 
-      # ─── install & build inside app/desktop ─────────────────────
+      # ── build in app/desktop ────────────────────────────────────
       - name: Install deps (desktop)
         run: pnpm --dir app/desktop install --frozen-lockfile
 
@@ -56,11 +56,10 @@ jobs:
         run: pnpm --dir app/desktop run build
 
       - name: Build installers
-        run: pnpm --dir app/desktop run dist
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # --publish=never ⇒ electron‑builder only writes to dist/
+        run: pnpm --dir app/desktop run dist -- --publish=never
 
-      # ─── upload artefacts ───────────────────────────────────────
+      # ── upload artefacts for the next job ───────────────────────
       - uses: actions/upload-artifact@v4
         with:
           name: installers-${{ runner.os }}
@@ -72,11 +71,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
-        with:
-          path: installers
+        with: { path: installers }
 
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
           name: Icon Stickers ${{ github.ref_name }}
-          files: installers/**/*
+          files: installers/**/*   # all platforms
