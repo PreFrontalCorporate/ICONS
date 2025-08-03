@@ -3,12 +3,11 @@ name: Desktop build & release
 
 on:
   push:
-    tags: ['v*.*.*']   # v0.1.0, v1.2.3 …
+    tags: ['v*.*.*']          # v0.1.0, v1.2.3 …
 
-# ── 1️⃣  let the automatic GITHUB_TOKEN create releases ────────────
 permissions:
-  contents: write       # create release & upload assets
-  packages: write       # (unused, but keeps electron‑builder happy)
+  contents: write             # allow creating a GitHub release
+  packages: write             # allow builder to download/publish artefacts
 
 env:
   ELECTRON_VERSION: 29.4.6
@@ -23,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
 
-      # ── PNPM & Node ──────────────────────────────────────────────
+      # ─── Node & pnpm ─────────────────────────────────────────────
       - uses: pnpm/action-setup@v2
         with: { version: 9 }
       - uses: actions/setup-node@v4
@@ -31,50 +30,31 @@ jobs:
           node-version: 20
           cache: pnpm
 
-      # ── caches ──────────────────────────────────────────────────
+      # ─── caches (pnpm store + Electron binaries) ────────────────
       - uses: actions/cache@v4
-        name: pnpm store cache
+        name: pnpm‑store
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
       - uses: actions/cache@v4
-        name: electron cache
+        name: electron‑cache
         with:
           path: ~/.cache/electron
           key: ${{ runner.os }}-electron-${{ env.ELECTRON_VERSION }}
 
-      # ── Linux AppImage runtime dep ──────────────────────────────
+      # ─── Linux AppImage runtime dep ─────────────────────────────
       - if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libfuse2
 
-      # ── build in app/desktop ────────────────────────────────────
-      - name: Install deps (desktop)
+      # ─── install, compile, package (inside app/desktop) ─────────
+      - name: Install deps
         run: pnpm --dir app/desktop install --frozen-lockfile
 
       - name: Compile TypeScript
         run: pnpm --dir app/desktop run build
 
-      - name: Build installers
-        # --publish=never ⇒ electron‑builder only writes to dist/
-        run: pnpm --dir app/desktop run dist -- --publish=never
-
-      # ── upload artefacts for the next job ───────────────────────
-      - uses: actions/upload-artifact@v4
-        with:
-          name: installers-${{ runner.os }}
-          path: app/desktop/dist/**
-          if-no-files-found: error
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with: { path: installers }
-
-      - uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.ref_name }}
-          name: Icon Stickers ${{ github.ref_name }}
-          files: installers/**/*   # all platforms
+      - name: Build installers & publish to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm --dir app/desktop run dist
