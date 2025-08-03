@@ -1,4 +1,3 @@
-# .github/workflows/release.yml
 name: Desktop build & release
 
 on:
@@ -18,17 +17,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with:
+          fetch-depth: 0
 
-      # ─── PNPM + Node ──────────────────────────────────────────────
+      # ─── PNPM + Node ─────────────────────────────────────────────
       - uses: pnpm/action-setup@v2
-        with: { version: 9 }
+        with:
+          version: 9
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
 
-      # ─── caches ──────────────────────────────────────────────────
+      # ─── caches ─────────────────────────────────────────────────
       - name: pnpm store cache
         uses: actions/cache@v4
         with:
@@ -41,12 +43,12 @@ jobs:
           path: ~/.cache/electron
           key: ${{ runner.os }}-electron-${{ env.ELECTRON_VERSION }}
 
-      # ─── linux runtime requirements (AppImage) ───────────────────
+      # ─── Linux deps for AppImage ────────────────────────────────
       - if: runner.os == 'Linux'
         name: Install libfuse2
         run: sudo apt-get update && sudo apt-get install -y libfuse2
 
-      # ─── install & build (run from app/desktop) ──────────────────
+      # ─── install & build inside app/desktop ─────────────────────
       - name: Install deps (desktop)
         run: pnpm --dir app/desktop install --frozen-lockfile
 
@@ -55,9 +57,10 @@ jobs:
 
       - name: Build installers
         run: pnpm --dir app/desktop run dist
-        env: { GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} }
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # ─── upload artefacts ─────────────────────────────────────────
+      # ─── upload artefacts ───────────────────────────────────────
       - uses: actions/upload-artifact@v4
         with:
           name: installers-${{ runner.os }}
@@ -69,7 +72,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
-        with: { path: installers }
+        with:
+          path: installers
 
       - uses: softprops/action-gh-release@v2
         with:
