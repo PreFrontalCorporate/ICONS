@@ -3,8 +3,11 @@
     /* ——— language & emit ——— */
     "module": "esnext",
     "jsx": "preserve",
-    "lib": ["dom", "dom.iterable", "esnext"],
-
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     /* ——— safety ——— */
     "strict": false,
     "skipLibCheck": true,
@@ -12,34 +15,41 @@
     "isolatedModules": true,
     "noEmit": true,
     "incremental": true,
-
     /* ——— module resolution & aliases ——— */
     "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "baseUrl": ".",                  // root of the web workspace
+    "baseUrl": ".", // root of the web workspace
     "paths": {
-      "@/*": ["./*"]                 // e.g. "@/components/…"
+      "@/*": [
+        "./*"
+      ] // e.g. "@/components/…"
     },
-
     /* ——— 👇  IMPORTANT  ——— */
-    "types": ["node"],               // keep Node globals
+    "types": [
+      "node"
+    ], // keep Node globals
     "typeRoots": [
-      "./types",                     // our local stubs
-      "../node_modules/@types",      // regular DefinitelyTyped pkgs
-      "../../node_modules/@types"    // root‑level (monorepo) pkgs
+      "./types", // our local stubs
+      "../node_modules/@types", // regular DefinitelyTyped pkgs
+      "../../node_modules/@types" // root‑level (monorepo) pkgs
     ],
-
     /* ——— Next.js plugin ——— */
-    "plugins": [{ "name": "next" }]
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "allowJs": true
   },
-
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
-    "types/**/*.d.ts"                // ensure the stub is picked up
+    "types/**/*.d.ts" // ensure the stub is picked up
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
