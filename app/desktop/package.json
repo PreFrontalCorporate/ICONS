@@ -16,7 +16,7 @@
   "scripts": {
     "dev": "electronmon . --ignore=packages/stickers",
     "build": "tsc -p tsconfig.main.json",
-    "dist": "electron-builder --publish=never"
+    "dist": "electron-builder"
   },
   "dependencies": {
     "@google-cloud/firestore": "7.11.3",
