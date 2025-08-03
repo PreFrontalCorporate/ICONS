@@ -47,6 +47,10 @@
       "build/icon.*",
       "packages/stickers/**/*"
     ],
+    
+    "directories": {
+      "output": "/mnt/build/installers"
+    },
 
     "mac":   {
       "target": [ "dmg", "zip" ],
