@@ -54,7 +54,9 @@ jobs:
       - name: Compile TypeScript
         run: pnpm --dir app/desktop run build
 
-      # GH_TOKEN lets electron‑builder publish straight to the tag
+      - name: Prepare output dir
+        run: sudo mkdir -p /mnt/build/installers
+
       - name: Build & publish installers
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
