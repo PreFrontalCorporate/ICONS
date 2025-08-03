@@ -6,17 +6,14 @@
   "private": true,
   "type": "module",
 
-  /* ---------- entry points ---------- */
   "main": "dist/main.js",
 
-  /* ---------- scripts ---------- */
   "scripts": {
     "dev":   "electronmon . --ignore=packages/stickers",
-    "build": "tsc -p tsconfig.main.json",     /* TS ➜ dist/           */
-    "dist":  "electron-builder"               /* creates EXE/DMG/etc  */
+    "build": "tsc -p tsconfig.main.json",    
+    "dist":  "electron-builder"              
   },
 
-  /* ---------- runtime deps ---------- */
   "dependencies": {
     "@google-cloud/firestore": "^7.16.4",
     "electron-updater": "^5.3.0",
@@ -24,17 +21,15 @@
     "ws": "^8.18.3"
   },
 
-  /* ---------- dev / build deps ---------- */
   "devDependencies": {
     "@types/electron": "^1.6.12",
     "@types/node": "^20.10.5",
-    "electron": "^29.4.6",          /* ← moved here */
+    "electron": "^29.4.6",          
     "electron-builder": "^24.13.3",
     "electronmon": "^2.0.0",
     "typescript": "^5.4.4"
   },
 
-  /* ---------- electron‑builder ---------- */
   "build": {
     "productName": "IconStickers",
     "files": [
