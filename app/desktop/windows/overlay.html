@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" />
+<style>
+  html, body { margin:0; background:transparent; overflow:hidden }
+  img { width:100%; height:100%; object-fit:contain; user-select:none }
+  #close {
+    position:absolute; top:6px; right:6px;
+    width:18px; height:18px; border-radius:9px;
+    background:#ff4668; cursor:pointer;
+  }
+</style>
+</head>
+<body>
+  <div id="close"></div>
+  <img id="sticker" draggable="false">
+<script>
+  const params = new URLSearchParams(location.search);
+  sticker.src = params.get('img');
+
+  // allow window drag by holding ⌘ (mac) or Alt (win)
+  window.addEventListener('keydown', e => {
+    if ((e.metaKey && e.key === 'Meta') || (e.altKey && e.key === 'Alt'))
+      document.body.style['-webkit-app-region'] = 'drag';
+  });
+  window.addEventListener('keyup', () => document.body.style['-webkit-app-region']='');
+
+  close.onclick = () => window.close();
+</script>
+</body>
+</html>

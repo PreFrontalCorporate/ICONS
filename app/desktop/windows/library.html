@@ -1,0 +1,51 @@
+<!-- app/desktop/windows/library.html -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf‑8">
+<title>Sticker Library</title>
+<style>
+  body{font:16px system-ui,sans-serif;margin:0;padding:24px;}
+  h1{margin:0 0 24px;font-size:24px}
+  ul{display:flex;flex-wrap:wrap;gap:16px;padding:0;list-style:none}
+  li{width:220px;border:1px solid #ddd;border-radius:8px;padding:12px;
+     text-align:center;cursor:pointer;user-select:none}
+  img{max-width:180px;max-height:180px;margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<h1>🎟️ My sticker library</h1>
+<ul id="grid"></ul>
+
+<script>
+(async()=>{
+  /* simplistic login prompt – replace with proper UI if you wish */
+  const email = localStorage.email || prompt('Shop e‑mail to load?');
+  if(!email) return;
+  localStorage.email = email;
+
+  /* 1 ─ fetch current entitlements */
+  const list = await window.iconOverlay.loadStickers(email);
+  render(list);
+
+  /* 2 ─ enable Firestore real‑time overlay push */
+  await window.iconOverlay.realtimeOn(email);
+
+  function render(arr){
+    const g = document.getElementById('grid'); g.innerHTML='';
+    arr.forEach(stk=>{
+      const li=document.createElement('li');
+      li.innerHTML =
+        `<img src="${stk.featuredImage.url}" alt="">
+         <div>${stk.title}</div>`;
+      li.onclick = ()=>window.iconOverlay.pinSticker(
+                       stk.id, stk.featuredImage.url);
+      g.appendChild(li);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

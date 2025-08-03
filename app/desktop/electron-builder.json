@@ -1,0 +1,26 @@
+{
+  "appId": "com.prefc.icon-suite",
+  "productName": "Icon Suite",
+  "files": [
+    "dist/**",
+    "node_modules/**",
+    "package.json"
+  ],
+  "asar": true,
+  "publish": [
+    { "provider": "github", "owner": "PreFrontalCorporate", "repo": "icon" }
+  ],
+  "mac": {
+    "category": "public.app-category.graphics-design",
+    "hardenedRuntime": true,
+    "entitlements": "build/entitlements.mac.plist"
+  },
+  "win": {
+    "target": "nsis",
+    "publisherName": "PreFrontal Corporate"
+  },
+  "linux": {
+    "target": [ "AppImage" ],
+    "category": "Utility"
+  }
+}
