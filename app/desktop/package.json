@@ -1,46 +1,54 @@
 {
-  "name": "desktop",
-  "private": true,
+  "name": "icon-desktop",
   "version": "0.1.0",
-  "main": "dist/main.js",
+  "description": "Electron overlay client for Icon Suite",
+  "author": "PreFrontal Corporate",
+  "private": true,
   "type": "module",
+
+  /* ---------- entry points ---------- */
+  "main": "dist/main.js",
+
+  /* ---------- scripts ---------- */
   "scripts": {
-    "dev": "electronmon . --ignore=packages/stickers",
-    "build": "electron-builder"
+    "dev":   "electronmon . --ignore=packages/stickers",
+    "build": "tsc -p tsconfig.main.json",     /* TS ➜ dist/           */
+    "dist":  "electron-builder"               /* creates EXE/DMG/etc  */
   },
+
+  /* ---------- runtime deps ---------- */
   "dependencies": {
-    "@google-cloud/pubsub": "^5.1.0",
-    "electron": "^29.4.6",
+    "@google-cloud/firestore": "^7.16.4",
     "electron-updater": "^5.3.0",
     "jsonwebtoken": "^9.0.2",
     "ws": "^8.18.3"
   },
+
+  /* ---------- dev / build deps ---------- */
   "devDependencies": {
     "@types/electron": "^1.6.12",
     "@types/node": "^20.10.5",
-    "electron-builder": "^24.13.1",
+    "electron": "^29.4.6",          /* ← moved here */
+    "electron-builder": "^24.13.3",
     "electronmon": "^2.0.0",
     "typescript": "^5.4.4"
   },
+
+  /* ---------- electron‑builder ---------- */
   "build": {
     "productName": "IconStickers",
     "files": [
       "dist/**/*",
       "packages/stickers/**/*"
     ],
-    "mac": {
-      "category": "public.app-category.graphics-design"
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "linux": {
-      "target": "AppImage"
-    },
+    "mac": { "category": "public.app-category.graphics-design" },
+    "win": { "target": "nsis" },
+    "linux": { "target": "AppImage" },
     "publish": {
       "provider": "github",
       "owner": "PreFrontalCorporate",
-      "repo": "icon"
+      "repo":  "icon"
     }
   }
 }
+
