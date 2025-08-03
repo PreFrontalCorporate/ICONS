@@ -1,13 +1,20 @@
-// app/desktop/package.json
 {
-  "name":       "icon-desktop",
-  "productName": "icon",                 // ← lowercase name shown to users
-  "version":    "1.0.7",
-  "description": "Overlay sticker client for Icon Suite",
-  "author":     "PreFrontal Corporate",
-  "private":    true,
-  "type":       "module",
-  "main":       "dist/main.js",
+  "name":        "icon-desktop",
+  "productName": "icon",
+  "version":     "1.0.8",
+  "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
+  "homepage":    "https://github.com/PreFrontalCorporate/icon",
+  "license":     "MIT",
+
+  "author": {
+    "name":  "PreFrontal Corporate",
+    "email": "support@cbb.homes",
+    "url":   "https://cbb.homes"
+  },
+
+  "private": true,
+  "type": "module",
+  "main": "dist/main.js",
 
   "scripts": {
     "dev":   "electronmon . --ignore=packages/stickers",
@@ -31,7 +38,7 @@
   },
 
   "build": {
-    "icon": "build/icon",                // uses build/icon.png|ico|icns
+    "icon": "build/icon",
     "electronDownload": { "mirror": "https://npmmirror.com/mirrors/electron/" },
 
     "files": [
@@ -41,19 +48,25 @@
       "packages/stickers/**/*"
     ],
 
-    "mac":   { "target": [ "dmg",  "zip" ],
-               "category": "public.app-category.graphics-design" },
+    "mac":   {
+      "target": [ "dmg", "zip" ],
+      "category": "public.app-category.graphics-design"
+    },
 
-    "win":   { "target": [
-                 { "target": "nsis",      "arch": [ "x64", "ia32", "arm64" ] },
-                 { "target": "portable",  "arch": [ "x64" ] }
-               ]},
+    "win":   {
+      "target": [
+        { "target": "nsis",     "arch": [ "x64", "ia32", "arm64" ] },
+        { "target": "portable", "arch": [ "x64" ] }
+      ]
+    },
 
-    "linux": { "target": [
-                 "AppImage", "deb", "rpm", "snap"
-               ]},
+    "linux": {
+      "maintainer": "PreFrontal Corporate <support@cbb.homes>",
+      "category":   "Utility",
+      "target":   [ "AppImage", "deb", "rpm", "snap" ]
+    },
 
-    "publish": {       /* workflow uploads manually – keep for future */
+    "publish": {
       "provider": "github",
       "owner":    "PreFrontalCorporate",
       "repo":     "icon"
