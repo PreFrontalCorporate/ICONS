@@ -1,11 +1,10 @@
 # .github/workflows/release.yml
-# Multi‑platform desktop build – Linux (AppImage), Windows (NSIS), macOS (DMG)
 name: Desktop build & release
 
 on:
   push:
     tags:
-      - 'v*.*.*'               # v0.1.0, v1.2.3 …
+      - 'v*.*.*'          # v0.1.0, v1.2.3 …
 
 env:
   ELECTRON_VERSION: 29.4.6
@@ -15,72 +14,65 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0        # so git describes the tag correctly
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      # ---------- pnpm tool-chain ----------
+      # ─── PNPM + Node ──────────────────────────────────────────────
       - uses: pnpm/action-setup@v2
-        with:
-          version: 9            # same major as in repo
-
-      - name: Use Node 20
-        uses: actions/setup-node@v4
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: pnpm
 
-      # ---------- caches ----------
-      - name: Restore pnpm store cache
+      # ─── caches ──────────────────────────────────────────────────
+      - name: pnpm store cache
         uses: actions/cache@v4
         with:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - name: Restore Electron cache
+      - name: electron cache
         uses: actions/cache@v4
         with:
           path: ~/.cache/electron
           key: ${{ runner.os }}-electron-${{ env.ELECTRON_VERSION }}
 
-      # ---------- install & build ----------
-      - name: Install deps (frozen lockfile)
-        run: pnpm install --frozen-lockfile
+      # ─── linux runtime requirements (AppImage) ───────────────────
+      - if: runner.os == 'Linux'
+        name: Install libfuse2
+        run: sudo apt-get update && sudo apt-get install -y libfuse2
+
+      # ─── install & build (run from app/desktop) ──────────────────
+      - name: Install deps (desktop)
+        run: pnpm --dir app/desktop install --frozen-lockfile
 
       - name: Compile TypeScript
-        run: pnpm --filter desktop run build
+        run: pnpm --dir app/desktop run build
 
       - name: Build installers
-        run: pnpm --filter desktop run dist
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm --dir app/desktop run dist
+        env: { GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} }
 
-      # ---------- upload artefacts ----------
-      - name: Upload installers (AppImage | exe | dmg)
-        uses: actions/upload-artifact@v4
+      # ─── upload artefacts ─────────────────────────────────────────
+      - uses: actions/upload-artifact@v4
         with:
           name: installers-${{ runner.os }}
-          path: app/desktop/dist/*.{AppImage,exe,dmg,zip,tar.gz}
+          path: app/desktop/dist/**
           if-no-files-found: error
 
-  # ---------- create / update GitHub Release and attach artefacts ----------
   release:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Download all artefacts
-        uses: actions/download-artifact@v4
-        with:
-          path: installers
+      - uses: actions/download-artifact@v4
+        with: { path: installers }
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
           name: Icon Stickers ${{ github.ref_name }}
-          files: installers/**/*.*
+          files: installers/**/*
