@@ -1,14 +1,12 @@
-name: Desktop build & release
+name: Desktop build & release
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    tags: [ 'v*.*.*' ]
 
 permissions:
   contents: write
   packages: write
-  actions: read
 
 env:
   ELECTRON_VERSION: 29.4.6
@@ -19,10 +17,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-latest
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -59,26 +54,8 @@ jobs:
       - name: Compile TypeScript
         run: pnpm --dir app/desktop run build
 
-      - name: Build installers
-        run: pnpm --dir app/desktop run dist -- --publish=never
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: installers-${{ runner.os }}
-          path: app/desktop/dist/**/*.{exe,dmg,AppImage,zip,tar.gz,deb}
-          if-no-files-found: error
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          path: installers
-
-      - uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.ref_name }}
-          name: Icon Stickers ${{ github.ref_name }}
-          files: installers/**/*
-          generate_release_notes: true
+      # GH_TOKEN lets electron‑builder publish straight to the tag
+      - name: Build & publish installers
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm --dir app/desktop run dist
