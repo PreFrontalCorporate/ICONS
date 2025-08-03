@@ -46,7 +46,7 @@ jobs:
           key: ${{ runner.os }}-electron-${{ env.ELECTRON_VERSION }}
 
       - if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libfuse2
+        run: sudo apt-get update && sudo apt-get install -y libfuse2 rpm
 
       - name: Install deps (desktop)
         run: pnpm --dir app/desktop install --frozen-lockfile
