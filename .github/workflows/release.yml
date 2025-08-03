@@ -1,0 +1,72 @@
+name: Desktop build & release
+
+on:
+  push:
+    tags: ["v*.*.*"]     # build only when you push a git tag v0.1.0 etc.
+
+jobs:
+  build:
+    # Build once per OS so we get native artefacts
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: pnpm/action-setup@v3
+      with: {version: 9}
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: pnpm
+
+    - name: Install deps
+      run: pnpm install --frozen-lockfile
+
+    # Linux needs wine & nsis to cross‑build Windows from ubuntu
+    - name: Host prerequisites (ubuntu only)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt update && sudo apt install -y nsis wine64
+
+    - name: Build JS
+      run: pnpm run build
+
+    - name: Build installers
+      env:
+        # (OPTIONAL) add signing env vars here
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CSC_LINK: ${{ secrets.CSC_LINK }}         # optional PFX / Apple cert
+        CSC_KEY_PASSWORD: ${{ secrets.CSC_PASS }} # optional
+        APPLE_ID: ${{ secrets.APPLE_ID }}         # optional
+        APPLE_ID_PASS: ${{ secrets.APPLE_PASS }}  # optional
+      run: pnpm run dist
+
+    # Upload every artefact produced by electron‑builder
+    - uses: actions/upload-artifact@v4
+      with:
+        name: releases-${{ runner.os }}
+        path: |
+          app/desktop/dist/*.dmg
+          app/desktop/dist/*.AppImage
+          app/desktop/dist/*.exe
+          app/desktop/dist/*.yml
+          app/desktop/dist/*.blockmap
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v4
+      with: {path: artifacts}
+
+    - name: Create GitHub release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: artifacts/**/*            # attach every file
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
