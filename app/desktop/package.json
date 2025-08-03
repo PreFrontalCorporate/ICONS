@@ -1,7 +1,7 @@
 {
   "name": "icon-desktop",
-  "version": "1.0.5",
-  "description": "Electron overlay client for Icon Suite",
+  "version": "1.0.6",
+  "description": "Overlay sticker client for Icon Suite",
   "author": "PreFrontal Corporate",
   "private": true,
   "type": "module",
