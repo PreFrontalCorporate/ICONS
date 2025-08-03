@@ -1,0 +1,3 @@
+
+# ignore AppImage extraction
+app/desktop/squashfs-root/
