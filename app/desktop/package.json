@@ -10,19 +10,15 @@
     "email": "support@cbb.homes",
     "url": "https://cbb.homes"
   },
-
   "private": true,
   "type": "module",
   "main": "dist/main.js",
-
   "scripts": {
     "dev": "electronmon . --ignore=packages/stickers",
     "build": "tsc -p tsconfig.main.json",
-    "renderer:dev": "vite",
-    "renderer:build": "vite build",
-    "dist": "pnpm run renderer:build && electron-builder"
+    "build:renderer": "vite build",
+    "dist": "pnpm run build && pnpm run build:renderer && electron-builder"
   },
-
   "dependencies": {
     "@google-cloud/firestore": "7.11.3",
     "electron-updater": "^5.3.0",
@@ -37,7 +33,6 @@
     "typescript": "^5.4.4",
     "vite": "^5.4.9"
   },
-
   "build": {
     "icon": "build/icon",
     "electronDownload": {
@@ -49,10 +44,7 @@
       "build/icon.*",
       "packages/stickers/**/*"
     ],
-    "mac": {
-      "target": ["dmg", "zip"],
-      "category": "public.app-category.graphics-design"
-    },
+    "mac": { "target": ["dmg", "zip"], "category": "public.app-category.graphics-design" },
     "win": {
       "target": [
         { "target": "nsis", "arch": ["x64", "ia32", "arm64"] },
@@ -64,10 +56,6 @@
       "category": "Utility",
       "target": ["AppImage", "deb", "rpm"]
     },
-    "publish": {
-      "provider": "github",
-      "owner": "PreFrontalCorporate",
-      "repo": "icon"
-    }
+    "publish": { "provider": "github", "owner": "PreFrontalCorporate", "repo": "icon" }
   }
 }
