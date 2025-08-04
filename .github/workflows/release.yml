@@ -6,8 +6,13 @@ on:
     tags: [ 'v*.*.*' ]
 
 permissions:
+<<<<<<< HEAD
   contents: write      # upload assets to a release
   packages: write      # (not used now, but good if you later switch to GH Packages)
+=======
+  contents: write
+  packages: write          # for GH Releases
+>>>>>>> 03b01db (COMMIT)
 
 env:
   ELECTRON_VERSION: 29.4.6
@@ -49,9 +54,15 @@ jobs:
           path: ~/.cache/electron
           key: ${{ runner.os }}-electron-${{ env.ELECTRON_VERSION }}
 
+<<<<<<< HEAD
       # 4 – extra packages required only on Linux
+=======
+      # ------- Linux‑only build dependencies -------
+>>>>>>> 03b01db (COMMIT)
       - if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libfuse2 rpm
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libfuse2 rpm build-essential fakeroot dpkg
 
       # 5 – install & build
       - name: Install deps (desktop)

@@ -64,7 +64,7 @@
     "linux": {
       "maintainer": "PreFrontal Corporate <support@cbb.homes>",
       "category": "Utility",
-      "target": ["AppImage", "deb", "rpm", "snap"]
+      "target": ["AppImage", "deb", "rpm"]
     },
     "publish": {
       "provider": "github",
