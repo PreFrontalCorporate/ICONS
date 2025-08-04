@@ -24,7 +24,6 @@
   "dependencies": {
     "@google-cloud/firestore": "7.11.3",
     "@shopify/shopify-api": "^11.14.1",
-    "@shopify/multipass": "^1.0.0",
     "electron-updater": "^5.3.0",
     "jsonwebtoken": "^9.0.2",
     "ws": "^8.18.3"
