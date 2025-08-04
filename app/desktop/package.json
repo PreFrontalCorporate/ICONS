@@ -1,7 +1,7 @@
 {
   "name": "icon-desktop",
   "productName": "icon",
-  "version": "1.0.11",                       // bump – will match your next tag
+  "version": "1.0.12",
   "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
   "homepage": "https://github.com/PreFrontalCorporate/icon",
   "license": "MIT",
@@ -10,43 +10,34 @@
     "email": "support@cbb.homes",
     "url": "https://cbb.homes"
   },
+
   "private": true,
   "type": "module",
+  "main": "dist/main.js",
 
-  /* ────────────── ENTRY POINTS ────────────── */
-  "main": "dist/main.js",                    // compiled main process
-  "browser": "dist/renderer/index.html",     // where electron‑builder will look
   "scripts": {
-    "dev": "concurrently -k -n MAIN,RENDER \"pnpm run dev:main\" \"pnpm run dev:renderer\"",
-    "dev:main": "tsc -w -p tsconfig.main.json",
-    "dev:renderer": "vite --config vite.config.ts --watch",
-    "build": "pnpm run build:main && pnpm run build:renderer",
-    "build:main": "tsc -p tsconfig.main.json",
-    "build:renderer": "vite build --config vite.config.ts",
-    "dist": "electron-builder"               // no hard‑coded output dir
+    "dev": "electronmon . --ignore=packages/stickers",
+    "build": "tsc -p tsconfig.main.json",
+    "renderer:dev": "vite",
+    "renderer:build": "vite build",
+    "dist": "pnpm run renderer:build && electron-builder"
   },
 
-  /* ────────────── RUNTIME DEPS ────────────── */
   "dependencies": {
     "@google-cloud/firestore": "7.11.3",
     "electron-updater": "^5.3.0",
     "jsonwebtoken": "^9.0.2",
     "ws": "^8.18.3"
   },
-
-  /* ────────────── DEV‑DEPS ────────────── */
   "devDependencies": {
     "@types/node": "^20.10.5",
-    "concurrently": "^8.2.2",
     "electron": "^29.4.6",
     "electron-builder": "^24.13.3",
     "electronmon": "^2.0.0",
     "typescript": "^5.4.4",
-    "vite": "^5.2.10",
-    "vite-plugin-electron-renderer": "^0.15.1"
+    "vite": "^5.4.9"
   },
 
-  /* ────────────── ELECTRON‑BUILDER ────────────── */
   "build": {
     "icon": "build/icon",
     "electronDownload": {
@@ -64,7 +55,7 @@
     },
     "win": {
       "target": [
-        { "target": "nsis",     "arch": ["x64", "ia32", "arm64"] },
+        { "target": "nsis", "arch": ["x64", "ia32", "arm64"] },
         { "target": "portable", "arch": ["x64"] }
       ]
     },
