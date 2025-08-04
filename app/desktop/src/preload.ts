@@ -1,4 +1,6 @@
+// app/desktop/src/preload.ts
 import { contextBridge, ipcRenderer } from 'electron';
+
 contextBridge.exposeInMainWorld('api', {
-  verify: (token: string) => ipcRenderer.invoke('verify', token)
+  ping: (): Promise<string> => ipcRenderer.invoke('ping'),
 });

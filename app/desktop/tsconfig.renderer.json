@@ -1,8 +1,14 @@
 {
-  "extends": "./tsconfig.main.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "jsx": "react-jsx",          // remove if you are not using React/JSX
-    "lib": ["DOM", "ES2020"]
+    "outDir": "dist/renderer",
+    "module":       "esnext",
+    "target":       "es2020",
+    "moduleResolution": "node",
+    "esModuleInterop":  true,
+    "resolveJsonModule": true,   // lets you import *.json
+    "skipLibCheck":      true,
+    "types": ["vite/client"]     // renderer has the DOM
   },
-  "include": ["renderer/**/*"]
+  "include": ["src/renderer/**/*"]
 }

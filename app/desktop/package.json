@@ -13,19 +13,25 @@
   "private": true,
   "type": "module",
   "main": "dist/main.js",
+
   "scripts": {
-    "dev": "electronmon . --ignore=packages/stickers",
-    "build": "tsc -p tsconfig.main.json",
-    "build:renderer": "vite build",
+    "dev": "vite dev --config vite.config.ts & electronmon . --ignore=packages/stickers",
+    "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.renderer.json",
+    "build:renderer": "vite build --config vite.config.ts",
     "dist": "pnpm run build && pnpm run build:renderer && electron-builder"
   },
+
   "dependencies": {
     "@google-cloud/firestore": "7.11.3",
+    "@shopify/shopify-api": "^13.0.0",
+    "@shopify/multipass": "^3.0.0",
     "electron-updater": "^5.3.0",
     "jsonwebtoken": "^9.0.2",
     "ws": "^8.18.3"
   },
+
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.4",
     "@types/node": "^20.10.5",
     "electron": "^29.4.6",
     "electron-builder": "^24.13.3",
@@ -33,11 +39,10 @@
     "typescript": "^5.4.4",
     "vite": "^5.4.9"
   },
+
   "build": {
     "icon": "build/icon",
-    "electronDownload": {
-      "mirror": "https://npmmirror.com/mirrors/electron/"
-    },
+    "electronDownload": { "mirror": "https://npmmirror.com/mirrors/electron/" },
     "files": [
       "dist/**/*",
       "windows/**/*",
@@ -47,7 +52,7 @@
     "mac": { "target": ["dmg", "zip"], "category": "public.app-category.graphics-design" },
     "win": {
       "target": [
-        { "target": "nsis", "arch": ["x64", "ia32", "arm64"] },
+        { "target": "nsis",     "arch": ["x64", "ia32", "arm64"] },
         { "target": "portable", "arch": ["x64"] }
       ]
     },

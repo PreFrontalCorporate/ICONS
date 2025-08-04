@@ -1,9 +1,18 @@
-import StickerCanvas from '../../../components/StickerCanvas';
-import { verify } from 'electron';
+import StickerCanvas from '../../components/StickerCanvas';   // fixed path
+import { verify } from 'jsonwebtoken';
+import stickers from '@stickers/index.json';                  // json import works because tsconfig has resolveJsonModule
+
+declare global {
+  interface Window {
+    api: { ping(): Promise<string> };
+  }
+}
 
 (async () => {
-  const token = localStorage.getItem('multipass');
-  const allowedIds: string[] = token ? await window.api.verify(token) : [];
-  const manifest = (await import('../../../packages/stickers/index.json')).default;
-  StickerCanvas({ stickers: manifest.filter((s) => allowedIds.includes(s.id)) });
+  console.log('Renderer booted, sticker count:', stickers.length);
+  console.log('ping →', await window.api.ping());
+
+  // quick JWT sanity‑check
+  const token = verify('dummy.jwt.token', 'secret', { ignoreExpiration: true });
+  console.log(token);
 })();
