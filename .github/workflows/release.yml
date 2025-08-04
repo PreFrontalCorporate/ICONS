@@ -7,8 +7,6 @@ on:
 permissions:
   contents: write
   packages: write
-  contents: write
-  packages: write
 
 env:
   ELECTRON_VERSION: 29.4.6
