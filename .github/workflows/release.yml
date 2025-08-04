@@ -2,11 +2,12 @@ name: Desktop build & release
 
 on:
   push:
+    # run every time a tag that looks like v1.2.3 is pushed
     tags: [ 'v*.*.*' ]
 
 permissions:
-  contents: write
-  packages: write
+  contents: write      # upload assets to a release
+  packages: write      # (not used now, but good if you later switch to GH Packages)
 
 env:
   ELECTRON_VERSION: 29.4.6
@@ -20,10 +21,12 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
+      # 1 – checkout the commit the tag points at
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0   # we need full history for changelog & versioning
 
+      # 2 – tooling
       - uses: pnpm/action-setup@v2
         with:
           version: ${{ env.PNPM_VERSION }}
@@ -33,6 +36,7 @@ jobs:
           node-version: 20
           cache: pnpm
 
+      # 3 – caches
       - name: pnpm‑store cache
         uses: actions/cache@v4
         with:
@@ -45,15 +49,19 @@ jobs:
           path: ~/.cache/electron
           key: ${{ runner.os }}-electron-${{ env.ELECTRON_VERSION }}
 
+      # 4 – extra packages required only on Linux
       - if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libfuse2 rpm
 
+      # 5 – install & build
       - name: Install deps (desktop)
         run: pnpm --dir app/desktop install --frozen-lockfile
 
       - name: Compile TypeScript
         run: pnpm --dir app/desktop run build
 
+      # 6 – package and upload to the *draft* release that
+      #     electron‑builder creates automatically
       - name: Build & publish installers
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
