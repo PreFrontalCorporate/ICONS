@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import type { Sticker } from '@stickers/types';
+import type { StickerEntry, Sticker } from '@stickers/types';
 
 export default function StickerCanvas({ stickers }: { stickers: StickerEntry[] }) {
   useEffect(() => {
