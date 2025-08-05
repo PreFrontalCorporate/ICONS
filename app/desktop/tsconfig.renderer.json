@@ -4,19 +4,24 @@
   "compilerOptions": {
     "outDir": "dist/renderer",
 
+    /* language */
     "module": "esnext",
     "target": "es2020",
     "moduleResolution": "node",
     "jsx": "react-jsx",
 
-    "esModuleInterop":  true,
+    /* extra flags */
+    "esModuleInterop": true,
     "resolveJsonModule": true,
-    "skipLibCheck":      true,
+    "skipLibCheck": true,
     "types": ["vite/client"]
   },
 
+  /* IMPORTANT ‑ include the shared folders so TS sees them */
   "include": [
     "src/renderer/**/*",
-    "src/types/**/*"
+    "src/types/**/*",
+    "../../components/**/*",
+    "../../packages/stickers/**/*"
   ]
 }

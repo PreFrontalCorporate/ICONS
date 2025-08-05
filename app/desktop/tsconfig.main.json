@@ -1,14 +1,22 @@
 {
   "extends": "../../tsconfig.json",
+
   "compilerOptions": {
+    /* where compiled JS goes */
     "outDir": "dist",
+    /* where *all* source files must live */
     "rootDir": "src",
-    "noEmit": false,
+
+    /* language / module */
     "module": "esnext",
     "target": "es2020",
     "moduleResolution": "node",
+
+    /* interop / tooling flags */
+    "noEmit": false,
     "esModuleInterop": true,
     "skipLibCheck": true
   },
+
   "include": ["src/**/*"]
 }
