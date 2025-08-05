@@ -28,8 +28,8 @@ export interface StickerEntry {
  * by describing a *superset* of `StickerEntry`.
  */
 export type Sticker = StickerEntry & {
-  owned?: boolean;
-  inCart?: boolean;
+  x: number;
+  y: number'
   /* add other optional fields here */
 };
 
