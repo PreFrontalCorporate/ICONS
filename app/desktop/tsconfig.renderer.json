@@ -6,9 +6,14 @@
     "target":       "es2020",
     "moduleResolution": "node",
     "esModuleInterop":  true,
-    "resolveJsonModule": true,   // lets you import *.json
+    "resolveJsonModule": true,
     "skipLibCheck":      true,
-    "types": ["vite/client"]     // renderer has the DOM
+    "types": ["vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["../../components/*"],
+      "@stickers/*":   ["../../packages/stickers/*"]
+    }
   },
-  "include": ["src/renderer/**/*"]
+  "include": ["src/renderer/**/*", "src/types/**/*"]
 }
