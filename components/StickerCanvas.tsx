@@ -13,6 +13,7 @@ export default function StickerCanvas({ stickers }: { stickers: StickerEntry[] }
       img.style.transform = 'translate(-50%,-50%)';
       img.style.pointerEvents = 'none';
       img.width = s.width;
+      img.setAttribute('data-sticker', s.id);  
       document.body.appendChild(img);
     });
     return () => document.querySelectorAll('img[data-sticker]').forEach((n) => n.remove());
