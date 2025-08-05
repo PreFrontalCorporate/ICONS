@@ -1,14 +1,23 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
+    "target":  "ES2022",
+    "module":  "ESNext",
     "moduleResolution": "Node",
-    "strict": true,
+    "strict":  true,
+
     "jsx": "react-jsx",
+
     "baseUrl": ".",
     "paths": {
-      "@/*": ["app/web/src/*"]
+      "@/*":            ["app/web/src/*"],          // ← existing alias (leave as‑is)
+      "@components/*":  ["components/*"],           // ← added for desktop renderer
+      "@stickers/*":    ["packages/stickers/*"]     // ← added for desktop renderer
     }
   },
-  "include": ["apps", "packages", "scripts"]
+
+  "include": [
+    "apps",
+    "packages",
+    "scripts"
+  ]
 }
