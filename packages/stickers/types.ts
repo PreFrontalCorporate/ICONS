@@ -1,35 +1,34 @@
-/** One row in our JSON catalogue (`packages/stickers/index.json`). */
+/**
+ * Pure data representation of one sticker as it exists in
+ *  ▸  packages/stickers/index.json
+ *  ▸  the Firebase collection                               */
 export interface StickerEntry {
-  /** Stable identifier – also the PNG / APNG filename without extension. */
+  /** primary key (hash) – unique across all tiers */
   id: string;
-  /** Human‑friendly name shown in the picker UI. */
+  /** human‑readable name shown in UI                 */
   name: string;
-  /** File name (relative to the “stickers” folder). */
+  /** file name under /stickers/ (png / webp / gif)   */
   file: string;
-  /** Intrinsic bitmap size in pixels. */
+  /** pixel dimensions of the *original* asset        */
   width: number;
   height: number;
-  /** `true` ⇢ APNG;  `false` ⇢ static PNG. */
+  /** animated = true → show a <video> / <img src="…gif">   */
   animated: boolean;
-  /** Percentage‑based default screen position (0 – 1). */
+
+  /** 0 – 1 relative default position on the screen */
   defaultPosition: { x: number; y: number };
-  /** 128 px square thumbnail for the picker. */
+
+  /** square 128 px preview used in picker            */
   thumb: string;
-  /** Viral‑tier used for “trending” sort order. */
+
+  /** how “viral” this sticker is (drives sorting)    */
   viralityTier: 1 | 2 | 3 | 4;
-  /** Retail price in US cents. */
+
+  /** MSRP in US‑$, used by the store‑front            */
   priceUSD: number;
 }
 
-/**
- * In memory, after we fetch user‑specific metadata,
- * an entry may be enriched with extra flags
- * (e.g. “owned”, “in‑cart”, etc.).  Keep it future‑proof
- * by describing a *superset* of `StickerEntry`.
- */
-export type Sticker = StickerEntry & {
-  x: number;
-  y: number'
-  /* add other optional fields here */
-};
-
+/* ------------------------------------------------------------------ */
+/*  In most places the code only needs “any sticker”.                  */
+/*  Re‑exporting under a shorter alias keeps imports nice & short.     */
+export type Sticker = StickerEntry;
