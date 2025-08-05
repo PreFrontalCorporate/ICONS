@@ -2,18 +2,21 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist/renderer",
-    "module":       "esnext",
-    "target":       "es2020",
+    "module": "esnext",
+    "target": "es2020",
     "moduleResolution": "node",
-    "esModuleInterop":  true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
     "resolveJsonModule": true,
-    "skipLibCheck":      true,
-    "types": ["vite/client"],
+    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "@components/*": ["../../components/*"],
       "@stickers/*":   ["../../packages/stickers/*"]
-    }
+    },
   },
-  "include": ["src/renderer/**/*", "src/types/**/*"]
+  "include": [
+    "src/renderer/**/*",
+    "src/types/**/*"
+  ]
 }
