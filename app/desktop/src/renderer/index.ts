@@ -1,3 +1,4 @@
+// app/desktop/src/renderer/index.ts
 import StickerCanvas from '@components/StickerCanvas';
 import { verify } from 'jsonwebtoken';
 import stickers from '@stickers/index.json';
