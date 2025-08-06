@@ -1,27 +1,18 @@
 {
   "extends": "../../tsconfig.json",
-
   "compilerOptions": {
-    /*––––––––– emit to dist –––––––––*/
-    "outDir": "dist",
-    "rootDir": "src",          // <‑‑ restore this so main.ts → dist/main.js
+    "outDir":  "dist",
+    "rootDir": "src",
 
-    /*––––––––– TS target / module –––––––––*/
-    "module": "esnext",
-    "target": "es2020",
+    /* ---------- add this ---------- */
+    "rootDirs": ["src", "../../components", "../../packages"],
+
+    "noEmit":  false,
+    "module":  "esnext",
+    "target":  "es2020",
     "moduleResolution": "node",
-
-    /*––––––––– quality / interop –––––––––*/
     "esModuleInterop": true,
-    "skipLibCheck":    true,
-
-    /*––––––––– allow shared sources ––––––*/
-    "rootDirs": [
-      "src",                 // local desktop sources
-      "../../components",    // shared React components
-      "../../packages"       // shared sticker package
-    ]
+    "skipLibCheck":    true
   },
-
   "include": ["src/**/*"]
 }

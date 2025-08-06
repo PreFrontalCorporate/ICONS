@@ -4,27 +4,28 @@
   "compilerOptions": {
     "outDir": "dist/renderer",
 
-    /* TS / Vite settings */
+    /* ---------------- Core targets ---------------- */
     "module": "esnext",
     "target": "es2020",
     "moduleResolution": "node",
     "jsx": "react-jsx",
 
-    "esModuleInterop":   true,
-    "resolveJsonModule": true,
-    "skipLibCheck":      true,
-    "types": ["vite/client"],
-
-    /* allow the renderer to import shared code */
+    /* ---------------- Extras ---------------------- */
     "rootDirs": [
-      "src/renderer",
-      "../../components",
-      "../../packages"
-    ]
+      "src",                // renderer‑local sources
+      "../../components",   // shared React components
+      "../../packages"      // stickers package
+    ],
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "types": ["vite/client"]
   },
 
   "include": [
     "src/renderer/**/*",
-    "src/types/**/*"
+    "src/types/**/*",
+    "../../components/**/*",
+    "../../packages/stickers/**/*"
   ]
 }
