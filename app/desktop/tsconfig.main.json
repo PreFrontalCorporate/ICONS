@@ -4,9 +4,6 @@
   "compilerOptions": {
     /* where compiled JS goes */
     "outDir": "dist",
-    /* where *all* source files must live */
-    "rootDir": "src",
-
     /* language / module */
     "module": "esnext",
     "target": "es2020",

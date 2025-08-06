@@ -2,33 +2,30 @@
   "extends": "../../tsconfig.json",
 
   "compilerOptions": {
-    /* ‑‑‑ where compiled JS is written ‑‑‑ */
+    /* output folder just for renderer bundle */
     "outDir": "dist/renderer",
 
-    /* language / module targets */
+    /* allow code that lives outside app/desktop/src */
+    "rootDir" : "../../",                    // 👈 new
+    "rootDirs": ["src", "../../components", "../../packages"],
+
+    /* module / runtime */
     "module": "esnext",
     "target": "es2020",
     "moduleResolution": "node",
     "jsx": "react-jsx",
 
-    /* allow the renderer to see sibling workspaces 👇 */
-    "rootDirs": [
-      "src",                    // ← our own code
-      "../../components",       // ← shared React bits
-      "../../packages/stickers" // ← sticker JSON & types
-    ],
-
-    /* quality‑of‑life flags */
-    "esModuleInterop":  true,
+    /* conveniences */
+    "esModuleInterop"  : true,
     "resolveJsonModule": true,
-    "skipLibCheck":      true,
-    "types": ["vite/client"]
+    "skipLibCheck"     : true,
+    "types"            : ["vite/client"]
   },
 
   "include": [
     "src/renderer/**/*",
     "src/types/**/*",
     "../../components/**/*",
-    "../../packages/stickers/**/*"
+    "../../packages/**/*"
   ]
 }
