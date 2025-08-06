@@ -2,20 +2,19 @@
   "extends": "../../tsconfig.json",
 
   "compilerOptions": {
-    /* emit to app/desktop/dist/renderer */
-    "outDir": "dist/renderer",
+    "outDir":  "dist/renderer",
 
-    "module":  "esnext",
-    "target":  "es2020",
-    "moduleResolution": "node",
-    "jsx": "react-jsx",
-
-    /* same **rootDirs** trick as the main‑process config */
+    /* allow the renderer to import shared code */
     "rootDirs": [
       "src/renderer",
       "../../components",
       "../../packages/stickers"
     ],
+
+    "module":            "esnext",
+    "target":            "es2020",
+    "moduleResolution":  "node",
+    "jsx":               "react-jsx",
 
     "esModuleInterop":   true,
     "resolveJsonModule": true,
@@ -25,8 +24,6 @@
 
   "include": [
     "src/renderer/**/*",
-    "../../components/**/*",
-    "../../packages/stickers/**/*",
     "src/types/**/*"
   ]
 }
