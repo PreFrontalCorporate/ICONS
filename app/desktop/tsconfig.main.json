@@ -1,24 +1,18 @@
 {
   "extends": "../../tsconfig.json",
 
-  // ---------- MAIN‑PROCESS ONLY ----------
   "compilerOptions": {
-    "outDir": "dist",          // <‑‑ electron‑builder looks for dist/main.js
-    "rootDir": "src",
+    "outDir": "dist",          // what electron‑builder expects
+    "rootDir": "src",          // <- keep this: everything must stay below app/desktop/src
 
-    "module":          "esnext",
-    "target":          "es2020",
-    "moduleResolution": "node",
-    "esModuleInterop":  true,
-    "skipLibCheck":     true
+    "module":            "esnext",
+    "target":            "es2020",
+    "moduleResolution":  "node",
+    "esModuleInterop":   true,
+    "skipLibCheck":      true
   },
 
-  /*  <-‑‑ IMPORTANT!
-      We *remove* renderer+shared code from the main project
-      so main.ts can compile on its own.  */
-  "exclude": [
-    "src/renderer/**/*",
-    "../../components/**/*",
-    "../../packages/stickers/**/*"
+  "include": [
+    "src/**/*"            // ⬅️ **only** the main‑process code
   ]
 }
