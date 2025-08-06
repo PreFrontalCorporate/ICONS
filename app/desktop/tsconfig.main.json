@@ -1,18 +1,31 @@
 {
   "extends": "../../tsconfig.json",
+
   "compilerOptions": {
-    "outDir":  "dist",
-    "rootDir": "src",
+    /* —— emit —— */
+    "outDir": "dist",               // compiled JS ends up in   app/desktop/dist
+                                    // ( electron‑builder expects dist/main.js )
 
-    /* ---------- add this ---------- */
-    "rootDirs": ["src", "../../components", "../../packages"],
-
-    "noEmit":  false,
-    "module":  "esnext",
-    "target":  "es2020",
+    /* —— module/target —— */
+    "module": "esnext",
+    "target": "es2020",
     "moduleResolution": "node",
+
+    /* —— where the compiler can pull source from —— */
+    "rootDirs": [
+      "src",                        // Desktop‑specific code
+      "../../components",           // shared React components
+      "../../packages/stickers"     // shared data / types
+    ],
+
+    /* —— misc goodies —— */
     "esModuleInterop": true,
-    "skipLibCheck":    true
+    "skipLibCheck":   true
   },
-  "include": ["src/**/*"]
+
+  "include": [
+    "src/**/*",
+    "../../components/**/*",
+    "../../packages/stickers/**/*"
+  ]
 }

@@ -2,30 +2,31 @@
   "extends": "../../tsconfig.json",
 
   "compilerOptions": {
+    /* emit to app/desktop/dist/renderer */
     "outDir": "dist/renderer",
 
-    /* ---------------- Core targets ---------------- */
-    "module": "esnext",
-    "target": "es2020",
+    "module":  "esnext",
+    "target":  "es2020",
     "moduleResolution": "node",
     "jsx": "react-jsx",
 
-    /* ---------------- Extras ---------------------- */
+    /* same **rootDirs** trick as the main‑process config */
     "rootDirs": [
-      "src",                // renderer‑local sources
-      "../../components",   // shared React components
-      "../../packages"      // stickers package
+      "src/renderer",
+      "../../components",
+      "../../packages/stickers"
     ],
-    "esModuleInterop": true,
+
+    "esModuleInterop":   true,
     "resolveJsonModule": true,
-    "skipLibCheck": true,
+    "skipLibCheck":      true,
     "types": ["vite/client"]
   },
 
   "include": [
     "src/renderer/**/*",
-    "src/types/**/*",
     "../../components/**/*",
-    "../../packages/stickers/**/*"
+    "../../packages/stickers/**/*",
+    "src/types/**/*"
   ]
 }
