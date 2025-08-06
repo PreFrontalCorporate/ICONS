@@ -2,30 +2,29 @@
   "extends": "../../tsconfig.json",
 
   "compilerOptions": {
-    /* output folder just for renderer bundle */
     "outDir": "dist/renderer",
 
-    /* allow code that lives outside app/desktop/src */
-    "rootDir" : "../../",                    // 👈 new
-    "rootDirs": ["src", "../../components", "../../packages"],
-
-    /* module / runtime */
+    /* TS / Vite settings */
     "module": "esnext",
     "target": "es2020",
     "moduleResolution": "node",
     "jsx": "react-jsx",
 
-    /* conveniences */
-    "esModuleInterop"  : true,
+    "esModuleInterop":   true,
     "resolveJsonModule": true,
-    "skipLibCheck"     : true,
-    "types"            : ["vite/client"]
+    "skipLibCheck":      true,
+    "types": ["vite/client"],
+
+    /* allow the renderer to import shared code */
+    "rootDirs": [
+      "src/renderer",
+      "../../components",
+      "../../packages"
+    ]
   },
 
   "include": [
     "src/renderer/**/*",
-    "src/types/**/*",
-    "../../components/**/*",
-    "../../packages/**/*"
+    "src/types/**/*"
   ]
 }
