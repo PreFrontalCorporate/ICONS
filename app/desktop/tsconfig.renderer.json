@@ -1,28 +1,28 @@
 {
   "extends": "../../tsconfig.json",
 
-  // ---------- RENDERER / WEBVIEW ----------
   "compilerOptions": {
     "outDir": "dist/renderer",
 
-    // Everything the renderer might need:
-    "rootDirs": [
-      "src/renderer",
-      "../../components",
-      "../../packages/stickers"
-    ],
-
-    "module":           "esnext",
-    "target":           "es2020",
+    "module": "esnext",
+    "target": "es2020",
     "moduleResolution": "node",
-    "jsx":              "react-jsx",
+    "jsx": "react-jsx",
 
     "esModuleInterop":  true,
     "resolveJsonModule": true,
     "skipLibCheck":      true,
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+
+    /* allow the compiler to crawl outside src/renderer */
+    "rootDirs": [
+      "src/renderer",
+      "../../components",
+      "../../packages"
+    ]
   },
 
+  /* sources actually compiled */
   "include": [
     "src/renderer/**/*",
     "../../components/**/*",

@@ -2,17 +2,20 @@
   "extends": "../../tsconfig.json",
 
   "compilerOptions": {
-    "outDir": "dist",          // what electron‑builder expects
-    "rootDir": "src",          // <- keep this: everything must stay below app/desktop/src
+    /* emit exactly the two main‑process files to dist */
+    "rootDir": "src",
+    "outDir":  "dist",
 
-    "module":            "esnext",
-    "target":            "es2020",
-    "moduleResolution":  "node",
-    "esModuleInterop":   true,
-    "skipLibCheck":      true
+    "module":  "esnext",
+    "target":  "es2020",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck":    true
   },
 
+  /* ONLY the main‑process sources */
   "include": [
-    "src/**/*"            // ⬅️ **only** the main‑process code
+    "src/main.ts",
+    "src/preload.ts"
   ]
 }
