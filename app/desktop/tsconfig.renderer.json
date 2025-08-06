@@ -1,19 +1,21 @@
 {
   "extends": "../../tsconfig.json",
 
+  // ---------- RENDERER / WEBVIEW ----------
   "compilerOptions": {
     "outDir": "dist/renderer",
 
-    "module": "esnext",
-    "target": "es2020",
-    "moduleResolution": "node",
-    "jsx": "react-jsx",
-
+    // Everything the renderer might need:
     "rootDirs": [
       "src/renderer",
       "../../components",
-      "../../packages"
+      "../../packages/stickers"
     ],
+
+    "module":           "esnext",
+    "target":           "es2020",
+    "moduleResolution": "node",
+    "jsx":              "react-jsx",
 
     "esModuleInterop":  true,
     "resolveJsonModule": true,
@@ -21,5 +23,9 @@
     "types": ["vite/client"]
   },
 
-  "include": ["src/renderer/**/*", "src/types/**/*"]
+  "include": [
+    "src/renderer/**/*",
+    "../../components/**/*",
+    "../../packages/stickers/**/*"
+  ]
 }
