@@ -1,5 +1,6 @@
 {
   "extends": "../../tsconfig.json",
+
   "compilerOptions": {
     "outDir": "dist/renderer",
 
@@ -11,12 +12,27 @@
     "esModuleInterop"  : true,
     "resolveJsonModule": true,
     "skipLibCheck"     : true,
-    "types"            : ["vite/client"],
-    "rootDirs"         : ["src/renderer", "../../components", "../../packages"]
+
+    "types": [
+      "vite/client",
+      "node"                 // ← adds Node globals so fs / path references type‑check
+    ],
+
+    "rootDirs": [
+      "src/renderer",
+      "../../components",
+      "../../packages/stickers"
+    ]
   },
+
   "include": [
     "src/renderer/**/*",
     "../../components/**/*",
-    "../../packages/stickers/**/*"
+    "../../packages/stickers/types.ts",       // runtime types only
+    "../../packages/stickers/index.json"
+  ],
+
+  "exclude": [
+    "../../packages/stickers/build_index.ts"  // Node‑only build script — keep it out
   ]
 }
