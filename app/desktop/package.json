@@ -1,8 +1,8 @@
 {
   "name": "icon-desktop",
   "productName": "icon",
-  "version": "1.0.34",
-  "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
+  "version": "1.0.36",                             // ← bumped
+  "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
   "homepage": "https://github.com/PreFrontalCorporate/icon",
   "license": "MIT",
   "author": {
@@ -10,80 +10,71 @@
     "email": "support@cbb.homes",
     "url": "https://cbb.homes"
   },
+
   "private": true,
   "type": "module",
   "main": "dist/main.js",
+
   "scripts": {
-    "dev": "vite dev --config vite.config.ts & electronmon . --ignore=packages/stickers",
-    "build": "tsc -p tsconfig.main.json && tsc -p tsconfig.renderer.json",
-    "build:renderer": "vite build --config vite.config.ts",
-    "dist": "pnpm run build && pnpm run build:renderer && electron-builder"
+    "dev"            : "vite dev --config vite.config.ts & electronmon . --ignore=packages/stickers",
+    "build"          : "tsc -p tsconfig.main.json && tsc -p tsconfig.renderer.json",
+    "build:renderer" : "vite build --config vite.config.ts",
+    "dist"           : "pnpm run build && pnpm run build:renderer && electron-builder"
   },
+
   "dependencies": {
     "@google-cloud/firestore": "7.11.3",
-    "@shopify/shopify-api": "^11.14.1",
-    "electron-updater": "^5.3.0",
-    "jsonwebtoken": "^9.0.2",
-    "ws": "^8.18.3"
+    "@shopify/shopify-api"   : "^11.14.1",
+    "electron-updater"       : "^5.3.0",
+    "jsonwebtoken"           : "^9.0.2",
+    "ws"                     : "^8.18.3"
   },
+
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.4",
-    "@types/node": "^20.10.5",
-    "electron": "^29.4.6",
-    "electron-builder": "^24.13.3",
-    "electronmon": "^2.0.0",
-    "typescript": "^5.4.4",
-    "vite": "^5.4.9"
+    "@types/node"        : "^20.10.5",
+    "electron"           : "^29.4.6",
+    "electron-builder"   : "^24.13.3",
+    "electronmon"        : "^2.0.0",
+    "typescript"         : "^5.4.4",
+    "vite"               : "^5.4.9"
   },
+
   "build": {
     "icon": "build/icon",
-    "electronDownload": {
-      "mirror": "https://npmmirror.com/mirrors/electron/"
-    },
+    "electronDownload": { "mirror": "https://npmmirror.com/mirrors/electron/" },
+
+    /* ---------- NEW FILE LIST ---------- */
     "files": [
-      "dist/**/*",
-      "windows/**/*",
+      "dist/main.js",            // main process
+      "dist/preload.js",         // preload script
+      "dist/renderer/**",        // vite bundle
+      "windows/**",
       "build/icon.*",
-      "packages/stickers/**/*"
+      "packages/stickers/**"
     ],
-    "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
-      "category": "public.app-category.graphics-design"
-    },
+
+    /* ---------- UNCHANGED PLATFORM TARGETS ---------- */
+    "mac":  { "target": ["dmg", "zip"], "category": "public.app-category.graphics-design" },
+
     "win": {
       "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32",
-            "arm64"
-          ]
-        },
-        {
-          "target": "portable",
-          "arch": [
-            "x64"
-          ]
-        }
-      ]
+        { "target": "nsis",     "arch": ["x64", "ia32", "arm64"] },
+        { "target": "portable", "arch": ["x64"] }
+      ],
+      "nsis": { "createDesktopShortcut": "always" }   // desktop shortcut
     },
+
     "linux": {
       "maintainer": "PreFrontal Corporate <support@cbb.homes>",
-      "category": "Utility",
-      "target": [
-        "AppImage",
-        "deb",
-        "rpm"
-      ]
+      "category"  : "Utility",
+      "target"    : ["AppImage", "deb", "rpm"]
     },
-    "publish": {
-      "provider": "github",
-      "owner": "PreFrontalCorporate",
-      "repo": "icon"
-    }
+
+    /* ---------- ADDITIONAL BUILDER OPTIONS ---------- */
+    "directories": { "buildResources": "build" },
+    "asarUnpack" : [ "dist/preload.js" ],
+
+    "publish": { "provider": "github", "owner": "PreFrontalCorporate", "repo": "icon" }
   }
 }
