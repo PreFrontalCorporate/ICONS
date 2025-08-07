@@ -1,7 +1,7 @@
 {
   "name": "icon-desktop",
   "productName": "icon",
-  "version": "1.0.36",                             // ← bumped
+  "version": "1.0.36",
   "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
   "homepage": "https://github.com/PreFrontalCorporate/icon",
   "license": "MIT",
@@ -44,17 +44,15 @@
     "icon": "build/icon",
     "electronDownload": { "mirror": "https://npmmirror.com/mirrors/electron/" },
 
-    /* ---------- NEW FILE LIST ---------- */
     "files": [
-      "dist/main.js",            // main process
-      "dist/preload.js",         // preload script
-      "dist/renderer/**",        // vite bundle
+      "dist/main.js",
+      "dist/preload.js",
+      "dist/renderer/**",
       "windows/**",
       "build/icon.*",
       "packages/stickers/**"
     ],
 
-    /* ---------- UNCHANGED PLATFORM TARGETS ---------- */
     "mac":  { "target": ["dmg", "zip"], "category": "public.app-category.graphics-design" },
 
     "win": {
@@ -71,7 +69,6 @@
       "target"    : ["AppImage", "deb", "rpm"]
     },
 
-    /* ---------- ADDITIONAL BUILDER OPTIONS ---------- */
     "directories": { "buildResources": "build" },
     "asarUnpack" : [ "dist/preload.js" ],
 
