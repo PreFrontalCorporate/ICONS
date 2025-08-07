@@ -4,10 +4,11 @@
     "outDir"           : "dist",
     "rootDir"          : "src",
     "target"           : "ES2020",
-    "module"           : "esnext",
+    "module"           : "commonjs",
     "moduleResolution" : "node",
     "esModuleInterop"  : true,
+    "types"            : ["electron"],
     "skipLibCheck"     : true
   },
-  "include": ["src/main.ts"]
+  "include": ["src/preload.ts"]
 }

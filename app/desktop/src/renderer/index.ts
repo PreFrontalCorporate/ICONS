@@ -1,19 +1,27 @@
-// app/desktop/src/renderer/index.ts
-import StickerCanvas from '@components/StickerCanvas';
-import { verify } from 'jsonwebtoken';
-import stickers from '@stickers/index.json';
-
 declare global {
-  interface Window {
-    api: { ping(): Promise<string> };
-  }
+  interface Window { api: { verifyJWT(token: string): any } }
 }
 
-(async () => {
-  console.log('Renderer booted, sticker count:', stickers.length);
-  console.log('ping →', await window.api.ping());
+import StickerCanvas from '@components/StickerCanvas';
+import type { StickerEntry } from '@stickers/types';
 
-  // quick JWT sanity‑check
-  const token = verify('dummy.jwt.token', 'secret', { ignoreExpiration: true });
-  console.log(token);
+(async () => {
+  const token = location.hash.slice(1);          // #<JWT>
+  if (!token) {
+    document.body.textContent = 'Please log in…';
+    return;
+  }
+
+  try {
+    const user = await window.api.verifyJWT(token);
+    console.log('User verified:', user);
+
+    // fetch sticker list from backend (placeholder)
+    const stickers: StickerEntry[] = [];
+
+    StickerCanvas({ stickers });
+  } catch (err) {
+    console.error(err);
+    document.body.textContent = 'Invalid login.';
+  }
 })();
