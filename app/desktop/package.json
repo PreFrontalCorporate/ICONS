@@ -1,12 +1,27 @@
 {
   "name": "icon-desktop",
-  "version": "1.0.54",
+  "productName": "icon",
+  "version": "1.0.55",
+  "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
+  "homepage": "https://github.com/PreFrontalCorporate/icon",
+  "license": "MIT",
+  "author": {
+    "name": "PreFrontal Corporate",
+    "email": "support@cbb.homes",
+    "url": "https://cbb.homes"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PreFrontalCorporate/icon.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PreFrontalCorporate/icon/issues"
+  },
   "private": true,
-  "description": "icon desktop app",
   "type": "module",
   "main": "dist/main.js",
-  "productName": "icon",
   "scripts": {
+    "dev": "vite dev --config vite.config.ts & electronmon . --ignore=packages/stickers",
     "build:main": "tsc -p tsconfig.main.json",
     "build:preload": "tsc -p tsconfig.preload.json",
     "build:renderer": "vite build --config vite.config.ts",
@@ -32,6 +47,7 @@
     "vite": "^5.4.9"
   },
   "build": {
+    "appId": "com.prefc.icon",
     "asar": true,
     "asarUnpack": [
       "dist/preload.cjs"
@@ -39,45 +55,32 @@
     "files": [
       "dist/**/*",
       "windows/**/*",
-      "build/icon.*",
-      "packages/stickers/**/*"
+      "build/icon.*"
+    ],
+    "extraResources": [
+      {
+        "from": "../../packages/stickers",
+        "to": "packages/stickers",
+        "filter": ["**/*"]
+      }
     ],
     "electronDownload": {
       "mirror": "https://npmmirror.com/mirrors/electron/"
     },
     "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
+      "target": ["dmg", "zip"],
       "category": "public.app-category.graphics-design"
     },
     "win": {
       "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32",
-            "arm64"
-          ]
-        },
-        {
-          "target": "portable",
-          "arch": [
-            "x64"
-          ]
-        }
+        { "target": "nsis", "arch": ["x64", "ia32", "arm64"] },
+        { "target": "portable", "arch": ["x64"] }
       ]
     },
     "linux": {
-      "maintainer": "PreFrontal Corporate <support@cbb.homes>",
       "category": "Utility",
-      "target": [
-        "AppImage",
-        "deb",
-        "rpm"
-      ]
+      "maintainer": "PreFrontal Corporate <support@cbb.homes>",
+      "target": ["AppImage", "deb", "rpm"]
     },
     "publish": {
       "provider": "github",
