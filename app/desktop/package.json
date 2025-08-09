@@ -10,40 +10,42 @@
     "email": "support@cbb.homes",
     "url": "https://cbb.homes"
   },
+
   "private": true,
   "type": "module",
   "main": "dist/main.js",
 
   "scripts": {
-    "dev"           : "vite dev --config vite.config.ts & electronmon . --ignore=packages/stickers",
-    "build:main"    : "tsc -p tsconfig.main.json",
+    "dev": "vite dev --config vite.config.ts & electronmon . --ignore=packages/stickers",
+    "build:main": "tsc -p tsconfig.main.json",
+    "build:preload": "tsc -p tsconfig.preload.json",
     "build:renderer": "vite build --config vite.config.ts",
-    "build"         : "pnpm run build:main && pnpm run build:renderer",
-    "dist"          : "pnpm run build && electron-builder",
-    "sync:scripts"  : "node ../../scripts/sync-scripts.mjs"
+    "build": "pnpm run build:main && pnpm run build:preload && pnpm run build:renderer",
+    "dist": "pnpm run build && electron-builder",
+    "sync:scripts": "node ../../scripts/desktop/sync-scripts.mjs"
   },
 
   "dependencies": {
     "@google-cloud/firestore": "7.11.3",
-    "@shopify/shopify-api"   : "^11.14.1",
-    "electron-updater"       : "^5.3.0",
-    "jsonwebtoken"           : "^9.0.2",
-    "ws"                     : "^8.18.3"
+    "@shopify/shopify-api": "^11.14.1",
+    "electron-updater": "^5.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "ws": "^8.18.3"
   },
 
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.4",
-    "@types/node"        : "^20.10.5",
-    "electron"           : "^29.4.6",
-    "electron-builder"   : "^24.13.3",
-    "electronmon"        : "^2.0.0",
-    "typescript"         : "^5.4.4",
-    "vite"               : "^5.4.9"
+    "@types/node": "^20.10.5",
+    "electron": "^29.4.6",
+    "electron-builder": "^24.13.3",
+    "electronmon": "^2.0.0",
+    "typescript": "^5.4.4",
+    "vite": "^5.4.9"
   },
 
   "build": {
     "asar": true,
-    "asarUnpack": ["dist/preload.js"],
+    "asarUnpack": ["dist/preload.cjs"],
     "files": [
       "dist/**/*",
       "windows/**/*",
@@ -53,22 +55,21 @@
     "electronDownload": {
       "mirror": "https://npmmirror.com/mirrors/electron/"
     },
+
     "mac": {
       "target": ["dmg", "zip"],
-      "category": "public.app-category.graphics-design",
-      "sign": false
+      "category": "public.app-category.graphics-design"
     },
     "win": {
       "target": [
-        { "target": "nsis",     "arch": ["x64", "ia32", "arm64"] },
+        { "target": "nsis", "arch": ["x64", "ia32", "arm64"] },
         { "target": "portable", "arch": ["x64"] }
-      ],
-      "signAndEditExecutable": false
+      ]
     },
     "linux": {
       "maintainer": "PreFrontal Corporate <support@cbb.homes>",
-      "category"  : "Utility",
-      "target"    : ["AppImage", "deb", "rpm"]
+      "category": "Utility",
+      "target": ["AppImage", "deb", "rpm"]
     },
     "publish": { "provider": "github", "owner": "PreFrontalCorporate", "repo": "icon" }
   }
