@@ -1,13 +1,13 @@
-const { contextBridge } = require('electron');
-const jwt   = require('jsonwebtoken');
-const fs    = require('fs');
-const path  = require('path');
-
-const secret = fs.readFileSync(
-  path.join(__dirname, 'jwt_secret.pem'),
-  'utf8'
-);
+// CommonJS at runtime (compiled via tsconfig.preload.json).
+import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('api', {
-  verifyJWT: (token: string) => jwt.verify(token, secret)
+  ping: () => ipcRenderer.invoke('ping'),
+  stickers: {
+    list: () => ipcRenderer.invoke('stickers:list'),
+    clearAll: () => ipcRenderer.send('stickers:clear-all')
+  },
+  overlay: {
+    setClickThrough: (on: boolean) => ipcRenderer.send('overlay:set-click-through', on)
+  }
 });
