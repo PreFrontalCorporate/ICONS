@@ -1,16 +1,35 @@
 #!/usr/bin/env node
-// Writes app/desktop/dist/package.json with { "type": "commonjs" }
-// so Electron treats dist/preload.js as CJS when it requires it.
-const fs = require('fs');
-const path = require('path');
-const target = path.join(__dirname, '../../app/desktop/dist/package.json');
+// Ensures Electron runs main as ESM and the preload as CJS.
+// - Renames dist/preload.js -> dist/preload.cjs (if needed)
+// - Writes dist/package.json with { "type": "module" }
+
+const fs   = require('node:fs');
+const path = require('node:path');
+
+const dist = path.resolve(__dirname, '../../app/desktop/dist');
+
+if (!fs.existsSync(dist)) {
+  console.error('❌  dist folder not found:', dist);
+  process.exit(1);
+}
+
 const from = path.join(dist, 'preload.js');
 const to   = path.join(dist, 'preload.cjs');
-if (fs.existsSync(from)) fs.renameSync(from, to);
 
-// IMPORTANT: either don't write dist/package.json at all, or:
-fs.writeFileSync(path.join(dist, 'package.json'), JSON.stringify({
-  // keep it module so dist/main.js stays ESM:
-  type: 'module'
-}, null, 2));
-console.log('→ ensured preload.cjs and type:module in dist/');
+try {
+  if (fs.existsSync(from)) {
+    fs.renameSync(from, to);
+    console.log('✓ renamed preload.js → preload.cjs');
+  } else if (fs.existsSync(to)) {
+    console.log('ℹ︎ preload.cjs already present');
+  } else {
+    console.warn('⚠︎ no preload file found (did build:preload run?)');
+  }
+
+  const pkgPath = path.join(dist, 'package.json');
+  fs.writeFileSync(pkgPath, JSON.stringify({ type: 'module' }, null, 2));
+  console.log('→ wrote dist/package.json with {"type":"module"}');
+} catch (err) {
+  console.error(err);
+  process.exit(1);
+}

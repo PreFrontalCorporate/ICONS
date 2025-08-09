@@ -1,8 +1,8 @@
 {
   "name": "icon-desktop",
   "productName": "icon",
-  "version": "1.0.50",
-  "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
+  "version": "1.0.51",
+  "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
   "homepage": "https://github.com/PreFrontalCorporate/icon",
   "license": "MIT",
   "author": {
@@ -18,20 +18,18 @@
     "build:main": "tsc -p tsconfig.main.json",
     "build:preload": "tsc -p tsconfig.preload.json",
     "build:renderer": "vite build --config vite.config.ts",
+    "build": "pnpm run build:main && pnpm run build:preload && pnpm run build:renderer",
     "postbuild": "node ../../scripts/desktop/write-dist-pkg.cjs",
-    "build": "pnpm run build:main && pnpm run build:preload && pnpm run build:renderer && pnpm run postbuild",
-    "dist": "pnpm run build && electron-builder",
+    "dist": "pnpm run build && pnpm run postbuild && electron-builder",
     "sync:scripts": "node ../../scripts/desktop/sync-scripts.mjs"
   },
   "dependencies": {
     "@google-cloud/firestore": "7.11.3",
-    "@shopify/shopify-api": "^11.14.1",
     "electron-updater": "^5.3.0",
     "jsonwebtoken": "^9.0.2",
     "ws": "^8.18.3"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.4",
     "@types/node": "^20.10.5",
     "electron": "^29.4.6",
     "electron-builder": "^24.13.3",
@@ -41,7 +39,9 @@
   },
   "build": {
     "asar": true,
-    "asarUnpack": ["dist/preload.cjs"],
+    "asarUnpack": [
+      "dist/preload.cjs"
+    ],
     "files": [
       "dist/**/*",
       "windows/**/*",
@@ -59,19 +59,17 @@
       "target": [
         { "target": "nsis", "arch": ["x64", "ia32", "arm64"] },
         { "target": "portable", "arch": ["x64"] }
-      ],
-      "publisherName": "PreFrontal Corporate"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true
+      ]
     },
     "linux": {
       "maintainer": "PreFrontal Corporate <support@cbb.homes>",
       "category": "Utility",
-      "target": ["AppImage", "deb", "rpm"]
+      "target": ["AppImage", "deb", "rpm", "snap"]
     },
-    "publish": { "provider": "github", "owner": "PreFrontalCorporate", "repo": "icon" }
+    "publish": {
+      "provider": "github",
+      "owner": "PreFrontalCorporate",
+      "repo": "icon"
+    }
   }
 }

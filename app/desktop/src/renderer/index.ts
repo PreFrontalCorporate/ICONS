@@ -1,71 +1,92 @@
 declare global {
   interface Window {
-    iconOverlay: { pinSticker(id: string, url: string): Promise<void>; clearAll(): Promise<void> };
+    desktop: {
+      login(store: string, password: string): Promise<{ ok: boolean; message?: string }>;
+      openLibrary(): Promise<void>;
+      focusLibrary(): Promise<void>;
+    };
+    iconOverlay: {
+      pinSticker(id: string, url: string): Promise<void>;
+      clearAll(): Promise<void>;
+      toggleClickThrough(): Promise<void>;
+    };
   }
 }
 
-import stickers from '@stickers/index.json';  // built by packages/stickers/build_index.ts
-type Entry = typeof stickers[number];
+import stickerIndex from '@stickers/index.json';
+import type { StickerEntry } from '@stickers/types';
 
-const el = document.getElementById('app')!;
+// naive template helpers
+const el = <K extends keyof HTMLElementTagNameMap>(tag: K, props: any = {}, ...kids: (Node | string)[]) => {
+  const node = document.createElement(tag);
+  Object.assign(node, props);
+  kids.forEach(k => node.append(k));
+  return node as HTMLElementTagNameMap[K];
+};
 
-function stickersBase(): string {
-  // file://…/dist/renderer/index.html  →  ../../packages/stickers/
-  if (location.protocol === 'file:') {
-    const base = new URL('../../packages/stickers/', location.href);
-    return base.toString();
-  }
-  // dev server / web fallback
-  return '/stickers/';
-}
+const root = document.getElementById('root')!;
 
 function renderLogin() {
-  el.innerHTML = `
-    <h1>Sign in to icon</h1>
-    <form id="login" class="row">
-      <input name="email" type="email" placeholder="you@example.com" required style="flex:1;padding:8px 10px;border:1px solid #ccc;border-radius:8px">
-      <button style="padding:8px 14px;border-radius:8px;border:0;background:#111;color:#fff">Continue</button>
-    </form>
-    <p style="opacity:.7">Temporary: we’ll unlock your local sample library after a dummy login.</p>
-  `;
-  (document.getElementById('login') as HTMLFormElement).onsubmit = (e) => {
+  const error = el('div', { id: 'error' });
+
+  const form = el('form', { id: 'login' },
+    el('label', {}, 'Shopify store',
+      el('input', { name: 'store', placeholder: 'mystore.myshopify.com', required: true })
+    ),
+    el('label', {}, 'Password',
+      el('input', { name: 'password', type: 'password', placeholder: '••••••••', required: true })
+    ),
+    el('button', { type: 'submit', textContent: 'Sign in' }),
+    error
+  );
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    localStorage.setItem('icon:user', (new FormData(e.currentTarget as HTMLFormElement).get('email') as string) || 'anon');
-    renderLibrary();
-  };
-}
+    error.textContent = '';
 
-function renderLibrary() {
-  const base = stickersBase();
-  const cards = stickers.map((s: Entry) => {
-    const thumb = `${base}${encodeURIComponent(s.id)}/${encodeURIComponent(s.thumb)}`;
-    return `
-      <div class="card" data-id="${s.id}" data-file="${s.file}">
-        <img src="${thumb}" alt="${s.name}">
-        <div style="margin-top:8px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div>
-      </div>
-    `;
-  }).join('');
+    const data = new FormData(form as HTMLFormElement);
+    const store = String(data.get('store') || '');
+    const password = String(data.get('password') || '');
 
-  el.innerHTML = `
-    <div class="row">
-      <h1 style="flex:1;margin:0">My library</h1>
-      <button id="clear" style="padding:8px 12px;border-radius:8px;border:1px solid #ddd;background:#fff">Clear all stickers</button>
-    </div>
-    <div class="grid">${cards}</div>
-    <p style="opacity:.6;margin-top:12px">Tip: press <kbd>T</kbd> with an overlay focused to toggle click‑through.</p>
-  `;
-
-  document.getElementById('clear')!.addEventListener('click', () => window.iconOverlay.clearAll());
-
-  el.querySelectorAll<HTMLDivElement>('.card').forEach(card => {
-    card.addEventListener('click', () => {
-      const id   = card.dataset.id!;
-      const file = card.dataset.file!;
-      const url  = `${base}${encodeURIComponent(id)}/${encodeURIComponent(file)}`;
-      window.iconOverlay.pinSticker(id, url);
-    });
+    const res = await window.desktop.login(store, password);
+    if (!res.ok) {
+      error.textContent = res.message || 'Login failed';
+      return;
+    }
+    renderGrid();
   });
+
+  root.replaceChildren(form);
 }
 
-localStorage.getItem('icon:user') ? renderLibrary() : renderLogin();
+function fileUrlForSticker(s: StickerEntry) {
+  // Our packages layout stores files under packages/stickers/<id>/<file>
+  // (ids match their containing folder names).
+  // electron-builder includes "packages/stickers/**/*", so we can reference with a file:// URL.
+  const rel = `../../packages/stickers/${s.id}/${s.file}`;
+  return new URL(rel, (import.meta as any).url).toString();
+}
+
+function renderGrid() {
+  const header = el('div', { className: 'row' },
+    el('h3', { textContent: 'Pick a sticker and it will pin as an overlay.' }),
+    el('div', { style: 'flex:1' }),
+    el('button', { textContent: 'Toggle click‑through', onclick: () => window.iconOverlay.toggleClickThrough() }),
+    el('button', { textContent: 'Clear all', onclick: () => window.iconOverlay.clearAll() })
+  );
+
+  const grid = el('div', { className: 'grid' });
+
+  (stickerIndex as StickerEntry[]).slice(0, 48).forEach((s) => {
+    const img = el('img', { alt: s.name });
+    img.src = fileUrlForSticker(s);
+    img.title = s.name;
+    img.addEventListener('click', () => window.iconOverlay.pinSticker(s.id, img.src));
+    grid.append(img);
+  });
+
+  root.replaceChildren(el('div', {}, header, grid));
+}
+
+// initial screen
+renderLogin();

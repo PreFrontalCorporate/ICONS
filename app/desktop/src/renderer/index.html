@@ -1,14 +1,26 @@
 <!doctype html>
-<meta charset="utf-8" />
-<title>icon – desktop</title>
-<style>
-  body { font-family: ui-sans-serif, system-ui; margin: 0; }
-  .wrap { max-width: 920px; margin: 28px auto; padding: 0 16px; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px; }
-  .card { border:1px solid #ddd; border-radius:10px; padding:10px; cursor:pointer; background:#fff }
-  .card img { width:100%; height:120px; object-fit:contain; display:block }
-  .row { display:flex; gap:8px; align-items:center; margin: 10px 0 18px }
-</style>
-<div class="wrap" id="app"></div>
-<script type="module" src="./index.ts"></script>
-
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>icon – sign in</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:; img-src 'self' data: file: https:;">
+    <style>
+      html,body { height: 100%; margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto }
+      main { height: 100%; display: grid; place-items: center; }
+      form { display:flex; flex-direction:column; gap:10px; width: 320px; }
+      label { display:flex; flex-direction:column; font-weight:600; gap:6px }
+      input { padding: 8px 10px; border: 1px solid #d0d0d0; border-radius: 8px; font-size: 14px }
+      button { padding: 10px 12px; border-radius: 8px; border: 0; background: black; color: white; font-weight: 600; cursor: pointer}
+      .row { display: flex; gap: 8px; align-items: center; }
+      .grid { margin-top: 18px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+      .grid img { width: 100%; border-radius: 6px; cursor: pointer; }
+      #error { color: #ff4668; margin-top: 6px; min-height: 1.2em; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div id="root"></div>
+    </main>
+    <script type="module" src="./index.ts"></script>
+  </body>
+</html>

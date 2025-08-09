@@ -1,13 +1,30 @@
-// CommonJS at runtime (compiled via tsconfig.preload.json).
+// CJS-compiled preload that exposes overlay + simple UI helpers.
 import { contextBridge, ipcRenderer } from 'electron';
 
-contextBridge.exposeInMainWorld('api', {
-  ping: () => ipcRenderer.invoke('ping'),
-  stickers: {
-    list: () => ipcRenderer.invoke('stickers:list'),
-    clearAll: () => ipcRenderer.send('stickers:clear-all')
-  },
-  overlay: {
-    setClickThrough: (on: boolean) => ipcRenderer.send('overlay:set-click-through', on)
-  }
+contextBridge.exposeInMainWorld('iconOverlay', {
+  pinSticker: (id: string, url: string) => ipcRenderer.invoke('overlay:create', id, url),
+  clearAll:   () => ipcRenderer.invoke('overlay:clearAll'),
+  toggleClickThrough: () => ipcRenderer.invoke('overlay:toggleClickThrough')
 });
+
+contextBridge.exposeInMainWorld('desktop', {
+  login: (store: string, password: string) =>
+    ipcRenderer.invoke('auth:login', { store, password }),
+  openLibrary: () => ipcRenderer.invoke('ui:openLibrary'),
+  focusLibrary: () => ipcRenderer.invoke('ui:focusLibrary')
+});
+
+declare global {
+  interface Window {
+    iconOverlay: {
+      pinSticker(id: string, url: string): Promise<void>;
+      clearAll(): Promise<void>;
+      toggleClickThrough(): Promise<void>;
+    };
+    desktop: {
+      login(store: string, password: string): Promise<{ ok: boolean; message?: string }>;
+      openLibrary(): Promise<void>;
+      focusLibrary(): Promise<void>;
+    };
+  }
+}
