@@ -1,53 +1,47 @@
-// app/desktop/src/main.ts
-import { app, BrowserWindow, dialog, globalShortcut, ipcMain, Menu } from 'electron';
-import path from 'node:path';
-import * as overlay from './ipc/overlay';
-import { getMyStickers } from './ipc/stickers';
+import { app, BrowserWindow, ipcMain } from 'electron';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
-let mainWin: BrowserWindow;
+const distDir    = join(app.getAppPath(), 'dist');
+const preloadCJS = join(distDir, 'preload.cjs');                 // <- packaged name
+const indexHtml  = join(distDir, 'renderer', 'index.html');
 
-function buildMenu() {
-  return Menu.buildFromTemplate([
-    { role: 'fileMenu', submenu: [
-      { label: 'Clear all stickers', accelerator: 'Ctrl+Shift+X', click: overlay.removeAllOverlays },
-      { type: 'separator' }, { role: 'quit' }
-    ]}
-  ]);
+// Lazy-load overlay helpers from dist/ipc/overlay.js (ESM needs the extension)
+async function loadOverlay() {
+  const overlayUrl = pathToFileURL(join(distDir, 'ipc', 'overlay.js')).href;
+  return import(overlayUrl);
 }
 
-function createMainWindow() {
-  mainWin = new BrowserWindow({
-    width: 1024,
-    height: 720,
-    minWidth: 800,
-    minHeight: 600,
+function createMainWindow(): void {
+  const win = new BrowserWindow({
+    width: 700,
+    height: 420,
+    show: false,
     webPreferences: {
-      // IMPORTANT: compiled preload is CommonJS
-      preload: path.join(__dirname, 'preload.cjs'),
-      sandbox: false
-    }
+      preload: preloadCJS,
+      sandbox: false, // needed for contextBridge
+    },
   });
 
-  mainWin.setMenu(buildMenu());
-  // Vite output goes to dist/renderer/index.html
-  mainWin.loadFile(path.join(__dirname, 'renderer/index.html'));
-
-  if (app.getVersion().endsWith('.0')) {
-    dialog.showMessageBox(mainWin, {
-      type: 'info',
-      title: 'icon',
-      message: 'Tip:  Ctrl + Shift + X removes all stickers.\nESC closes a focused overlay.'
-    });
-  }
+  win.loadURL(pathToFileURL(indexHtml).toString());
+  win.once('ready-to-show', () => win.show());
 }
 
 app.whenReady().then(() => {
   createMainWindow();
-  globalShortcut.register('CommandOrControl+Shift+X', overlay.removeAllOverlays);
-});
-app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit());
 
-/* IPC: overlay + remote stickers */
-ipcMain.handle('overlay:create', (_e, id: string, url: string) => overlay.createOverlay(id, url));
-ipcMain.handle('overlay:clearAll', overlay.removeAllOverlays);
-ipcMain.handle('stickers:getMine', async (_e, token: string) => getMyStickers(token));
+  // IPC: overlay controls (resolved at call time so we don't hard-import modules)
+  ipcMain.handle('overlay:create', async (_e, id: string, url: string) => {
+    const mod = await loadOverlay();
+    return mod.createOverlay(id, url);
+  });
+
+  ipcMain.handle('overlay:clearAll', async () => {
+    const mod = await loadOverlay();
+    return mod.removeAllOverlays();
+  });
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
