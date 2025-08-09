@@ -1,7 +1,7 @@
 {
   "name": "icon-desktop",
   "productName": "icon",
-  "version": "1.0.49",
+  "version": "1.0.50",
   "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
   "homepage": "https://github.com/PreFrontalCorporate/icon",
   "license": "MIT",
@@ -41,7 +41,7 @@
   },
   "build": {
     "asar": true,
-    "asarUnpack": ["dist/preload.js"],
+    "asarUnpack": ["dist/preload.cjs"],
     "files": [
       "dist/**/*",
       "windows/**/*",

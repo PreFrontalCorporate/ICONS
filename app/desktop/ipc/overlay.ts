@@ -3,13 +3,15 @@ import { BrowserWindow, screen } from 'electron';
 import path from 'node:path';
 
 const ACTIVE = new Map<string, BrowserWindow>();
+let CLICK_THROUGH = false;
 
-/** Create (or reveal) a frameless always‑on‑top overlay for one sticker */
+function applyClickThrough(win: BrowserWindow) {
+  win.setIgnoreMouseEvents(CLICK_THROUGH, { forward: CLICK_THROUGH });
+}
+
 export function createOverlay(id: string, imgUrl: string) {
-  /* reveal if already created */
   if (ACTIVE.has(id)) { ACTIVE.get(id)!.show(); return; }
 
-  /* place on monitor where the cursor lives */
   const cursor = screen.getCursorScreenPoint();
   const disp   = screen.getDisplayNearestPoint(cursor);
 
@@ -17,27 +19,29 @@ export function createOverlay(id: string, imgUrl: string) {
     width: 320, height: 320,
     x: disp.bounds.x + Math.round(disp.workArea.width  / 3),
     y: disp.bounds.y + Math.round(disp.workArea.height / 3),
-
-    transparent : true, frame: false, resizable: true,
-    alwaysOnTop : true, skipTaskbar: true, hasShadow:false,
-    type: 'toolbar',                         // shadow‑less
-
-    webPreferences: {
-      preload : path.join(__dirname, '../preload.js'),
-      sandbox : false
-    }
+    transparent: true, frame: false, resizable: true,
+    alwaysOnTop: true, skipTaskbar: true, hasShadow: false,
+    type: 'toolbar',
+    webPreferences: { preload: path.join(__dirname, '../preload.cjs'), sandbox: false } // ⟵ .cjs
   });
 
   if (process.platform === 'win32')
-    win.setAlwaysOnTop(true, 'pop-up-menu'); // above most fullscreen apps
+    win.setAlwaysOnTop(true, 'pop-up-menu');
 
-  win.loadURL(`data:text/html,
-    <style>
-      html,body{margin:0;background:transparent;overflow:hidden}
-      img{width:100%;height:100%;user-select:none;-webkit-user-drag:none}
-    </style>
-    <img src="${encodeURI(imgUrl)}">
-  `);
+  applyClickThrough(win);
+
+  // Use the HTML template and pass the image via query string
+  win.loadFile(path.join(__dirname, '../windows/overlay.html'), { query: { img: imgUrl } });
+
+  // keyboard helpers
+  win.webContents.on('before-input-event', (_e, input) => {
+    if (input.type !== 'keyDown') return;
+    if (input.key === 'Escape') win.close();
+    if (input.code === 'KeyT') {          // T = toggle click-through
+      CLICK_THROUGH = !CLICK_THROUGH;
+      ACTIVE.forEach(applyClickThrough);
+    }
+  });
 
   win.on('closed', () => ACTIVE.delete(id));
   ACTIVE.set(id, win);
