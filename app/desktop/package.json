@@ -1,7 +1,7 @@
 {
   "name": "icon-desktop",
   "productName": "icon",
-  "version": "1.0.46",
+  "version": "1.0.48",
   "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
   "homepage": "https://github.com/PreFrontalCorporate/icon",
   "license": "MIT",
@@ -10,11 +10,9 @@
     "email": "support@cbb.homes",
     "url": "https://cbb.homes"
   },
-
   "private": true,
   "type": "module",
   "main": "dist/main.js",
-
   "scripts": {
     "dev": "vite dev --config vite.config.ts & electronmon . --ignore=packages/stickers",
     "build:main": "tsc -p tsconfig.main.json",
@@ -24,7 +22,6 @@
     "dist": "pnpm run build && electron-builder",
     "sync:scripts": "node ../../scripts/desktop/sync-scripts.mjs"
   },
-
   "dependencies": {
     "@google-cloud/firestore": "7.11.3",
     "@shopify/shopify-api": "^11.14.1",
@@ -32,7 +29,6 @@
     "jsonwebtoken": "^9.0.2",
     "ws": "^8.18.3"
   },
-
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.4",
     "@types/node": "^20.10.5",
@@ -42,10 +38,11 @@
     "typescript": "^5.4.4",
     "vite": "^5.4.9"
   },
-
   "build": {
     "asar": true,
-    "asarUnpack": ["dist/preload.cjs"],
+    "asarUnpack": [
+      "dist/preload.cjs"
+    ],
     "files": [
       "dist/**/*",
       "windows/**/*",
@@ -55,22 +52,44 @@
     "electronDownload": {
       "mirror": "https://npmmirror.com/mirrors/electron/"
     },
-
     "mac": {
-      "target": ["dmg", "zip"],
+      "target": [
+        "dmg",
+        "zip"
+      ],
       "category": "public.app-category.graphics-design"
     },
     "win": {
       "target": [
-        { "target": "nsis", "arch": ["x64", "ia32", "arm64"] },
-        { "target": "portable", "arch": ["x64"] }
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32",
+            "arm64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
       ]
     },
     "linux": {
       "maintainer": "PreFrontal Corporate <support@cbb.homes>",
       "category": "Utility",
-      "target": ["AppImage", "deb", "rpm"]
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ]
     },
-    "publish": { "provider": "github", "owner": "PreFrontalCorporate", "repo": "icon" }
+    "publish": {
+      "provider": "github",
+      "owner": "PreFrontalCorporate",
+      "repo": "icon"
+    }
   }
 }
