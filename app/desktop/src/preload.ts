@@ -1,30 +1,23 @@
-// CJS-compiled preload that exposes overlay + simple UI helpers.
+// app/desktop/src/preload.ts
+// Preload must be CJS at runtime; tsc compiles this with "module":"commonjs".
+// Expose a minimal, safe API for the renderer.
+
 import { contextBridge, ipcRenderer } from 'electron';
 
-contextBridge.exposeInMainWorld('iconOverlay', {
-  pinSticker: (id: string, url: string) => ipcRenderer.invoke('overlay:create', id, url),
-  clearAll:   () => ipcRenderer.invoke('overlay:clearAll'),
-  toggleClickThrough: () => ipcRenderer.invoke('overlay:toggleClickThrough')
-});
-
-contextBridge.exposeInMainWorld('desktop', {
-  login: (store: string, password: string) =>
-    ipcRenderer.invoke('auth:login', { store, password }),
-  openLibrary: () => ipcRenderer.invoke('ui:openLibrary'),
-  focusLibrary: () => ipcRenderer.invoke('ui:focusLibrary')
-});
-
-declare global {
-  interface Window {
-    iconOverlay: {
-      pinSticker(id: string, url: string): Promise<void>;
-      clearAll(): Promise<void>;
-      toggleClickThrough(): Promise<void>;
-    };
-    desktop: {
-      login(store: string, password: string): Promise<{ ok: boolean; message?: string }>;
-      openLibrary(): Promise<void>;
-      focusLibrary(): Promise<void>;
-    };
+contextBridge.exposeInMainWorld('icon', {
+  overlay: {
+    pinSticker: (id: string, url: string) => ipcRenderer.invoke('overlay:create', id, url),
+    clearAll: () => ipcRenderer.invoke('overlay:clearAll')
+  },
+  stickers: {
+    getMine: (token: string) => ipcRenderer.invoke('stickers:getMine', token)
   }
-}
+});
+
+// Optional: a tiny helper so the renderer can persist the token via preload
+// (renderer also has localStorage directly; keep both handy)
+contextBridge.exposeInMainWorld('iconAuth', {
+  saveToken: (token: string) => localStorage.setItem('cat', token),
+  readToken: () => localStorage.getItem('cat'),
+  clear: () => localStorage.removeItem('cat')
+});

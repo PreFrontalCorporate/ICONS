@@ -1,7 +1,7 @@
 {
   "name": "icon-desktop",
   "productName": "icon",
-  "version": "1.0.55",
+  "version": "1.0.56",
   "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
   "homepage": "https://github.com/PreFrontalCorporate/icon",
   "license": "MIT",
@@ -9,13 +9,6 @@
     "name": "PreFrontal Corporate",
     "email": "support@cbb.homes",
     "url": "https://cbb.homes"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/PreFrontalCorporate/icon.git"
-  },
-  "bugs": {
-    "url": "https://github.com/PreFrontalCorporate/icon/issues"
   },
   "private": true,
   "type": "module",
@@ -28,7 +21,7 @@
     "build": "pnpm run build:main && pnpm run build:preload && pnpm run build:renderer",
     "postbuild": "node ../../scripts/desktop/write-dist-pkg.cjs",
     "dist": "pnpm run build && electron-builder",
-    "sync:scripts": "node ../../scripts/desktop/sync-scripts.mjs"
+    "sync:scripts": "node ././scripts/desktop/sync-scripts.mjs"
   },
   "dependencies": {
     "@google-cloud/firestore": "7.11.3",
@@ -47,7 +40,6 @@
     "vite": "^5.4.9"
   },
   "build": {
-    "appId": "com.prefc.icon",
     "asar": true,
     "asarUnpack": [
       "dist/preload.cjs"
@@ -56,13 +48,6 @@
       "dist/**/*",
       "windows/**/*",
       "build/icon.*"
-    ],
-    "extraResources": [
-      {
-        "from": "../../packages/stickers",
-        "to": "packages/stickers",
-        "filter": ["**/*"]
-      }
     ],
     "electronDownload": {
       "mirror": "https://npmmirror.com/mirrors/electron/"
@@ -73,13 +58,19 @@
     },
     "win": {
       "target": [
-        { "target": "nsis", "arch": ["x64", "ia32", "arm64"] },
-        { "target": "portable", "arch": ["x64"] }
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32", "arm64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
       ]
     },
     "linux": {
-      "category": "Utility",
       "maintainer": "PreFrontal Corporate <support@cbb.homes>",
+      "category": "Utility",
       "target": ["AppImage", "deb", "rpm"]
     },
     "publish": {

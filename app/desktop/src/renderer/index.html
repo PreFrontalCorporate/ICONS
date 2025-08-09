@@ -2,25 +2,40 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>icon – sign in</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:; img-src 'self' data: file: https:;">
+    <title>icon – stickers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      html,body { height: 100%; margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto }
-      main { height: 100%; display: grid; place-items: center; }
-      form { display:flex; flex-direction:column; gap:10px; width: 320px; }
-      label { display:flex; flex-direction:column; font-weight:600; gap:6px }
-      input { padding: 8px 10px; border: 1px solid #d0d0d0; border-radius: 8px; font-size: 14px }
-      button { padding: 10px 12px; border-radius: 8px; border: 0; background: black; color: white; font-weight: 600; cursor: pointer}
+      :root { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+      body { margin: 0; padding: 16px; }
+      header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+      input[type="password"], input[type="text"] { padding: 8px; width: 360px; }
+      button { padding: 8px 12px; cursor: pointer; }
+      #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+      .card { border: 1px solid #ddd; padding: 8px; border-radius: 8px; background: #fff; }
+      .card img { width: 100%; height: auto; display: block; }
       .row { display: flex; gap: 8px; align-items: center; }
-      .grid { margin-top: 18px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
-      .grid img { width: 100%; border-radius: 6px; cursor: pointer; }
-      #error { color: #ff4668; margin-top: 6px; min-height: 1.2em; }
+      .muted { color: #666; font-size: 12px; }
     </style>
+    <script defer src="index.js"></script>
   </head>
   <body>
-    <main>
-      <div id="root"></div>
-    </main>
-    <script type="module" src="./index.ts"></script>
+    <header>
+      <strong>Icon Stickers</strong>
+      <span class="muted">Streamed from Shopify – nothing is packaged.</span>
+      <div style="flex:1"></div>
+      <button id="clearAll" title="Remove all overlays">Clear overlays</button>
+    </header>
+
+    <section id="login">
+      <div class="row">
+        <input id="token" type="text" placeholder="Paste your token (cat=...)" />
+        <button id="save">Save</button>
+        <button id="logout" style="display:none">Log out</button>
+      </div>
+      <p class="muted">This token is stored locally and sent to the API as <code>cookie: cat=&lt;token&gt;</code> for your sticker list.</p>
+    </section>
+
+    <h3>Your stickers</h3>
+    <div id="grid"></div>
   </body>
 </html>

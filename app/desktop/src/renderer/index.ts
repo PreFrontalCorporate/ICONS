@@ -1,92 +1,65 @@
 declare global {
   interface Window {
-    desktop: {
-      login(store: string, password: string): Promise<{ ok: boolean; message?: string }>;
-      openLibrary(): Promise<void>;
-      focusLibrary(): Promise<void>;
+    icon: {
+      overlay: { pinSticker(id: string, url: string): Promise<void>; clearAll(): Promise<void> };
+      stickers: { getMine(token: string): Promise<Array<{ id: string; title?: string; featuredImage: { url: string } }>> };
     };
-    iconOverlay: {
-      pinSticker(id: string, url: string): Promise<void>;
-      clearAll(): Promise<void>;
-      toggleClickThrough(): Promise<void>;
-    };
+    iconAuth: { saveToken(t: string): void; readToken(): string | null; clear(): void };
   }
 }
 
-import stickerIndex from '@stickers/index.json';
-import type { StickerEntry } from '@stickers/types';
-
-// naive template helpers
-const el = <K extends keyof HTMLElementTagNameMap>(tag: K, props: any = {}, ...kids: (Node | string)[]) => {
-  const node = document.createElement(tag);
-  Object.assign(node, props);
-  kids.forEach(k => node.append(k));
-  return node as HTMLElementTagNameMap[K];
+const els = {
+  grid: document.getElementById('grid') as HTMLDivElement,
+  token: document.getElementById('token') as HTMLInputElement,
+  save: document.getElementById('save') as HTMLButtonElement,
+  logout: document.getElementById('logout') as HTMLButtonElement,
+  clearAll: document.getElementById('clearAll') as HTMLButtonElement,
 };
 
-const root = document.getElementById('root')!;
+const TOKEN_KEY = 'cat';
 
-function renderLogin() {
-  const error = el('div', { id: 'error' });
+async function refresh() {
+  const token = window.iconAuth.readToken() || localStorage.getItem(TOKEN_KEY) || '';
+  els.token.value = token || '';
+  els.logout.style.display = token ? '' : 'none';
 
-  const form = el('form', { id: 'login' },
-    el('label', {}, 'Shopify store',
-      el('input', { name: 'store', placeholder: 'mystore.myshopify.com', required: true })
-    ),
-    el('label', {}, 'Password',
-      el('input', { name: 'password', type: 'password', placeholder: '••••••••', required: true })
-    ),
-    el('button', { type: 'submit', textContent: 'Sign in' }),
-    error
-  );
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    error.textContent = '';
-
-    const data = new FormData(form as HTMLFormElement);
-    const store = String(data.get('store') || '');
-    const password = String(data.get('password') || '');
-
-    const res = await window.desktop.login(store, password);
-    if (!res.ok) {
-      error.textContent = res.message || 'Login failed';
-      return;
-    }
-    renderGrid();
-  });
-
-  root.replaceChildren(form);
+  const stickers = token ? await window.icon.stickers.getMine(token) : [];
+  renderGrid(stickers);
 }
 
-function fileUrlForSticker(s: StickerEntry) {
-  // Our packages layout stores files under packages/stickers/<id>/<file>
-  // (ids match their containing folder names).
-  // electron-builder includes "packages/stickers/**/*", so we can reference with a file:// URL.
-  const rel = `../../packages/stickers/${s.id}/${s.file}`;
-  return new URL(rel, (import.meta as any).url).toString();
+function renderGrid(stickers: Array<{ id: string; title?: string; featuredImage: { url: string } }>) {
+  els.grid.innerHTML = '';
+  if (!stickers.length) {
+    els.grid.innerHTML = `<div class="muted">No stickers yet. Make sure your token is valid.</div>`;
+    return;
+  }
+
+  for (const s of stickers) {
+    const card = document.createElement('button');
+    card.className = 'card';
+    card.title = s.title || s.id;
+    card.innerHTML = `<img alt="${(s.title || s.id).replace(/"/g, '')}" src="${s.featuredImage.url}">`;
+    card.addEventListener('click', () => window.icon.overlay.pinSticker(s.id, s.featuredImage.url));
+    els.grid.appendChild(card);
+  }
 }
 
-function renderGrid() {
-  const header = el('div', { className: 'row' },
-    el('h3', { textContent: 'Pick a sticker and it will pin as an overlay.' }),
-    el('div', { style: 'flex:1' }),
-    el('button', { textContent: 'Toggle click‑through', onclick: () => window.iconOverlay.toggleClickThrough() }),
-    el('button', { textContent: 'Clear all', onclick: () => window.iconOverlay.clearAll() })
-  );
+els.save.addEventListener('click', async () => {
+  const token = els.token.value.trim();
+  if (!token) return;
+  window.iconAuth.saveToken(token);
+  localStorage.setItem(TOKEN_KEY, token);
+  await refresh();
+});
 
-  const grid = el('div', { className: 'grid' });
+els.logout.addEventListener('click', async () => {
+  window.iconAuth.clear();
+  localStorage.removeItem(TOKEN_KEY);
+  els.token.value = '';
+  await refresh();
+});
 
-  (stickerIndex as StickerEntry[]).slice(0, 48).forEach((s) => {
-    const img = el('img', { alt: s.name });
-    img.src = fileUrlForSticker(s);
-    img.title = s.name;
-    img.addEventListener('click', () => window.iconOverlay.pinSticker(s.id, img.src));
-    grid.append(img);
-  });
+els.clearAll.addEventListener('click', () => window.icon.overlay.clearAll());
 
-  root.replaceChildren(el('div', {}, header, grid));
-}
-
-// initial screen
-renderLogin();
+// first paint
+refresh().catch(console.error);
