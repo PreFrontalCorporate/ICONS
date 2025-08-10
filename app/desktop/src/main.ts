@@ -1,76 +1,85 @@
 // app/desktop/src/main.ts
-import { app, BrowserWindow, Menu, globalShortcut, ipcMain, session } from 'electron';
+import { app, BrowserWindow, ipcMain, globalShortcut, Menu } from 'electron';
 import path from 'node:path';
-import * as overlay from './ipc/overlay';
+import { pathToFileURL } from 'node:url';
 
-let mainWin: BrowserWindow;
-
-function forceThirdPartyCookies() {
-  const filter = { urls: ['https://*.vercel.app/*', 'https://*.icon.cool/*', 'https://icon-web-two.vercel.app/*'] };
-
-  session.defaultSession.webRequest.onHeadersReceived(filter, (details, callback) => {
-    const headers = details.responseHeaders ?? {};
-    // find the canonical Set-Cookie key regardless of case
-    const key = Object.keys(headers).find(k => k.toLowerCase() === 'set-cookie');
-
-    if (key && Array.isArray(headers[key])) {
-      // rewrite each Set-Cookie value
-      const rewritten = headers[key]!.map(v => {
-        let s = v;
-
-        // strip any existing SameSite=Lax/Strict so we can append None cleanly
-        s = s.replace(/;\s*SameSite=(Lax|Strict)/i, '');
-
-        // ensure SameSite=None and Secure
-        if (!/;\s*SameSite=/i.test(s)) s += '; SameSite=None';
-        if (!/;\s*Secure/i.test(s))    s += '; Secure';
-
-        // be explicit
-        if (!/;\s*Path=/i.test(s))     s += '; Path=/';
-        return s;
-      });
-
-      headers[key] = rewritten;
-      headers['Set-Cookie'] = rewritten; // normalize case for safety
-    }
-
-    callback({ responseHeaders: headers });
-  });
+function distPath(...parts: string[]) {
+  return path.join(app.getAppPath(), 'dist', ...parts);
 }
 
-function buildMenu() {
-  return Menu.buildFromTemplate([
-    { role: 'fileMenu', submenu: [
-        { label:'Clear all stickers', accelerator:'Ctrl+Shift+X', click: overlay.removeAllOverlays },
-        { type:'separator' }, { role:'quit' }
-      ]}
-  ]);
+function asFileUrl(p: string) {
+  return pathToFileURL(p).toString();
+}
+
+function overlayModuleUrl() {
+  // Important: explicit .js so Node’s ESM resolver finds it inside asar.
+  const p = distPath('ipc', 'overlay.js');
+  return asFileUrl(p);
+}
+
+async function withOverlay<T>(fn: (overlay: any) => T | Promise<T>) {
+  const mod = await import(overlayModuleUrl());
+  return fn(mod);
 }
 
 function createMainWindow() {
-  mainWin = new BrowserWindow({
-    width: 1024, height: 720, minWidth: 800, minHeight: 600,
+  const win = new BrowserWindow({
+    width: 1024,
+    height: 720,
+    minWidth: 880,
+    minHeight: 600,
+    show: false,
     webPreferences: {
-      // persistent partition so cookies survive app restarts
-      partition: 'persist:icon',
-      preload: path.join(__dirname, 'preload.cjs'),
+      // Preload for the top-level window (not the overlay windows)
+      preload: distPath('preload.cjs'),
       sandbox: false,
     },
   });
 
-  mainWin.setMenu(buildMenu());
-  // Local wrapper that embeds your hosted UI in an iframe:
-  mainWin.loadFile(path.join(__dirname, '../windows/library.html'));
+  // Use the local HTML that iframes the web library
+  const libraryHtml = path.join(app.getAppPath(), 'windows', 'library.html');
+  win.loadFile(libraryHtml);
+  win.once('ready-to-show', () => win.show());
+
+  // Quick menu with "Clear all stickers"
+  const menu = Menu.buildFromTemplate([
+    {
+      label: 'File',
+      submenu: [
+        {
+          label: 'Clear all stickers',
+          accelerator: 'Ctrl+Shift+X',
+          click: () => withOverlay(o => o.removeAllOverlays()),
+        },
+        { type: 'separator' },
+        { role: 'quit' },
+      ],
+    },
+  ]);
+  win.setMenu(menu);
+
+  // Global shortcut too
+  globalShortcut.register('CommandOrControl+Shift+X', () =>
+    withOverlay(o => o.removeAllOverlays()),
+  );
 }
 
 app.whenReady().then(() => {
-  forceThirdPartyCookies();
   createMainWindow();
-  globalShortcut.register('CommandOrControl+Shift+X', overlay.removeAllOverlays);
+
+  // IPC from the renderer (library iframe posts → preload forwards → main)
+  ipcMain.handle('overlay:create', (_e, id: string, url: string) =>
+    withOverlay(o => o.createOverlay(id, url)),
+  );
+  ipcMain.handle('overlay:clearAll', () =>
+    withOverlay(o => o.removeAllOverlays()),
+  );
 });
 
-app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit());
+app.on('will-quit', () => {
+  try { globalShortcut.unregisterAll(); } catch {}
+});
 
-/* IPC for overlays */
-ipcMain.handle('overlay:create', (_e,id,url) => overlay.createOverlay(id,url));
-ipcMain.handle('overlay:clearAll', overlay.removeAllOverlays);
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
