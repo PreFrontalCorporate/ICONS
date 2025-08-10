@@ -1,12 +1,18 @@
-// NOTE: This compiles to CommonJS and is renamed to preload.cjs in postbuild
-const { contextBridge, ipcRenderer } = require('electron');
+// app/desktop/src/preload.ts
+import { contextBridge, ipcRenderer } from 'electron';
 
-contextBridge.exposeInMainWorld('icon', {
-  stickers: {
-    list: (token: string) => ipcRenderer.invoke('stickers:list', token),
-  },
-  overlay: {
-    create: (id: string, url: string) => ipcRenderer.invoke('overlay:create', id, url),
-    clearAll: () => ipcRenderer.invoke('overlay:clearAll'),
-  }
+contextBridge.exposeInMainWorld('api', {
+  // stickers
+  login: (email: string, password: string) =>
+    ipcRenderer.invoke('stickers:login', { email, password }),
+  list:  (token: string) =>
+    ipcRenderer.invoke('stickers:list', token),
+
+  // overlays
+  createOverlay: (id: string, url: string) =>
+    ipcRenderer.invoke('overlay:create', id, url),
+  clearOverlays: () =>
+    ipcRenderer.invoke('overlay:clearAll'),
+
+  // storage (renderer controls its own localStorage)
 });

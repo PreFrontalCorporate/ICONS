@@ -1,24 +1,33 @@
 // app/desktop/src/ipc/stickers.ts
-const API = process.env.ICON_API_URL ?? 'https://icon-web-two.vercel.app/api';
+import fetch from 'node-fetch';
 
-// Returns array of { id, title, url } regardless of backend shape
-export async function listMyStickers(token: string) {
-  if (!token) return [];
-  const r = await fetch(`${API}/me`, { headers: { cookie: `cat=${token}` } });
-  if (!r.ok) { console.error('API /me failed', r.status, r.statusText); return []; }
-  const json = await r.json();
+const API = 'https://icon-web-two.vercel.app/api';
 
-  // Try a few common shapes → normalize
-  let items: any[] =
-    Array.isArray(json?.stickers) ? json.stickers :
-    Array.isArray(json?.items)    ? json.items    :
-    Array.isArray(json)           ? json          : [];
+// 1) Login via web API -> returns the Shopify Customer Access Token (CAT)
+export async function login(email: string, password: string): Promise<string> {
+  const r = await fetch(`${API}/login`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
 
-  return items
-    .map((it: any) => ({
-      id:    it.id ?? it.handle ?? it.sku ?? it.title ?? String(Math.random()),
-      title: it.title ?? it.name ?? 'Sticker',
-      url:   it.featuredImage?.url ?? it.image?.url ?? it.url ?? it.src
-    }))
-    .filter(s => !!s.url);
+  if (!r.ok) {
+    const msg = await r.text().catch(() => '');
+    throw new Error(`Login failed (${r.status}) ${msg}`);
+  }
+
+  const setCookie = r.headers.get('set-cookie') || '';
+  // Extract cat=... from Set-Cookie
+  const m = setCookie.match(/(?:^|;)\s*cat=([^;]+)/i);
+  if (!m) throw new Error('Server did not return a "cat" cookie.');
+  return m[1];
+}
+
+// 2) Fetch current user’s stickers using the CAT
+export async function getMyStickers(token: string) {
+  const r = await fetch(`${API}/me`, {
+    headers: { cookie: `cat=${token}` },
+  });
+  if (!r.ok) return [];
+  return r.json(); // [{ id, title, featuredImage:{url,altText} }, ...]
 }

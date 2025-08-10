@@ -8,32 +8,36 @@
       :root { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
       body { margin: 0; padding: 16px; }
       header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-      input[type="password"], input[type="text"] { padding: 8px; width: 360px; }
+      input[type="password"], input[type="text"], input[type="email"] { padding: 8px; width: 320px; }
       button { padding: 8px 12px; cursor: pointer; }
-      #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+      #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
       .card { border: 1px solid #ddd; padding: 8px; border-radius: 8px; background: #fff; }
       .card img { width: 100%; height: auto; display: block; }
-      .row { display: flex; gap: 8px; align-items: center; }
+      .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
       .muted { color: #666; font-size: 12px; }
     </style>
-    <!-- Vite will rewrite this to a hashed asset in dist/renderer -->
-    <script type="module" src="./index.ts"></script>
+    <script defer src="index.js"></script>
   </head>
   <body>
     <header>
       <strong>Icon Stickers</strong>
-      <span class="muted">Streamed from Shopify – nothing is packaged.</span>
+      <span class="muted">Streamed from Shopify.</span>
       <div style="flex:1"></div>
-      <button id="clearAll" title="Remove all overlays">Clear overlays</button>
+      <button id="clearAll">Clear overlays</button>
     </header>
 
     <section id="login">
       <div class="row">
-        <input id="token" type="text" placeholder="Paste your token (cat=...)" />
+        <input id="email" type="email"  placeholder="Email" autocomplete="email" />
+        <input id="pass"  type="password" placeholder="Password" autocomplete="current-password" />
+        <button id="signin">Sign in</button>
+        <span class="muted">or paste a <code>cat</code>:</span>
+        <input id="token" type="text" placeholder="cat=..." />
         <button id="save">Save</button>
         <button id="logout" style="display:none">Log out</button>
       </div>
-      <p class="muted">This token is stored locally and sent to the API as <code>cookie: cat=&lt;token&gt;</code> for your sticker list.</p>
+      <p class="muted" id="hint">We store your token locally and send it to the API as <code>cookie: cat=&lt;token&gt;</code> to fetch your stickers.</p>
+      <p class="muted" id="err" style="color:#b00; display:none"></p>
     </section>
 
     <h3>Your stickers</h3>
