@@ -6,14 +6,15 @@ import { shopifyFetch } from '@/lib/shopify';
 /**
  * POST /api/login  { email, password }
  * — Creates a Shopify customer‑token and stores it in an http‑only cookie “cat”.
- *   The cookie lives for 365 days and is refreshed on each successful login.
+ *   Cookie lasts 365 days. We set SameSite=None so it also works when the page
+ *   runs inside Electron (iframe / cross-site).
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).end();
 
   const { email, password } = req.body as { email: string; password: string };
 
-  /* ------------------------------------------------- 1. create token */
+  // 1) create token via Shopify Storefront API
   const { customerAccessTokenCreate } = await shopifyFetch<{
     customerAccessTokenCreate: {
       customerAccessToken: { accessToken: string; expiresAt: string } | null;
@@ -36,15 +37,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ message });
   }
 
-  /* --------------------------------------------- 2. set year‑long cookie */
-  const maxAge = 60 * 60 * 24 * 365;                     // 1 year
-
+  // 2) set year‑long cookie
+  const maxAge = 60 * 60 * 24 * 365;
   res.setHeader(
     'Set-Cookie',
     serialize('cat', customerAccessTokenCreate.customerAccessToken.accessToken, {
       httpOnly : true,
-      sameSite : 'lax',                                   // keep “none”+secure when on HTTPS
-      secure   : process.env.NODE_ENV === 'production',
+      sameSite : 'none',         // ← was 'lax'
+      secure   : true,           // required by browsers for SameSite=None
       path     : '/',
       maxAge,
     }),
