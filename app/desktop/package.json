@@ -53,44 +53,21 @@
       "mirror": "https://npmmirror.com/mirrors/electron/"
     },
     "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
+      "target": ["dmg", "zip"],
       "category": "public.app-category.graphics-design"
     },
     "win": {
       "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32",
-            "arm64"
-          ]
-        },
-        {
-          "target": "portable",
-          "arch": [
-            "x64"
-          ]
-        }
+        { "target": "nsis", "arch": ["x64", "ia32", "arm64"] },
+        { "target": "portable", "arch": ["x64"] }
       ],
       "publisherName": "PreFrontal Corporate"
     },
     "linux": {
       "maintainer": "PreFrontal Corporate <support@cbb.homes>",
       "category": "Utility",
-      "target": [
-        "AppImage",
-        "deb",
-        "rpm"
-      ]
+      "target": ["AppImage", "deb", "rpm"]
     },
-    "publish": {
-      "provider": "github",
-      "owner": "PreFrontalCorporate",
-      "repo": "icon"
-    }
+    "publish": { "provider": "github", "owner": "PreFrontalCorporate", "repo": "icon" }
   }
 }

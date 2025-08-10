@@ -1,80 +1,88 @@
+type Sticker = {
+  id: string;
+  title: string;
+  featuredImage?: { url: string; altText?: string };
+};
+
 declare global {
   interface Window {
-    iconOverlay: {
-      pinSticker(id: string, url: string): Promise<void> | void;
-      clearAll(): Promise<void> | void;
-    };
     stickers: {
-      list(token: string): Promise<Array<{ id: string; title: string; featuredImage: { url: string; altText?: string } }>>;
-    };
+      list(token: string): Promise<Sticker[]>;
+      pin(id: string, url: string): Promise<void>;
+      clearAll(): Promise<void>;
+    }
   }
 }
 
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector(sel) as T;
-
 const tokenInput = $('#token') as HTMLInputElement;
 const saveBtn    = $('#save')!;
 const logoutBtn  = $('#logout')!;
-const clearBtn   = $('#clearAll')!;
 const grid       = $('#grid')!;
+const clearAll   = $('#clearAll')!;
 
-function setLoggedInState(hasToken: boolean) {
-  if (hasToken) {
-    tokenInput.style.display = 'none';
-    saveBtn.style.display    = 'none';
-    logoutBtn.style.display  = '';
-  } else {
-    tokenInput.style.display = '';
-    saveBtn.style.display    = '';
-    logoutBtn.style.display  = 'none';
-  }
+function getToken(): string | null { return localStorage.getItem('icon.cat'); }
+function setToken(t: string)       { localStorage.setItem('icon.cat', t); }
+function clearToken()              { localStorage.removeItem('icon.cat'); }
+
+function card(sticker: Sticker) {
+  const img = sticker.featuredImage?.url ?? '';
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.innerHTML = `
+    <img src="${img}" alt="${sticker.title||''}" draggable="false">
+    <div class="row">
+      <div style="flex:1">${sticker.title||sticker.id}</div>
+      <button data-id="${sticker.id}" data-url="${img}">Pin</button>
+    </div>
+  `;
+  el.querySelector('button')!.addEventListener('click', () => {
+    window.stickers.pin(sticker.id, img);
+  });
+  return el;
 }
 
-async function loadStickers(token: string) {
-  grid.innerHTML = 'Loading…';
+async function loadStickers(t: string) {
+  grid.textContent = 'Loading…';
   try {
-    const list = await window.stickers.list(token);
-    if (!list?.length) {
-      grid.innerHTML = '<span class="muted">No stickers found. Check your token.</span>';
+    const items = await window.stickers.list(t);
+    grid.textContent = '';
+    if (!items?.length) {
+      grid.textContent = 'No stickers yet.';
       return;
     }
-    grid.innerHTML = '';
-    for (const s of list) {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.title = s.title;
-      const img = document.createElement('img');
-      img.src = s.featuredImage.url;
-      img.alt = s.featuredImage.altText ?? s.title;
-      card.appendChild(img);
-      card.addEventListener('click', () => window.iconOverlay.pinSticker(s.id, s.featuredImage.url));
-      grid.appendChild(card);
-    }
-  } catch (e) {
-    console.error(e);
-    grid.innerHTML = '<span class="muted">Failed to load stickers.</span>';
+    items.forEach(s => grid.appendChild(card(s)));
+  } catch (err) {
+    console.error(err);
+    grid.textContent = 'Could not load stickers.';
   }
 }
 
-saveBtn.addEventListener('click', () => {
+function updateLoginUI() {
+  const t = getToken();
+  tokenInput.value = t ?? '';
+  logoutBtn.style.display = t ? '' : 'none';
+}
+
+saveBtn.addEventListener('click', async () => {
   const t = tokenInput.value.trim();
   if (!t) return;
-  localStorage.setItem('icon.cat', t);
-  setLoggedInState(true);
-  loadStickers(t);
+  setToken(t);
+  updateLoginUI();
+  await loadStickers(t);
 });
 
 logoutBtn.addEventListener('click', () => {
-  localStorage.removeItem('icon.cat');
-  setLoggedInState(false);
-  grid.innerHTML = '';
-  tokenInput.value = '';
-  tokenInput.focus();
+  clearToken();
+  updateLoginUI();
+  grid.textContent = '';
 });
 
-clearBtn.addEventListener('click', () => window.iconOverlay.clearAll());
+clearAll.addEventListener('click', () => window.stickers.clearAll());
 
-// bootstrap
-const saved = localStorage.getItem('icon.cat');
-setLoggedInState(!!saved);
-if (saved) loadStickers(saved);
+// boot
+(async () => {
+  updateLoginUI();
+  const t = getToken();
+  if (t) await loadStickers(t);
+})();
