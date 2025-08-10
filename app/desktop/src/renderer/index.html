@@ -16,7 +16,8 @@
       .row { display: flex; gap: 8px; align-items: center; }
       .muted { color: #666; font-size: 12px; }
     </style>
-    <script defer src="index.js"></script>
+    <!-- IMPORTANT: use Vite module entry; Vite will rewrite to ./assets/index-*.js -->
+    <script type="module" src="./index.ts"></script>
   </head>
   <body>
     <header>

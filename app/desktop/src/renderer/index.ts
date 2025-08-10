@@ -1,65 +1,80 @@
 declare global {
   interface Window {
-    icon: {
-      overlay: { pinSticker(id: string, url: string): Promise<void>; clearAll(): Promise<void> };
-      stickers: { getMine(token: string): Promise<Array<{ id: string; title?: string; featuredImage: { url: string } }>> };
+    iconOverlay: {
+      pinSticker(id: string, url: string): Promise<void> | void;
+      clearAll(): Promise<void> | void;
     };
-    iconAuth: { saveToken(t: string): void; readToken(): string | null; clear(): void };
+    stickers: {
+      list(token: string): Promise<Array<{ id: string; title: string; featuredImage: { url: string; altText?: string } }>>;
+    };
   }
 }
 
-const els = {
-  grid: document.getElementById('grid') as HTMLDivElement,
-  token: document.getElementById('token') as HTMLInputElement,
-  save: document.getElementById('save') as HTMLButtonElement,
-  logout: document.getElementById('logout') as HTMLButtonElement,
-  clearAll: document.getElementById('clearAll') as HTMLButtonElement,
-};
+const $ = <T extends HTMLElement>(sel: string) => document.querySelector(sel) as T;
 
-const TOKEN_KEY = 'cat';
+const tokenInput = $('#token') as HTMLInputElement;
+const saveBtn    = $('#save')!;
+const logoutBtn  = $('#logout')!;
+const clearBtn   = $('#clearAll')!;
+const grid       = $('#grid')!;
 
-async function refresh() {
-  const token = window.iconAuth.readToken() || localStorage.getItem(TOKEN_KEY) || '';
-  els.token.value = token || '';
-  els.logout.style.display = token ? '' : 'none';
-
-  const stickers = token ? await window.icon.stickers.getMine(token) : [];
-  renderGrid(stickers);
-}
-
-function renderGrid(stickers: Array<{ id: string; title?: string; featuredImage: { url: string } }>) {
-  els.grid.innerHTML = '';
-  if (!stickers.length) {
-    els.grid.innerHTML = `<div class="muted">No stickers yet. Make sure your token is valid.</div>`;
-    return;
-  }
-
-  for (const s of stickers) {
-    const card = document.createElement('button');
-    card.className = 'card';
-    card.title = s.title || s.id;
-    card.innerHTML = `<img alt="${(s.title || s.id).replace(/"/g, '')}" src="${s.featuredImage.url}">`;
-    card.addEventListener('click', () => window.icon.overlay.pinSticker(s.id, s.featuredImage.url));
-    els.grid.appendChild(card);
+function setLoggedInState(hasToken: boolean) {
+  if (hasToken) {
+    tokenInput.style.display = 'none';
+    saveBtn.style.display    = 'none';
+    logoutBtn.style.display  = '';
+  } else {
+    tokenInput.style.display = '';
+    saveBtn.style.display    = '';
+    logoutBtn.style.display  = 'none';
   }
 }
 
-els.save.addEventListener('click', async () => {
-  const token = els.token.value.trim();
-  if (!token) return;
-  window.iconAuth.saveToken(token);
-  localStorage.setItem(TOKEN_KEY, token);
-  await refresh();
+async function loadStickers(token: string) {
+  grid.innerHTML = 'Loading…';
+  try {
+    const list = await window.stickers.list(token);
+    if (!list?.length) {
+      grid.innerHTML = '<span class="muted">No stickers found. Check your token.</span>';
+      return;
+    }
+    grid.innerHTML = '';
+    for (const s of list) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.title = s.title;
+      const img = document.createElement('img');
+      img.src = s.featuredImage.url;
+      img.alt = s.featuredImage.altText ?? s.title;
+      card.appendChild(img);
+      card.addEventListener('click', () => window.iconOverlay.pinSticker(s.id, s.featuredImage.url));
+      grid.appendChild(card);
+    }
+  } catch (e) {
+    console.error(e);
+    grid.innerHTML = '<span class="muted">Failed to load stickers.</span>';
+  }
+}
+
+saveBtn.addEventListener('click', () => {
+  const t = tokenInput.value.trim();
+  if (!t) return;
+  localStorage.setItem('icon.cat', t);
+  setLoggedInState(true);
+  loadStickers(t);
 });
 
-els.logout.addEventListener('click', async () => {
-  window.iconAuth.clear();
-  localStorage.removeItem(TOKEN_KEY);
-  els.token.value = '';
-  await refresh();
+logoutBtn.addEventListener('click', () => {
+  localStorage.removeItem('icon.cat');
+  setLoggedInState(false);
+  grid.innerHTML = '';
+  tokenInput.value = '';
+  tokenInput.focus();
 });
 
-els.clearAll.addEventListener('click', () => window.icon.overlay.clearAll());
+clearBtn.addEventListener('click', () => window.iconOverlay.clearAll());
 
-// first paint
-refresh().catch(console.error);
+// bootstrap
+const saved = localStorage.getItem('icon.cat');
+setLoggedInState(!!saved);
+if (saved) loadStickers(saved);
