@@ -1,88 +1,69 @@
-type Sticker = {
-  id: string;
-  title: string;
-  featuredImage?: { url: string; altText?: string };
-};
+type Sticker = { id: string; title: string; url: string };
 
 declare global {
   interface Window {
-    stickers: {
-      list(token: string): Promise<Sticker[]>;
-      pin(id: string, url: string): Promise<void>;
-      clearAll(): Promise<void>;
+    icon: {
+      stickers: { list(token: string): Promise<Sticker[]> };
+      overlay:  { create(id: string, url: string): Promise<void>; clearAll(): Promise<void> };
     }
   }
 }
 
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector(sel) as T;
 const tokenInput = $('#token') as HTMLInputElement;
-const saveBtn    = $('#save')!;
-const logoutBtn  = $('#logout')!;
-const grid       = $('#grid')!;
-const clearAll   = $('#clearAll')!;
+const saveBtn    = $('#save')  as HTMLButtonElement;
+const logoutBtn  = $('#logout') as HTMLButtonElement;
+const grid       = $('#grid')  as HTMLDivElement;
 
-function getToken(): string | null { return localStorage.getItem('icon.cat'); }
-function setToken(t: string)       { localStorage.setItem('icon.cat', t); }
-function clearToken()              { localStorage.removeItem('icon.cat'); }
+const STORAGE_KEY = 'icon.token';
 
-function card(sticker: Sticker) {
-  const img = sticker.featuredImage?.url ?? '';
-  const el = document.createElement('div');
-  el.className = 'card';
-  el.innerHTML = `
-    <img src="${img}" alt="${sticker.title||''}" draggable="false">
-    <div class="row">
-      <div style="flex:1">${sticker.title||sticker.id}</div>
-      <button data-id="${sticker.id}" data-url="${img}">Pin</button>
-    </div>
-  `;
-  el.querySelector('button')!.addEventListener('click', () => {
-    window.stickers.pin(sticker.id, img);
-  });
-  return el;
+function setLoggedIn(on: boolean) {
+  tokenInput.disabled = on;
+  saveBtn.style.display = on ? 'none' : 'inline-block';
+  logoutBtn.style.display = on ? 'inline-block' : 'none';
 }
 
-async function loadStickers(t: string) {
+async function loadGrid(token: string) {
   grid.textContent = 'Loading…';
-  try {
-    const items = await window.stickers.list(t);
-    grid.textContent = '';
-    if (!items?.length) {
-      grid.textContent = 'No stickers yet.';
-      return;
-    }
-    items.forEach(s => grid.appendChild(card(s)));
-  } catch (err) {
-    console.error(err);
-    grid.textContent = 'Could not load stickers.';
+  const list = await window.icon.stickers.list(token);
+  if (!list.length) { grid.textContent = 'No stickers yet.'; return; }
+
+  grid.innerHTML = '';
+  for (const s of list) {
+    const card = document.createElement('div'); card.className = 'card';
+    card.innerHTML = `
+      <img src="${encodeURI(s.url)}" alt="">
+      <div class="row">
+        <div style="flex:1">${s.title ?? ''}</div>
+        <button data-id="${s.id}" data-url="${encodeURI(s.url)}">Pin</button>
+      </div>
+    `;
+    card.querySelector('button')!.addEventListener('click', () => {
+      window.icon.overlay.create(s.id, s.url);
+    });
+    grid.appendChild(card);
   }
 }
 
-function updateLoginUI() {
-  const t = getToken();
-  tokenInput.value = t ?? '';
-  logoutBtn.style.display = t ? '' : 'none';
-}
+$('#clearAll')!.addEventListener('click', () => window.icon.overlay.clearAll());
 
 saveBtn.addEventListener('click', async () => {
-  const t = tokenInput.value.trim();
-  if (!t) return;
-  setToken(t);
-  updateLoginUI();
-  await loadStickers(t);
+  const token = tokenInput.value.trim();
+  if (!token) return;
+  localStorage.setItem(STORAGE_KEY, token);
+  setLoggedIn(true);
+  await loadGrid(token);
 });
 
 logoutBtn.addEventListener('click', () => {
-  clearToken();
-  updateLoginUI();
-  grid.textContent = '';
+  localStorage.removeItem(STORAGE_KEY);
+  tokenInput.value = '';
+  setLoggedIn(false);
+  grid.innerHTML = '';
 });
 
-clearAll.addEventListener('click', () => window.stickers.clearAll());
-
-// boot
-(async () => {
-  updateLoginUI();
-  const t = getToken();
-  if (t) await loadStickers(t);
+(function init() {
+  const token = localStorage.getItem(STORAGE_KEY) || '';
+  tokenInput.value = token;
+  if (token) { setLoggedIn(true); loadGrid(token); }
 })();

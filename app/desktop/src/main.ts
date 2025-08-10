@@ -1,65 +1,56 @@
-// app/desktop/src/main.ts
-import { app, BrowserWindow, ipcMain, globalShortcut, Menu } from 'electron';
-import { join } from 'node:path';
+import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron';
+import * as path from 'node:path';
+import * as fs from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import * as overlay from './ipc/overlay.js';
+import { listMyStickers } from './ipc/stickers.js';
 
-// dist folder inside app.asar
-const distDir   = join(app.getAppPath(), 'dist');
-const preload   = join(distDir, 'preload.cjs');            // <- CJS preload (postbuild renames it)
-const indexHtml = join(distDir, 'renderer', 'index.html');
+// Paths inside the packaged app (asar) and during dev are different.
+// We always point at dist/, then pick whichever preload exists.
+const distDir = path.join(app.getAppPath(), 'dist');
+const preloadCandidates = [
+  path.join(distDir, 'preload.cjs'),
+  path.join(distDir, 'preload.js'),
+];
+const preload = preloadCandidates.find(p => {
+  try { return fs.existsSync(p); } catch { return false; }
+}) ?? preloadCandidates[0];
 
-// ESM-safe imports that also work inside app.asar
-const overlayMod  = import(new URL('./ipc/overlay.js',  import.meta.url).href);
-const stickersMod = import(new URL('./ipc/stickers.js', import.meta.url).href);
+const indexHtml = path.join(distDir, 'renderer', 'index.html');
 
-function buildMenu(removeAll: () => void) {
-  return Menu.buildFromTemplate([
-    { label: 'File', submenu: [
-      { label: 'Clear all stickers', accelerator: 'Ctrl+Shift+X', click: removeAll },
-      { type: 'separator' },
-      { role: 'quit' },
-    ]},
-  ]);
-}
-
-async function createMainWindow() {
+function createMainWindow(): BrowserWindow {
   const win = new BrowserWindow({
-    width: 880,
-    height: 560,
-    show: false,
+    width: 960,
+    height: 640,
+    show: true,                              // <— show immediately (no hidden window)
     webPreferences: {
       preload,
-      sandbox: false, // required for contextBridge
+      sandbox: false,                        // needed for contextBridge
     },
   });
 
-  win.setMenu(null); // temporary – we set a menu after overlay module is ready
-  await win.loadURL(pathToFileURL(indexHtml).toString());
-  win.once('ready-to-show', () => win.show());
+  // Helpful diagnostics if anything fails to load
+  win.webContents.on('did-fail-load', (_e, code, desc, url) => {
+    console.error('Renderer failed to load:', code, desc, url);
+    win.loadURL(`data:text/plain,Failed to load UI (${code}): ${desc}`);
+  });
+
+  win.loadURL(pathToFileURL(indexHtml).toString());
+  return win;
 }
 
-app.whenReady().then(async () => {
-  const overlay  = await overlayMod;   // { createOverlay, removeAllOverlays }
-  const stickers = await stickersMod;  // { getMyStickers }
-
-  // UI window
-  await createMainWindow();
-
-  // Menu + hotkey to clear
-  const menu = buildMenu(overlay.removeAllOverlays);
-  BrowserWindow.getAllWindows()[0]?.setMenu(menu);
-  globalShortcut.register('CommandOrControl+Shift+X', overlay.removeAllOverlays);
-
-  // IPC
-  ipcMain.handle('overlay:create', (_e, id: string, url: string) =>
-    overlay.createOverlay(id, url)
-  );
-  ipcMain.handle('overlay:clearAll', () => overlay.removeAllOverlays());
-  ipcMain.handle('stickers:list', (_e, token: string) =>
-    stickers.getMyStickers(token)
-  );
+app.whenReady().then(() => {
+  createMainWindow();
+  // Global hotkey to clear all stickers
+  globalShortcut.register('CommandOrControl+Shift+X', () => overlay.removeAllOverlays());
 });
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
+
+/* ───── IPC ────────────────────────────────────────────── */
+ipcMain.handle('stickers:list', async (_e, token: string) => {
+  try { return await listMyStickers(token); }
+  catch (err) { console.error('stickers:list error', err); return []; }
 });
+ipcMain.handle('overlay:create', (_e, id: string, url: string) => overlay.createOverlay(id, url));
+ipcMain.handle('overlay:clearAll', () => overlay.removeAllOverlays());
