@@ -1,7 +1,7 @@
 {
   "name": "icon-desktop",
   "productName": "Icon Desktop",
-  "version": "1.0.102",
+  "version": "1.0.103",
   "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
   "license": "MIT",
   "homepage": "https://github.com/PreFrontalCorporate/icon",
@@ -9,7 +9,6 @@
   "author": { "name": "PreFrontal Corporate", "email": "support@cbb.homes", "url": "https://cbb.homes" },
 
   "main": "dist/entry.cjs",
-
   "scripts": {
     "dev": "vite dev --config vite.config.ts & electronmon . --ignore=packages/stickers",
     "build:main": "tsc -p tsconfig.main.json",
@@ -27,7 +26,6 @@
     "archiver": "^6.0.2",
     "sanitize-filename": "^1.6.3"
   },
-
   "devDependencies": {
     "@types/node": "^20.10.5",
     "electron": "^29.4.6",
@@ -36,15 +34,14 @@
     "typescript": "^5.4.4",
     "vite": "^5.4.19"
   },
-
   "build": {
     "asar": true,
     "asarUnpack": ["dist/preload.cjs"],
     "files": ["dist/**/*", "windows/**/*", "build/icon.*", "packages/stickers/**/*"],
-    "mac":   { "target": ["dmg", "zip"], "category": "public.app-category.graphics-design" },
-    "win":   {
+    "mac": { "target": ["dmg", "zip"], "category": "public.app-category.graphics-design" },
+    "win": {
       "target": [
-        { "target": "nsis",     "arch": ["x64", "ia32", "arm64"] },
+        { "target": "nsis", "arch": ["x64", "ia32", "arm64"] },
         { "target": "portable", "arch": ["x64"] }
       ],
       "publisherName": "PreFrontal Corporate"
