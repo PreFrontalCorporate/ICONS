@@ -1,73 +1,125 @@
-// app/desktop/src/main.ts (TS/ESM)
-import { app, BrowserWindow } from 'electron';
+// app/desktop/src/main.ts
+import { app, BrowserWindow, globalShortcut, ipcMain, shell } from 'electron';
 import * as path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import * as fs from 'node:fs';
+import { pathToFileURL } from 'node:url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname  = path.dirname(__filename);
+// Hosted Login/Library — first-party cookies
+const LIBRARY_URL = process.env.ICON_LIBRARY_URL || 'https://icon-web-two.vercel.app/';
+
+const distDir    = path.join(app.getAppPath(), 'dist');
+const preloadCJS = path.join(distDir, 'preload.cjs');
+const indexHtml  = path.join(distDir, 'renderer', 'index.html');
 
 function log(...args: unknown[]) {
   try {
-    const p = path.join(app.getPath('userData'), 'debug.log');
-    const line = `[${new Date().toISOString()}] ${args.map(a =>
-      typeof a === 'string' ? a : JSON.stringify(a)
-    ).join(' ')}\n`;
+    const p = path.join(app.getPath('userData'), 'icon-desktop.log');
+    const line = `[${new Date().toISOString()}] ` + args.map(a => (typeof a === 'string' ? a : JSON.stringify(a))).join(' ') + '\n';
     fs.appendFileSync(p, line);
   } catch {}
 }
 
-async function createMainWindow() {
-  const preload   = path.join(__dirname, 'preload.cjs');
-  const indexHtml = path.join(__dirname, 'renderer', 'index.html');
+// Chromium logging to file (must be set before 'ready')
+const chromiumLog = path.join(process.env.TEMP || app.getPath('temp'), 'icon-desktop-chromium.log');
+app.commandLine.appendSwitch('enable-logging');
+app.commandLine.appendSwitch('log-file', chromiumLog);
+app.commandLine.appendSwitch('v', '1');
 
-  log('paths', { preload, indexHtml, isPackaged: app.isPackaged });
+// Deep links: allow icon:// links launched from the Library
+app.setAsDefaultProtocolClient?.('icon'); // handled via setWindowOpenHandler below
 
-  const win = new BrowserWindow({
-    width: 1100,
-    height: 700,
-    show: false,              // avoid white flash; we’ll show explicitly
-    autoHideMenuBar: true,
-    backgroundColor: '#121212',
-    // IMPORTANT: keep this visible in taskbar
-    skipTaskbar: false,
-    webPreferences: {
-      preload,
-      contextIsolation: true,
-      nodeIntegration: false,
-      sandbox: false
-    }
-  });
+async function loadOverlay() {
+  const url = pathToFileURL(path.join(distDir, 'ipc', 'overlay.js')).href;
+  return import(url);
+}
 
-  // If the renderer fails to load (bad path, etc.), log & show a fallback
-  win.webContents.on('did-fail-load', (_e, code, desc, url) => {
-    log('did-fail-load', code, desc, url);
-    win.loadURL(`data:text/html,<h1>Renderer failed to load</h1><p>${desc}</p>`);
-    setTimeout(() => { if (!win.isVisible()) win.show(); }, 50);
-  });
-
-  win.webContents.once('did-finish-load', () => {
-    log('did-finish-load');
-    if (!win.isVisible()) win.show();
-    win.focus();
-  });
-
-  // Belt-and-suspenders: even if no events fire, show anyway
-  setTimeout(() => { if (!win.isVisible()) { log('fallback show'); win.show(); } }, 4000);
-
+function handleOverlayLink(u: string) {
   try {
-    if (app.isPackaged) {
-      await win.loadFile(indexHtml);
-    } else {
-      const devUrl = process.env.VITE_DEV_SERVER_URL ?? 'http://localhost:5173';
-      await win.loadURL(devUrl);
-    }
-  } catch (err) {
-    log('load error', err);
-    if (!win.isVisible()) win.show();
+    const url = new URL(u);
+    if (url.protocol !== 'icon:') return false;
+    if (url.hostname !== 'overlay') return false; // icon://overlay?src=...
+    const src = url.searchParams.get('src');
+    if (!src) return true; // consume without action
+    const id = url.searchParams.get('id') || `overlay-${Date.now()}`;
+    ipcMain.emit('overlay:create-link', null, id, src);
+    return true;
+  } catch {
+    return false;
   }
 }
 
-app.whenReady().then(createMainWindow);
-app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
-app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createMainWindow(); });
+function createMainWindow(): void {
+  const win = new BrowserWindow({
+    width: 1024,
+    height: 720,
+    show: false,
+    webPreferences: {
+      preload: preloadCJS,
+      contextIsolation: true,
+      sandbox: false,
+      // Persist cookies/storage so login survives restarts (Electron session docs).
+      partition: 'persist:icon'
+    },
+  });
+
+  // Open external links in OS browser; intercept icon://overlay to create overlays
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    if (handleOverlayLink(url)) return { action: 'deny' };
+    shell.openExternal(url).catch(() => {});
+    return { action: 'deny' };
+  });
+
+  // Also intercept in-page navigations (target=_self etc.)
+  win.webContents.on('will-navigate', (e, url) => {
+    if (handleOverlayLink(url)) e.preventDefault();
+  });
+
+  // Load hosted app first; fallback to local if it fails
+  win.loadURL(LIBRARY_URL).catch(err => {
+    log('loadURL hosted failed', err?.message || String(err));
+    const fileUrl = pathToFileURL(indexHtml).toString();
+    win.loadURL(fileUrl).catch(e => log('loadURL local failed', e?.message || String(e)));
+  });
+
+  win.webContents.on('did-fail-load', (_e, code, desc, urlTried) => {
+    log('did-fail-load', code, desc, urlTried);
+    const fallback = pathToFileURL(indexHtml).toString();
+    win.loadURL(fallback).catch(() => {});
+  });
+
+  win.once('ready-to-show', () => win.show());
+}
+
+app.whenReady()
+  .then(() => {
+    createMainWindow();
+
+    // Overlay IPC — also listen to synthetic event from handleOverlayLink()
+    ipcMain.handle('overlay:create', async (_e, id: string, url: string) => {
+      const m = await loadOverlay();
+      return m.createOverlay(id, url);
+    });
+    ipcMain.handle('overlay:clearAll', async () => {
+      const m = await loadOverlay();
+      return m.removeAllOverlays();
+    });
+    ipcMain.on('overlay:create-link', async (_e, id: string, url: string) => {
+      const m = await loadOverlay();
+      return m.createOverlay(id, url);
+    });
+
+    // Global shortcut: clear overlays quickly
+    globalShortcut.register('CommandOrControl+Shift+X', async () => {
+      try {
+        const m = await loadOverlay();
+        m.removeAllOverlays?.();
+      } catch (e) {
+        log('removeAllOverlays error', e instanceof Error ? e.message : String(e));
+      }
+    });
+  })
+  .catch(e => log('app.whenReady error', e));
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
