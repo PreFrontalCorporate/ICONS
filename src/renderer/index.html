@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Icon Desktop</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' file: data:; style-src 'self' 'unsafe-inline';">
+    <style>
+      :root { --bg:#151515; --fg:#eee; --muted:#a0a0a0; --accent:#5fd4a9; }
+      html,body { margin:0; height:100%; background:var(--bg); color:var(--fg); font:14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, sans-serif; }
+      header { display:flex; gap:12px; align-items:center; padding:14px 16px; border-bottom:1px solid #222; }
+      header h1 { font-size:16px; margin:0 8px 0 0; }
+      header .pill { opacity:.8; font-size:12px; }
+      header input[type="search"] { flex:1; padding:8px 10px; border-radius:8px; border:1px solid #333; background:#111; color:var(--fg); }
+      header button { padding:8px 12px; border-radius:8px; border:1px solid #2a2a2a; background:#1c1c1c; color:#eee; cursor:pointer; }
+      header button:hover { border-color:#3a3a3a; }
+      #main { display:grid; grid-template-columns: 260px 1fr; height:calc(100% - 52px); }
+      #sidebar { border-right:1px solid #222; padding:12px; overflow:auto; }
+      #sidebar h3 { margin:6px 0 8px 0; font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+      #libs { display:flex; flex-direction:column; gap:6px; }
+      #libs .lib { padding:8px; border:1px solid #2a2a2a; border-radius:8px; word-break:break-all; background:#101010; }
+      #grid { padding:12px; overflow:auto; display:grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap:12px; }
+      .card { background:#101010; border:1px solid #2a2a2a; border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:8px; cursor:pointer; user-select:none; }
+      .thumb { height:72px; display:flex; align-items:center; justify-content:center; }
+      .thumb img { max-width:64px; max-height:64px; }
+      .meta { font-size:12px; color:var(--muted); }
+      .sel { outline:2px solid var(--accent); }
+      footer { padding:8px 12px; border-top:1px solid #222; color:var(--muted); }
+      .row { display:flex; align-items:center; gap:8px; }
+      .spacer { flex:1; }
+      .link { color:var(--accent); text-decoration:none; }
+      .link:hover { text-decoration:underline; }
+      .ctx { position:fixed; background:#0f0f0f; border:1px solid #2a2a2a; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,.45); display:none; z-index:20; }
+      .ctx button { display:block; width:100%; padding:8px 12px; background:none; border:none; text-align:left; color:#ddd; }
+      .ctx button:hover { background:#1b1b1b; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Icon Desktop</h1>
+      <span class="pill" id="ver"></span>
+      <button id="add">Add Folder…</button>
+      <button id="export">Export Selected…</button>
+      <input id="search" type="search" placeholder="Search icons…" />
+    </header>
+
+    <div id="main">
+      <aside id="sidebar">
+        <h3>Libraries</h3>
+        <div id="libs"></div>
+      </aside>
+      <section id="grid"></section>
+    </div>
+
+    <footer>
+      <div class="row">
+        <span id="count">0 icons</span>
+        <div class="spacer"></div>
+        <a id="help" href="https://example.com" class="link">Docs</a>
+      </div>
+    </footer>
+
+    <div class="ctx" id="ctx">
+      <button data-action="open">Open</button>
+      <button data-action="reveal">Reveal in Explorer</button>
+    </div>
+
+    <script type="module" src="./index.ts"></script>
+  </body>
+</html>

@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ error: msg });
   }
 
-  // Important for an embedded/desktop flow: third‑party cookies need SameSite=None + Secure
+  // IMPORTANT for Electron: third‑party contexts & iframes need SameSite=None + Secure
   res.setHeader(
     'Set-Cookie',
     serialize('cat', tok, {

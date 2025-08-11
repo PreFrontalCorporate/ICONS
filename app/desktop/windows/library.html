@@ -4,18 +4,19 @@
 <style>
   html,body{margin:0;height:100%}
   iframe{border:0;width:100%;height:100%}
+  body{background:#151515;color:#eee}
 </style>
 </head><body>
 
-<!-- Re‑use the Vercel Cloud‑Run build directly -->
+<!-- Host the web Library UI inside the desktop shell -->
 <iframe src="https://icon-web-two.vercel.app/library"></iframe>
 
 <script>
-  // Provide overlay API to in‑frame scripts
+  // Forward messages from the library to the preload API
   window.addEventListener('message', ev=>{
     const {cmd,id,url} = ev.data||{};
-    if(cmd==='pinSticker') window.iconOverlay.pinSticker(id,url);
-    if(cmd==='clearAll')   window.iconOverlay.clearAll();
+    if (cmd==='pinSticker') window.iconOverlay.pinSticker(id,url);
+    if (cmd==='clearAll')   window.iconOverlay.clearAll();
   });
 </script>
 </body></html>
