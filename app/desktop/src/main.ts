@@ -1,8 +1,8 @@
 // app/desktop/src/main.ts (TS/ESM)
 import { app, BrowserWindow } from 'electron';
-import path from 'node:path';
+import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import fs from 'node:fs';
+import * as fs from 'node:fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
