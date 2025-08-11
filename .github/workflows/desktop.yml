@@ -13,12 +13,27 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+
       - uses: pnpm/action-setup@v4
-        with: { version: 9, run_install: true }   # :contentReference[oaicite:7]{index=7}
+        with:
+          version: 9
+
       - uses: actions/setup-node@v4
-        with: { node-version: 20, cache: 'pnpm' }
-      - name: Build & package under Xvfb
-        run: xvfb-run --auto-servernum pnpm --filter desktop run build
-      - uses: electron-builder-action@v5   # builds + attaches installers :contentReference[oaicite:8]{index=8}
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install (workspace)
+        run: pnpm -w install --frozen-lockfile
+
+      - name: Build desktop (under Xvfb)
+        run: xvfb-run --auto-servernum pnpm --dir app/desktop run build
+
+      # Build & (on tags) publish installers with electron-builder
+      - name: Package & publish
+        uses: samuelmeuli/action-electron-builder@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          package_root: app/desktop
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

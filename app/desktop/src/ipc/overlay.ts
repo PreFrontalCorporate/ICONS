@@ -6,36 +6,50 @@ const ACTIVE = new Map<string, BrowserWindow>();
 
 /** Create (or reveal) a frameless always‑on‑top overlay for one sticker */
 export function createOverlay(id: string, imgUrl: string) {
-  if (ACTIVE.has(id)) { ACTIVE.get(id)!.show(); return; }
+  const existing = ACTIVE.get(id);
+  if (existing) { existing.show(); existing.focus(); return; }
 
   const cursor = screen.getCursorScreenPoint();
   const disp   = screen.getDisplayNearestPoint(cursor);
 
   const win = new BrowserWindow({
-    width: 320, height: 320,
+    width: 320,
+    height: 320,
     x: disp.bounds.x + Math.round(disp.workArea.width  / 3),
     y: disp.bounds.y + Math.round(disp.workArea.height / 3),
-    transparent : true,
-    frame: false,
-    resizable: true,
-    alwaysOnTop : true,
-    skipTaskbar: true,
-    hasShadow:false,
-    type: 'toolbar',
+    transparent   : true,
+    backgroundColor: '#00000000',
+    frame         : false,
+    resizable     : true,
+    alwaysOnTop   : true,
+    skipTaskbar   : true,
+    hasShadow     : false,
+    type          : 'toolbar',
+    show          : false, // show when ready
     webPreferences: {
-      // IMPORTANT: our preload is CJS at runtime
-      preload : path.join(__dirname, '../preload.cjs'),
-      sandbox : false,
+      // IMPORTANT: preload is CJS at runtime and lives in dist/preload.cjs
+      preload         : path.resolve(__dirname, '..', 'preload.cjs'),
+      contextIsolation: true,
+      sandbox         : false,
+      devTools        : process.env.NODE_ENV !== 'production',
     }
   });
 
   if (process.platform === 'win32') {
     // Sit above most fullscreen windows on Windows
     win.setAlwaysOnTop(true, 'pop-up-menu');
+  } else if (process.platform === 'darwin') {
+    // Keep visible across spaces/fullscreen on macOS
+    win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   }
 
-  win.loadURL(`data:text/html,
-    <meta http-equiv="Content-Security-Policy" content="img-src * data: blob:;">
+  win.removeMenu();
+  win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  win.webContents.on('will-navigate', (e) => e.preventDefault());
+
+  const html = `
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'none'; img-src * data: blob:; style-src 'unsafe-inline'">
     <style>
       html,body{margin:0;background:transparent;overflow:hidden}
       img{width:100%;height:100%;user-select:none;-webkit-user-drag:none}
@@ -45,13 +59,16 @@ export function createOverlay(id: string, imgUrl: string) {
       window.addEventListener('keydown', e => e.key === 'Escape' && window.close());
     </script>
     <img src="${encodeURI(imgUrl)}">
-  `);
+  `;
 
+  win.once('ready-to-show', () => win.show());
   win.on('closed', () => ACTIVE.delete(id));
+  win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
+
   ACTIVE.set(id, win);
 }
 
 export function removeAllOverlays() {
-  ACTIVE.forEach(w => w.close());
+  for (const w of ACTIVE.values()) try { w.close(); } catch {}
   ACTIVE.clear();
 }
