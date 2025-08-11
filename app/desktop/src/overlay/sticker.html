@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Sticker</title>
+    <meta http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src https: data:; script-src 'unsafe-inline'; style-src 'unsafe-inline'">
+    <style>
+      html, body { margin:0; padding:0; background:transparent; overflow:hidden; }
+      #chrome { position:fixed; inset:0; pointer-events:none; border:1px solid rgba(255,255,255,.18); border-radius:10px; }
+      #dragbar { position:absolute; inset:0 0 auto 0; height:28px; -webkit-app-region: drag; pointer-events:auto; }
+      #close {
+        position:absolute; top:6px; right:8px;
+        -webkit-app-region: no-drag; pointer-events:auto; cursor:pointer;
+        padding:2px 8px; font:12px/1 system-ui; color:#fff; background:rgba(0,0,0,.45); border-radius:6px;
+      }
+      #content { position:absolute; inset:12px; top:32px; -webkit-app-region: no-drag; display:grid; place-items:center; }
+      img { max-width:100%; max-height:100%; user-select:none; -webkit-user-drag:none; transform-origin:center center; }
+      #hint { position:absolute; left:12px; top:6px; font:11px system-ui; color:#ccc; opacity:.9; -webkit-app-region: no-drag; }
+    </style>
+  </head>
+  <body>
+    <div id="chrome"></div>
+    <div id="dragbar"></div>
+    <div id="hint">Ctrl+Wheel to rotate</div>
+    <div id="close" aria-label="Close">✕</div>
+    <div id="content"><img id="sticker" alt=""></div>
+
+    <script>
+      // Read query params
+      const params = new URLSearchParams(location.search);
+      const src = params.get('src');
+      const name = params.get('name') || '';
+      let rotation = Number(params.get('rotation') || 0) || 0;
+
+      const img = document.getElementById('sticker');
+      if (src) img.src = src;
+      img.alt = name;
+
+      // Fit window to image (with small chrome padding)
+      img.addEventListener('load', () => {
+        const padX = 24, padY = 24 + 28; // borders + dragbar
+        const w = Math.min(img.naturalWidth, 900) + padX;
+        const h = Math.min(img.naturalHeight, 900) + padY;
+        window.icon?.resizeSelf({ width: w, height: h });
+      });
+
+      // Rotation: Ctrl + mouse wheel
+      window.addEventListener('wheel', (e) => {
+        if (!e.ctrlKey) return;
+        e.preventDefault();
+        rotation += e.deltaY > 0 ? 2 : -2;
+        img.style.transform = `rotate(${rotation}deg)`;
+      }, { passive: false });
+
+      // Close
+      document.getElementById('close').addEventListener('click', () => {
+        window.icon?.closeSelf();
+      });
+    </script>
+  </body>
+</html>

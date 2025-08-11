@@ -1,105 +1,57 @@
-// app/web/pages/library.tsx
-'use client';
+import { useMemo } from "react";
 
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-
-type Product = {
-  id: string;
-  title: string;
-  featuredImage: { url: string; altText: string | null };
-};
-
-export default function LibraryPage() {
-  const [user,  setUser]  = useState<'anon' | 'loading' | 'ready'>('anon');
-  const [data,  setData]  = useState<Product[] | null>(null);
-  const [error, setError] = useState('');
-
-  /* ------------------- fetch stickers once session is confirmed ------------------- */
-  useEffect(() => {
-    if (user !== 'ready') return;
-
-    fetch('/api/me', { credentials: 'include' })
-      .then(r => r.ok ? r.json() : Promise.reject())
-      .then(r => setData(Array.isArray(r) ? r : []))   // ← guard against non‑array
-      .catch(() => {
-        setError('Session expired – please log in');
-        setUser('anon');
-      });
-  }, [user]);
-
-  /* -------------------------------------- POST email / password -------------------------------------- */
-  async function login(form: FormData) {
-    setUser('loading');
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(Object.fromEntries(form)),
-    });
-
-    if (res.ok) {
-      setUser('ready');
-      setError('');
-    } else {
-      setUser('anon');
-      setError('Wrong email or password');
+declare global {
+  interface Window {
+    icon?: {
+      pinSticker: (src: string, opts?: { name?: string; w?: number; h?: number; rotation?: number }) => void;
+      clearOverlays: () => void;
     }
   }
+}
 
-  /* ------------------------------------------- render states ------------------------------------------ */
-  if (user === 'anon') {
-    return (
-      <form
-        onSubmit={e => { e.preventDefault(); login(new FormData(e.currentTarget)); }}
-        className="max-w-sm mx-auto mt-24 space-y-4"
-      >
-        <h1 className="text-2xl font-semibold text-center">Log in</h1>
+export default function Library() {
+  const stickers = useMemo(() => [
+    {
+      name: "Pepe the Frog Rare Version Meme",
+      src: "https://cdn.shopify.com/s/files/1/0652/0605/9087/files/Pepe_the_Frog_Rare_Version_Meme.webp?v=1753859458",
+    },
+    {
+      name: "Rare Pepe",
+      src: "https://cdn.shopify.com/s/files/1/0652/0605/9087/files/Rare_Pepe.webp?v=1753859512",
+    },
+    {
+      name: "I Took a DNA Test Turns Out I'm 100% That Bitch",
+      src: "https://cdn.shopify.com/s/files/1/0652/0605/9087/files/I_Took_a_DNA_Test_Turns_Out_I_m_100_That_Bitch.webp?v=1753859149",
+    },
+  ], []);
 
-        <input
-          name="email"
-          type="email"
-          required
-          placeholder="Email"
-          className="border px-3 py-2 w-full rounded"
-        />
-        <input
-          name="password"
-          type="password"
-          required
-          placeholder="Password"
-          className="border px-3 py-2 w-full rounded"
-        />
+  const pin = (s: { name: string; src: string }) => {
+    window.icon?.pinSticker(s.src, { name: s.name });
+  };
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
-
-        <Button type="submit" className="w-full">Enter</Button>
-      </form>
-    );
-  }
-
-  if (user === 'loading') {
-    return <p className="text-center mt-24">Checking…</p>;
-  }
-
-  /* ------------------------------- logged‑in view ------------------------------- */
-  const list = Array.isArray(data) ? data : [];
+  const clear = () => window.icon?.clearOverlays();
 
   return (
     <main className="max-w-5xl mx-auto p-8">
       <h1 className="text-3xl font-semibold mb-6">🎟️ My sticker library</h1>
 
-      {list.length === 0 && <p>You have no stickers yet 🤔</p>}
+      <div className="flex items-center justify-between mb-6">
+        <p className="text-muted-foreground">Click any sticker to pin it as an overlay.</p>
+        <button
+          onClick={clear}
+          className="inline-flex items-center rounded-md h-9 px-3 bg-zinc-800 text-white hover:bg-zinc-700"
+        >
+          Remove overlays
+        </button>
+      </div>
 
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {list.map(p => (
-          <li key={p.id} className="border rounded-lg p-4 flex flex-col items-center">
-            <img
-              src={p.featuredImage.url}
-              alt={p.featuredImage.altText ?? p.title}
-              className="h-32 object-contain mb-4"
-            />
-            <span>{p.title}</span>
+        {stickers.map((s) => (
+          <li key={s.src}
+              className="border rounded-lg p-4 flex flex-col items-center hover:bg-accent cursor-pointer"
+              onClick={() => pin(s)}>
+            <img className="h-32 object-contain mb-4" src={s.src} alt={s.name} />
+            <span>{s.name}</span>
           </li>
         ))}
       </ul>
