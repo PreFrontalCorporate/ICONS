@@ -1,93 +1,123 @@
 // app/desktop/src/ipc/overlay.ts
-import { BrowserWindow, screen } from 'electron';
-import * as path from 'node:path';
+import { BrowserWindow, screen, ipcMain } from 'electron';
+import type { IpcMainInvokeEvent } from 'electron';
 
-const ACTIVE = new Map<string, BrowserWindow>();
-let EDIT_MODE = false;
+type OverlayInfo = { id: string; win: BrowserWindow };
+const overlays = new Map<string, OverlayInfo>();
 
-export function inEditMode() { return EDIT_MODE; }
-export function setEditMode(on: boolean) {
-  EDIT_MODE = !!on;
-  for (const w of ACTIVE.values()) {
-    try { w.setIgnoreMouseEvents(!EDIT_MODE, { forward: true }); } catch {}
-  }
+function overlayHtmlWith(src: string, initialScale = 1): string {
+  const html = `<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <style>
+      html, body { margin:0; padding:0; background:transparent; overflow:hidden; }
+      body { user-select:none; }
+      #wrap { position:fixed; inset:0; display:grid; place-items:center; pointer-events:none; }
+      img { max-width:100vw; max-height:100vh; transform:scale(${initialScale}); transform-origin:center; pointer-events:auto; }
+      #hint { position:fixed; left:8px; bottom:8px; color:#0ff; font:12px system-ui; background:rgba(0,0,0,.4); padding:6px 8px; border-radius:6px; }
+      #hint.hidden { display:none; }
+    </style>
+  </head>
+  <body>
+    <div id="wrap"><img id="sticker" src="${src}" draggable="false"/></div>
+    <div id="hint" class="hidden">
+      <div><b>EDIT MODE</b></div>
+      <div>Drag to move • Ctrl+Wheel to scale • Alt to exit edit</div>
+    </div>
+    <script>
+      const { ipcRenderer } = require('electron');
+      const sticker = document.getElementById('sticker');
+      const hint = document.getElementById('hint');
+      let scale = ${initialScale};
+      let editing = false;
+      let lastPos = null;
+
+      function setEditMode(on) {
+        editing = on;
+        ipcRenderer.invoke('overlay:set-click-through', !on);
+        hint.classList.toggle('hidden', !on);
+        document.body.style.cursor = on ? 'move' : 'default';
+      }
+
+      window.addEventListener('keydown', (e) => { if (e.key === 'Alt') setEditMode(true); }, true);
+      window.addEventListener('keyup',   (e) => { if (e.key === 'Alt') setEditMode(false); }, true);
+
+      window.addEventListener('mousedown', (e) => {
+        if (!editing) return;
+        lastPos = { x: e.screenX, y: e.screenY };
+      }, true);
+      window.addEventListener('mouseup', () => { lastPos = null; }, true);
+      window.addEventListener('mousemove', (e) => {
+        if (!editing || !lastPos) return;
+        const dx = e.screenX - lastPos.x;
+        const dy = e.screenY - lastPos.y;
+        lastPos = { x: e.screenX, y: e.screenY };
+        ipcRenderer.invoke('overlay:nudge', dx, dy);
+      }, true);
+
+      window.addEventListener('wheel', (e) => {
+        if (!editing || !e.ctrlKey) return;
+        e.preventDefault();
+        const factor = e.deltaY > 0 ? 0.95 : 1.05;
+        scale = Math.min(6, Math.max(0.2, scale * factor));
+        sticker.style.transform = 'scale(' + scale + ')';
+      }, { passive: false });
+    </script>
+  </body>
+</html>`;
+  return 'data:text/html;base64,' + Buffer.from(html, 'utf8').toString('base64');
 }
-export function toggleEditMode() { setEditMode(!EDIT_MODE); }
 
-/** Create (or reveal) a frameless, always-on-top overlay for one sticker */
-export function createOverlay(id: string, imgUrl: string) {
-  // Reveal/update if this sticker already exists
-  const existing = ACTIVE.get(id);
-  if (existing) {
-    existing.showInactive(); // don’t steal focus
-    existing.webContents.send('set-img', imgUrl);
-    return;
-  }
-
-  // Place on the display under the cursor
-  const cursor = screen.getCursorScreenPoint();
-  const disp   = screen.getDisplayNearestPoint(cursor);
-
+function newOverlayWindow(): BrowserWindow {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   const win = new BrowserWindow({
-    width: 320,
-    height: 320,
-    x: disp.bounds.x + Math.round(disp.workArea.width  / 3),
-    y: disp.bounds.y + Math.round(disp.workArea.height / 3),
-
+    width: Math.round(width * 0.3),
+    height: Math.round(height * 0.3),
     frame: false,
     transparent: true,
-    resizable: true,
     hasShadow: false,
-    skipTaskbar: true,
-    // keep it above everything, including fullscreen apps
+    resizable: true,
+    movable: true,
+    focusable: false,       // click-through default
     alwaysOnTop: true,
-    type: 'toolbar',
-
+    skipTaskbar: false,
     webPreferences: {
-      preload: path.join(__dirname, '..', 'preload.cjs'),
       sandbox: false,
       contextIsolation: true,
+      nodeIntegration: true // required for require('electron') in overlay HTML
     },
   });
 
-  // Make sure it truly floats everywhere
+  // Default to click-through; forward mouse moves (Electron docs)
+  win.setIgnoreMouseEvents(true, { forward: true });
   win.setAlwaysOnTop(true, 'screen-saver');
-  win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  return win;
+}
 
-  // Click-through by default; Edit Mode re-enables hit-testing
-  win.setIgnoreMouseEvents(!EDIT_MODE, { forward: true });
+export async function createOverlay(id: string, stickerUrl: string) {
+  const existing = overlays.get(id)?.win;
+  if (existing && !existing.isDestroyed()) { existing.focus(); return; }
 
-  // Minimal inline HTML with scale + hints.
-  const html = `data:text/html;charset=UTF-8,
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src * data: blob:; style-src 'unsafe-inline';">
-    <style>
-      html,body{margin:0;background:transparent;overflow:hidden;height:100%}
-      body{-webkit-app-region:drag}
-      img{display:block;width:100%;height:100%;user-select:none;-webkit-user-drag:none;pointer-events:none;-webkit-app-region:no-drag;transform-origin:center center}
-      #hint{position:fixed;top:6px;left:8px;font:12px system-ui;background:rgba(0,0,0,.55);color:#fff;padding:4px 6px;border-radius:4px}
-    </style>
-    <script>
-      let scale = 1;
-      addEventListener('wheel', e => {
-        if (!e.ctrlKey && !e.shiftKey) return;
-        e.preventDefault();
-        const d = Math.sign(e.deltaY) * -0.05;
-        scale = Math.min(4, Math.max(0.2, +(scale + d).toFixed(2)));
-        const img = document.getElementById('s');
-        img.style.transform = 'scale(' + scale + ')';
-      }, {passive:false});
-      addEventListener('keydown', e => e.key === 'Escape' && close());
-    </script>
-    <img id="s" src="${encodeURI(imgUrl)}">
-    <div id="hint">Edit: Ctrl+Shift+E · Scale: Ctrl/Shift + Wheel · ESC to close</div>
-  `;
+  const win = newOverlayWindow();
+  overlays.set(id, { id, win });
 
-  win.loadURL(html);
-  win.on('closed', () => ACTIVE.delete(id));
-  ACTIVE.set(id, win);
+  ipcMain.handleOnce('overlay:set-click-through', (_e: IpcMainInvokeEvent, on: boolean) => {
+    try { win.setIgnoreMouseEvents(on, { forward: true }); } catch {}
+  });
+  ipcMain.handle('overlay:nudge', (_e: IpcMainInvokeEvent, dx: number, dy: number) => {
+    try {
+      const [x, y] = win.getPosition();
+      win.setPosition(x + Math.round(dx), y + Math.round(dy));
+    } catch {}
+  });
+
+  await win.loadURL(overlayHtmlWith(stickerUrl, 1));
 }
 
 export function removeAllOverlays() {
-  for (const w of ACTIVE.values()) { try { w.close(); } catch {} }
-  ACTIVE.clear();
+  for (const { win } of overlays.values()) {
+    try { win.close(); } catch {}
+  }
+  overlays.clear();
 }
