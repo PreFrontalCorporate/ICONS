@@ -1,14 +1,14 @@
 // app/desktop/src/main.ts
 import { app, BrowserWindow, globalShortcut, ipcMain, shell } from 'electron';
-import path, { join } from 'node:path';
-import fs from 'node:fs';
+import * as path from 'node:path';
+import * as fs from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 const isDev = !app.isPackaged;
 
-const distDir    = join(app.getAppPath(), 'dist');
-const preloadCJS = join(distDir, 'preload.cjs');
-const indexHtml  = join(distDir, 'renderer', 'index.html');
+const distDir    = path.join(app.getAppPath(), 'dist');
+const preloadCJS = path.join(distDir, 'preload.cjs');
+const indexHtml  = path.join(distDir, 'renderer', 'index.html');
 
 function log(...args: unknown[]) {
   try {
@@ -21,14 +21,15 @@ function log(...args: unknown[]) {
   } catch {}
 }
 
-// Force Chromium logging so the PowerShell script captures logs
+// Force Chromium logging so the PowerShell script captures logs.
+// These switches must be added before app.whenReady().
 const chromiumLog = path.join(process.env.TEMP || app.getPath('temp'), 'icon-desktop-chromium.log');
-app.commandLine.appendSwitch('enable-logging');
-app.commandLine.appendSwitch('log-file', chromiumLog);
-app.commandLine.appendSwitch('v', '1');
+app.commandLine.appendSwitch('enable-logging');   // Chromium logging on
+app.commandLine.appendSwitch('log-file', chromiumLog); // Absolute path on Windows is required
+app.commandLine.appendSwitch('v', '1');           // Verbose level
 
 async function loadOverlay() {
-  const url = pathToFileURL(join(distDir, 'ipc', 'overlay.js')).href;
+  const url = pathToFileURL(path.join(distDir, 'ipc', 'overlay.js')).href;
   return import(url);
 }
 
@@ -72,7 +73,7 @@ Tried: ${fileUrl}</pre>
 app.whenReady()
   .then(() => {
     createMainWindow();
-    // Global hotkey to clear everything fast
+    // Global hotkey to clear all overlays
     globalShortcut.register('CommandOrControl+Shift+X', async () => {
       try {
         const overlay = await loadOverlay();
