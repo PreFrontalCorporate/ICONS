@@ -1,14 +1,13 @@
-import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
+import { resolve } from 'node:path';
 
 export default defineConfig({
-  root: 'src/renderer',
+  // Vite expects index.html in this folder
+  root: __dirname,
   base: './',
-  build: { outDir: resolve(__dirname, 'dist/renderer'), emptyOutDir: true, sourcemap: false },
-  resolve: {
-    alias: {
-      '@components': resolve(__dirname, '../../components'),
-      '@stickers'  : resolve(__dirname, '../../packages/stickers')
-    }
+  build: {
+    // IMPORTANT: put renderer output INSIDE app/desktop/dist so it ships with the app
+    outDir: resolve(__dirname, 'dist/renderer'),
+    emptyOutDir: true
   }
 });

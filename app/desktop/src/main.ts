@@ -1,74 +1,115 @@
-import { app, BrowserWindow, ipcMain, globalShortcut } from "electron";
-import path from "node:path";
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import fs from 'node:fs';
 
-const overlays = new Set<BrowserWindow>();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const isDev = !app.isPackaged;
 
-function createOverlay({
-  src,
-  name = "",
-  w = 320,
-  h = 320,
-  rotation = 0,
-}: { src: string; name?: string; w?: number; h?: number; rotation?: number }) {
-  const win = new BrowserWindow({
-    width: w,
-    height: h,
-    frame: false,
-    transparent: true,
-    resizable: true,
-    fullscreenable: false,
-    skipTaskbar: true,
-    hasShadow: false,
-    backgroundColor: "#00000000",
-    alwaysOnTop: true,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.cjs"),
-      nodeIntegration: false,
-      contextIsolation: true,
-      sandbox: true,
-    },
-  });
+let mainWindow: BrowserWindow | null = null;
 
-  // Keep truly on top (above full‑screen windows)
-  win.setAlwaysOnTop(true, "screen-saver");
-  if (process.platform === "darwin") {
-    win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+function log(...args: unknown[]) {
+  try {
+    const line = `[${new Date().toISOString()}] ${args.map(a => String(a)).join(' ')}\n`;
+    const logPath = path.join(app.getPath('userData'), 'icon-desktop.log');
+    fs.appendFileSync(logPath, line);
+  } catch {
+    // ignore file log errors
   }
-
-  overlays.add(win);
-  win.on("closed", () => overlays.delete(win));
-
-  win.loadFile(path.join(__dirname, "overlay", "sticker.html"), {
-    query: { src, name, rotation: String(rotation) },
-  });
-
-  return win;
+  // helpful when run via --enable-logging
+  // eslint-disable-next-line no-console
+  console.log('[main]', ...args);
 }
 
-/** IPC plumbing */
-ipcMain.on("pin-sticker", (_evt, payload) => createOverlay(payload));
-ipcMain.on("clear-overlays", () => {
-  overlays.forEach((w) => w.close());
-  overlays.clear();
-});
-ipcMain.handle("overlay-close-self", (event) => {
-  BrowserWindow.fromWebContents(event.sender)?.close();
-});
-ipcMain.handle("overlay-resize-self", (event, { width, height }) => {
-  const win = BrowserWindow.fromWebContents(event.sender);
-  if (win && Number.isFinite(width) && Number.isFinite(height)) {
-    win.setSize(Math.round(width), Math.round(height), true);
-  }
-});
+function createMainWindow() {
+  const preloadPath = path.join(__dirname, 'preload.cjs');
 
-/** Optional macro: Ctrl/Cmd + Alt + X clears all overlays */
-app.whenReady().then(() => {
-  globalShortcut.register("CommandOrControl+Alt+X", () => {
-    overlays.forEach((w) => w.close());
-    overlays.clear();
+  mainWindow = new BrowserWindow({
+    width: 1024,
+    height: 768,
+    backgroundColor: '#151515',
+    autoHideMenuBar: true,
+    // show immediately so we never “ghost” in the background
+    show: true,
+    webPreferences: {
+      // ← ensure the same preload is used by the window hosting the web app
+      preload: preloadPath,
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: false
+    }
   });
-});
 
-app.on("will-quit", () => {
-  globalShortcut.unregisterAll();
-});
+  log('Using preload:', preloadPath);
+
+  const rendererIndex = path.join(__dirname, 'renderer', 'index.html');
+  const fileUrl = `file://${rendererIndex.replace(/\\/g, '/')}`;
+  log('Loading renderer:', fileUrl);
+
+  mainWindow.loadURL(fileUrl).catch((err) => {
+    log('loadURL threw:', err?.stack || String(err));
+  });
+
+  // If anything fails to load, show a visible error instead of staying hidden forever.
+  mainWindow.webContents.on('did-fail-load', (_e, code, desc, url, isMainFrame) => {
+    log('did-fail-load', code, desc, url, 'mainFrame?', isMainFrame);
+    const html = Buffer.from(`
+      <!doctype html>
+      <meta charset="utf-8">
+      <title>Icon Desktop - Error</title>
+      <body style="font: 14px system-ui; padding:24px; background:#111; color:#eee;">
+        <h1>Icon Desktop</h1>
+        <p>Renderer failed to load.</p>
+        <pre style="white-space: pre-wrap; background:#222; padding:12px; border-radius:8px;">
+${desc} (${code})
+Tried: ${fileUrl}
+        </pre>
+      </body>
+    `);
+    mainWindow?.loadURL('data:text/html;base64,' + html.toString('base64'));
+  });
+
+  mainWindow.on('ready-to-show', () => {
+    log('ready-to-show');
+    mainWindow?.show();
+  });
+
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
+
+  // Open external links in the user’s browser
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url).catch(() => {});
+    return { action: 'deny' };
+  });
+
+  if (isDev) {
+    mainWindow.webContents.openDevTools({ mode: 'detach' }).catch(() => {});
+  }
+}
+
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+    }
+  });
+
+  app.whenReady().then(createMainWindow).catch((e) => log('app.whenReady error', e));
+
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') app.quit();
+  });
+
+  app.on('activate', () => {
+    if (mainWindow === null) createMainWindow();
+  });
+}
+
+// simple IPC demo for preload → renderer
+ipcMain.handle('app:getVersion', () => app.getVersion());
