@@ -4,9 +4,15 @@
   "version": "1.0.78",
   "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
   "license": "MIT",
+  "homepage": "https://github.com/PreFrontalCorporate/icon",
   "repository": {
     "type": "git",
     "url": "https://github.com/PreFrontalCorporate/icon.git"
+  },
+  "author": {
+    "name": "PreFrontal Corporate",
+    "email": "support@cbb.homes",
+    "url": "https://cbb.homes"
   },
 
   "main": "dist/entry.cjs",
