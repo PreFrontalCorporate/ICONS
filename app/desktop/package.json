@@ -1,26 +1,19 @@
 {
   "name": "icon-desktop",
   "productName": "icon",
-  "version": "1.0.76",
+  "version": "1.0.77",
   "description": "Overlay sticker client for Icon Suite — pin your stickers on top of any app.",
-  "homepage": "https://github.com/PreFrontalCorporate/icon",
+  "author": "PreFrontal Corporate <support@cbb.homes>",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/PreFrontalCorporate/icon.git",
-    "directory": "app/desktop"
+    "url": "https://github.com/PreFrontalCorporate/icon.git"
   },
-  "bugs": {
-    "url": "https://github.com/PreFrontalCorporate/icon/issues"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "PreFrontal Corporate",
-    "email": "support@cbb.homes",
-    "url": "https://cbb.homes"
-  },
-  "private": true,
-  "type": "module",
+  "homepage": "https://github.com/PreFrontalCorporate/icon",
+  "bugs": { "url": "https://github.com/PreFrontalCorporate/icon/issues" },
+
   "main": "dist/main.js",
+
   "scripts": {
     "dev": "vite dev --config vite.config.ts & electronmon . --ignore=packages/stickers",
     "build:main": "tsc -p tsconfig.main.json",
@@ -28,33 +21,31 @@
     "build:renderer": "vite build --config vite.config.ts",
     "build": "pnpm run build:main && pnpm run build:preload && pnpm run build:renderer",
     "postbuild": "node ../../scripts/desktop/write-dist-pkg.cjs",
-    "dist": "pnpm run build && electron-builder"
+    "dist": "electron-builder"
   },
+
   "dependencies": {
-    "electron-updater": "^5.3.0"
+    "electron-updater": "^5.3.0",
+    "electron-store": "^8.2.0",
+    "fast-glob": "^3.3.2",
+    "archiver": "^7.0.1",
+    "sanitize-filename": "^1.6.3"
   },
+
   "devDependencies": {
-    "@types/node": "^20.10.5",
+    "@types/node": "^20.19.9",
     "electron": "^29.4.6",
     "electron-builder": "^24.13.3",
     "electronmon": "^2.0.3",
     "typescript": "^5.4.4",
     "vite": "^5.4.19"
   },
+
   "build": {
-    "appId": "homes.cbb.icon",
-    "productName": "icon",
-    "electronDownload": {
-      "mirror": "https://npmmirror.com/mirrors/electron/"
-    },
-    "files": [
-      "dist/**/*",
-      "build/icon.*",
-      "packages/stickers/**/*"
-    ],
-    "directories": {
-      "output": "release"
-    },
+    "appId": "com.prefc.icon-suite",
+    "productName": "Icon Suite",
+    "asar": true,
+    "files": ["dist/**", "node_modules/**", "package.json"],
     "mac": {
       "target": ["dmg", "zip"],
       "category": "public.app-category.graphics-design"
@@ -63,17 +54,20 @@
       "target": [
         { "target": "nsis", "arch": ["x64", "ia32", "arm64"] },
         { "target": "portable", "arch": ["x64"] }
-      ]
+      ],
+      "publisherName": "PreFrontal Corporate"
     },
     "linux": {
-      "maintainer": "PreFrontal Corporate <support@cbb.homes>",
+      "target": ["AppImage", "deb", "rpm"],
       "category": "Utility",
-      "target": ["AppImage", "deb", "rpm"]
+      "maintainer": "PreFrontal Corporate <support@cbb.homes>"
     },
     "publish": {
       "provider": "github",
       "owner": "PreFrontalCorporate",
       "repo": "icon"
     }
-  }
+  },
+
+  "engines": { "node": ">=20" }
 }
