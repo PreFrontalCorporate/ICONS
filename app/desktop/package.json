@@ -1,18 +1,15 @@
 {
   "name": "icon-desktop",
-  "productName": "icon",
-  "version": "1.0.77",
-  "description": "Overlay sticker client for Icon Suite — pin your stickers on top of any app.",
-  "author": "PreFrontal Corporate <support@cbb.homes>",
+  "productName": "Icon Desktop",
+  "version": "1.0.78",
+  "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/PreFrontalCorporate/icon.git"
   },
-  "homepage": "https://github.com/PreFrontalCorporate/icon",
-  "bugs": { "url": "https://github.com/PreFrontalCorporate/icon/issues" },
 
-  "main": "dist/main.js",
+  "main": "dist/entry.cjs",
 
   "scripts": {
     "dev": "vite dev --config vite.config.ts & electronmon . --ignore=packages/stickers",
@@ -21,19 +18,19 @@
     "build:renderer": "vite build --config vite.config.ts",
     "build": "pnpm run build:main && pnpm run build:preload && pnpm run build:renderer",
     "postbuild": "node ../../scripts/desktop/write-dist-pkg.cjs",
-    "dist": "electron-builder"
+    "dist": "pnpm run build && electron-builder"
   },
 
   "dependencies": {
     "electron-updater": "^5.3.0",
-    "electron-store": "^8.2.0",
+    "electron-store": "^9.0.0",
     "fast-glob": "^3.3.2",
-    "archiver": "^7.0.1",
+    "archiver": "^6.0.2",
     "sanitize-filename": "^1.6.3"
   },
 
   "devDependencies": {
-    "@types/node": "^20.19.9",
+    "@types/node": "^20.10.5",
     "electron": "^29.4.6",
     "electron-builder": "^24.13.3",
     "electronmon": "^2.0.3",
@@ -42,10 +39,16 @@
   },
 
   "build": {
-    "appId": "com.prefc.icon-suite",
-    "productName": "Icon Suite",
     "asar": true,
-    "files": ["dist/**", "node_modules/**", "package.json"],
+    "asarUnpack": [
+      "dist/preload.cjs"
+    ],
+    "files": [
+      "dist/**/*",
+      "windows/**/*",
+      "build/icon.*",
+      "packages/stickers/**/*"
+    ],
     "mac": {
       "target": ["dmg", "zip"],
       "category": "public.app-category.graphics-design"
@@ -58,16 +61,14 @@
       "publisherName": "PreFrontal Corporate"
     },
     "linux": {
-      "target": ["AppImage", "deb", "rpm"],
+      "maintainer": "PreFrontal Corporate <support@cbb.homes>",
       "category": "Utility",
-      "maintainer": "PreFrontal Corporate <support@cbb.homes>"
+      "target": ["AppImage", "deb", "rpm"]
     },
     "publish": {
       "provider": "github",
       "owner": "PreFrontalCorporate",
       "repo": "icon"
     }
-  },
-
-  "engines": { "node": ">=20" }
+  }
 }
