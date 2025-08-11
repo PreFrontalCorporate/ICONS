@@ -4,7 +4,11 @@ import * as path from 'node:path';
 import * as fs from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
-const isDev = !app.isPackaged;
+/**
+ * Load the hosted Login/Library first so auth cookies are FIRST-PARTY.
+ * Fallback to local HTML if offline.
+ */
+const LIBRARY_URL = process.env.ICON_LIBRARY_URL || 'https://icon-web-two.vercel.app/';
 
 const distDir    = path.join(app.getAppPath(), 'dist');
 const preloadCJS = path.join(distDir, 'preload.cjs');
@@ -21,12 +25,13 @@ function log(...args: unknown[]) {
   } catch {}
 }
 
-// Force Chromium logging so the PowerShell script captures logs.
-// These switches must be added before app.whenReady().
+/** Chromium logging to file (works in packaged apps).
+ * Must be set before app.whenReady(). Docs: app.commandLine.appendSwitch(...)
+ */
 const chromiumLog = path.join(process.env.TEMP || app.getPath('temp'), 'icon-desktop-chromium.log');
-app.commandLine.appendSwitch('enable-logging');   // Chromium logging on
-app.commandLine.appendSwitch('log-file', chromiumLog); // Absolute path on Windows is required
-app.commandLine.appendSwitch('v', '1');           // Verbose level
+app.commandLine.appendSwitch('enable-logging');        // chromium logging on
+app.commandLine.appendSwitch('log-file', chromiumLog); // write to this file
+app.commandLine.appendSwitch('v', '1');                // verbosity
 
 async function loadOverlay() {
   const url = pathToFileURL(path.join(distDir, 'ipc', 'overlay.js')).href;
@@ -40,25 +45,26 @@ function createMainWindow(): void {
     show: false,
     webPreferences: {
       preload: preloadCJS,
-      sandbox: false,
       contextIsolation: true,
+      sandbox: false,
+      // Persist cookies/storage for the web app so login survives restarts.
+      // Electron docs: partitions beginning with "persist:" are on-disk.
+      partition: 'persist:icon'
     },
   });
 
-  const fileUrl = pathToFileURL(indexHtml).toString();
-  win.loadURL(fileUrl).catch(err => log('loadURL error', err?.message || String(err)));
+  // Load hosted Login/Library (first-party cookie flow)
+  win.loadURL(LIBRARY_URL).catch(err => {
+    log('loadURL hosted failed', err?.message || String(err));
+    // Fallback to local placeholder if offline
+    const fileUrl = pathToFileURL(indexHtml).toString();
+    win.loadURL(fileUrl).catch(e => log('loadURL local failed', e?.message || String(e)));
+  });
 
-  win.webContents.on('did-fail-load', (_e, code, desc, url) => {
-    log('did-fail-load', code, desc, url);
-    const html = Buffer.from(`<!doctype html><meta charset="utf-8">
-      <title>Icon Desktop - Error</title>
-      <body style="font:14px system-ui;padding:24px;background:#111;color:#eee;">
-        <h1>Icon Desktop</h1>
-        <p>Renderer failed to load.</p>
-        <pre style="white-space:pre-wrap;background:#222;padding:12px;border-radius:8px;">${desc} (${code})
-Tried: ${fileUrl}</pre>
-      </body>`);
-    win.loadURL('data:text/html;base64,' + html.toString('base64')).catch(() => {});
+  win.webContents.on('did-fail-load', (_e, code, desc, urlTried) => {
+    log('did-fail-load', code, desc, urlTried);
+    const fallback = pathToFileURL(indexHtml).toString();
+    win.loadURL(fallback).catch(() => {});
   });
 
   // Open external links in the OS browser
@@ -73,7 +79,7 @@ Tried: ${fileUrl}</pre>
 app.whenReady()
   .then(() => {
     createMainWindow();
-    // Global hotkey to clear all overlays
+    // Global hotkey to clear overlays fast
     globalShortcut.register('CommandOrControl+Shift+X', async () => {
       try {
         const overlay = await loadOverlay();
@@ -89,7 +95,7 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
-/* ───── IPC ────────────────────────────────────────────── */
+/* ───── IPC for overlays ─────────────────────────────── */
 ipcMain.handle('overlay:create', async (_e, id: string, url: string) => {
   const m = await loadOverlay();
   return m.createOverlay(id, url);
