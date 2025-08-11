@@ -1,6 +1,6 @@
 // app/desktop/src/ipc/overlay.ts
 import { BrowserWindow, screen } from 'electron';
-import path from 'node:path';
+import * as path from 'node:path';
 
 const ACTIVE = new Map<string, BrowserWindow>();
 

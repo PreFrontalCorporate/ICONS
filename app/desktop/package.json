@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "name": "icon-desktop",
   "productName": "Icon Desktop",
@@ -52,3 +53,7 @@
     "publish": { "provider": "github", "owner": "PreFrontalCorporate", "repo": "icon" }
   }
 }
+=======
+
+sartorialsynapse@icon-dev-01:/srv/icon$ 
+>>>>>>> af73a3b (fix(desktop): NodeNext-compatible imports for core modules; bump to 1.0.86)
