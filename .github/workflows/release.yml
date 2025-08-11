@@ -12,6 +12,8 @@ permissions:
 env:
   ELECTRON_VERSION: 29.4.6
   PNPM_VERSION: 9
+  CSC_IDENTITY_AUTO_DISCOVERY: "false" # don't try to codesign
+  USE_HARD_LINKS: "false"              # faster/safer on CI
 
 jobs:
   build:
@@ -50,6 +52,7 @@ jobs:
           key: ${{ runner.os }}-electron-${{ env.ELECTRON_VERSION }}
 
       - name: Linux build deps
+      # only needed on Linux to build AppImage/RPM/DEB
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
@@ -61,7 +64,24 @@ jobs:
       - name: Compile TypeScript
         run: pnpm --dir app/desktop run build
 
-      - name: Build & publish installers
+      - name: Sync version from tag
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          node -e "const fs=require('fs');const p='app/desktop/package.json';const j=JSON.parse(fs.readFileSync(p));j.version='${VERSION}';fs.writeFileSync(p,JSON.stringify(j,null,2));console.log('package.json.version =', j.version)"
+
+      - name: Build installers & publish release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm --dir app/desktop run dist
+        run: pnpm --dir app/desktop run dist -- --publish always
+
+      # Optional but handy: keep CI artifacts too
+      - name: Upload installers as workflow artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: installers-${{ runner.os }}
+          path: |
+            app/desktop/dist/**
+            app/desktop/release/**   # whichever your electron-builder outputs to
+          if-no-files-found: ignore
