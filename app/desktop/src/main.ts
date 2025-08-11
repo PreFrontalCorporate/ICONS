@@ -1,74 +1,99 @@
 // app/desktop/src/main.ts
-import { app, BrowserWindow, ipcMain } from 'electron';
-import { join } from 'node:path';
+import { app, BrowserWindow, globalShortcut, ipcMain, shell } from 'electron';
+import path, { join } from 'node:path';
+import fs from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
-// Paths into the packaged app
+const isDev = !app.isPackaged;
+
 const distDir    = join(app.getAppPath(), 'dist');
 const preloadCJS = join(distDir, 'preload.cjs');
-const indexHtml  = join(distDir, 'renderer', 'index.html'); // local “token” UI fallback
+const indexHtml  = join(distDir, 'renderer', 'index.html');
 
-// Honour CLI logging flags and also assert in-process logging so packaged builds always log
-function configureLogging() {
-  // If caller passed --log-file, forward to Chromium as a switch.
-  const logFileArg = process.argv.find(a => a.startsWith('--log-file='));
-  if (logFileArg) {
-    const filePath = logFileArg.split('=')[1];
-    if (filePath) app.commandLine.appendSwitch('log-file', filePath);
-  }
-  // Force Chromium logging when requested
-  if (process.argv.includes('--enable-logging')) {
-    // value "file" is recognized by Chromium for writing to file (when --log-file is set)
-    app.commandLine.appendSwitch('enable-logging', 'file');
-  }
+function log(...args: unknown[]) {
+  try {
+    const p = path.join(app.getPath('userData'), 'icon-desktop.log');
+    const line =
+      `[${new Date().toISOString()}] ` +
+      args.map(a => (typeof a === 'string' ? a : JSON.stringify(a))).join(' ') +
+      '\n';
+    fs.appendFileSync(p, line);
+  } catch {}
 }
 
+// Force Chromium logging so the PowerShell script captures logs
+const chromiumLog = path.join(process.env.TEMP || app.getPath('temp'), 'icon-desktop-chromium.log');
+app.commandLine.appendSwitch('enable-logging');
+app.commandLine.appendSwitch('log-file', chromiumLog);
+app.commandLine.appendSwitch('v', '1');
+
 async function loadOverlay() {
-  const overlayUrl = pathToFileURL(join(distDir, 'ipc', 'overlay.js')).href;
-  return import(overlayUrl);
+  const url = pathToFileURL(join(distDir, 'ipc', 'overlay.js')).href;
+  return import(url);
 }
 
 function createMainWindow(): void {
   const win = new BrowserWindow({
-    width: 900,
-    height: 640,
+    width: 1024,
+    height: 720,
     show: false,
-    // Persist a named session partition so cookies/auth persist across restarts
     webPreferences: {
       preload: preloadCJS,
       sandbox: false,
-      partition: 'persist:icon', // persistent Chromium profile for the app
+      contextIsolation: true,
     },
   });
 
-  // Prefer loading the hosted Library directly so its cookie is first‑party.
-  // If you want to keep the iframe-based shell, keep windows/library.html instead,
-  // but with SameSite=None cookies (fixed above) that will also work.
-  const LIBRARY_URL = 'https://icon-web-two.vercel.app/library';
+  const fileUrl = pathToFileURL(indexHtml).toString();
+  win.loadURL(fileUrl).catch(err => log('loadURL error', err?.message || String(err)));
 
-  win.loadURL(LIBRARY_URL).catch(() => {
-    // offline fallback: show local token UI
-    win.loadURL(pathToFileURL(indexHtml).toString());
+  win.webContents.on('did-fail-load', (_e, code, desc, url) => {
+    log('did-fail-load', code, desc, url);
+    const html = Buffer.from(`<!doctype html><meta charset="utf-8">
+      <title>Icon Desktop - Error</title>
+      <body style="font:14px system-ui;padding:24px;background:#111;color:#eee;">
+        <h1>Icon Desktop</h1>
+        <p>Renderer failed to load.</p>
+        <pre style="white-space:pre-wrap;background:#222;padding:12px;border-radius:8px;">${desc} (${code})
+Tried: ${fileUrl}</pre>
+      </body>`);
+    win.loadURL('data:text/html;base64,' + html.toString('base64')).catch(() => {});
+  });
+
+  // Open external links in the OS browser
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url).catch(() => {});
+    return { action: 'deny' };
   });
 
   win.once('ready-to-show', () => win.show());
 }
 
-app.whenReady().then(() => {
-  configureLogging();
-  createMainWindow();
-
-  // IPC overlay controls (lazy import keeps main bundle lean)
-  ipcMain.handle('overlay:create', async (_e, id: string, url: string) => {
-    const mod = await loadOverlay();
-    return mod.createOverlay(id, url);
-  });
-  ipcMain.handle('overlay:clearAll', async () => {
-    const mod = await loadOverlay();
-    return mod.removeAllOverlays();
-  });
-});
+app.whenReady()
+  .then(() => {
+    createMainWindow();
+    // Global hotkey to clear everything fast
+    globalShortcut.register('CommandOrControl+Shift+X', async () => {
+      try {
+        const overlay = await loadOverlay();
+        overlay.removeAllOverlays?.();
+      } catch (e) {
+        log('removeAllOverlays error', e instanceof Error ? e.message : String(e));
+      }
+    });
+  })
+  .catch(e => log('app.whenReady error', e));
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
+});
+
+/* ───── IPC ────────────────────────────────────────────── */
+ipcMain.handle('overlay:create', async (_e, id: string, url: string) => {
+  const m = await loadOverlay();
+  return m.createOverlay(id, url);
+});
+ipcMain.handle('overlay:clearAll', async () => {
+  const m = await loadOverlay();
+  return m.removeAllOverlays();
 });

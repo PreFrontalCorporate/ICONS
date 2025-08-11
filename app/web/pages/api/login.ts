@@ -3,53 +3,45 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { serialize } from 'cookie';
 import { shopifyFetch } from '@/lib/shopify';
 
-/**
- * POST /api/login  { email, password }
- * — Creates a Shopify customer‑token and stores it in an http‑only cookie “cat”.
- *   The cookie lives for 365 days and is refreshed on each successful login.
- *   NOTE: The desktop app may load this UI in an iframe / different top‑level origin.
- *         Third‑party cookie contexts require SameSite=None; Secure.
- */
+// helper: 30 days
+const maxAge = 60 * 60 * 24 * 30;
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { email, password } = req.body as { email: string; password: string };
+  const { email, password } = (req.body ?? {}) as { email?: string; password?: string };
+  if (!email || !password) return res.status(400).json({ error: 'Missing credentials' });
 
-  /* ------------------------------------------------- 1. create token */
+  const q = /* GraphQL */ `
+    mutation ($email: String!, $password: String!) {
+      customerAccessTokenCreate(input: { email: $email, password: $password }) {
+        customerAccessToken { accessToken, expiresAt }
+        userErrors { message }
+      }
+    }
+  `;
+
   const { customerAccessTokenCreate } = await shopifyFetch<{
     customerAccessTokenCreate: {
-      customerAccessToken: { accessToken: string; expiresAt: string } | null;
-      customerUserErrors:   { message: string }[];
+      customerAccessToken?: { accessToken: string; expiresAt: string } | null;
+      userErrors: { message: string }[];
     };
-  }>(
-    /* GraphQL */ `
-      mutation login($email: String!, $password: String!) {
-        customerAccessTokenCreate(input: { email:$email, password:$password }) {
-          customerAccessToken { accessToken expiresAt }
-          customerUserErrors { message }
-        }
-      }
-    `,
-    { email, password },
-  );
+  }>(q, { email, password });
 
-  if (!customerAccessTokenCreate.customerAccessToken) {
-    const message = customerAccessTokenCreate.customerUserErrors[0]?.message ?? 'Login failed';
-    return res.status(401).json({ message });
+  const tok = customerAccessTokenCreate?.customerAccessToken?.accessToken;
+  if (!tok) {
+    const msg = customerAccessTokenCreate?.userErrors?.[0]?.message ?? 'Invalid credentials';
+    return res.status(401).json({ error: msg });
   }
 
-  /* --------------------------------------------- 2. set year‑long cookie */
-  const maxAge = 60 * 60 * 24 * 365; // 1 year
-  const isProd = process.env.NODE_ENV === 'production';
-
+  // IMPORTANT for Electron: third‑party contexts & iframes need SameSite=None + Secure
   res.setHeader(
     'Set-Cookie',
-    serialize('cat', customerAccessTokenCreate.customerAccessToken.accessToken, {
+    serialize('cat', tok, {
       httpOnly: true,
-      // IMPORTANT: Allows cookie in third‑party contexts (e.g., Electron iframe)
       sameSite: 'none',
-      secure  : isProd,         // must be true with SameSite=None in production over HTTPS
-      path    : '/',
+      secure: true,
+      path: '/',
       maxAge,
     }),
   );
