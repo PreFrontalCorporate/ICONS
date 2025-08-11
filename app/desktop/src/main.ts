@@ -1,92 +1,88 @@
-// Main process – robust boot with logging + Library shell
-import { app, BrowserWindow, ipcMain, Menu, globalShortcut } from 'electron';
-import * as path from 'node:path';
-import * as fs from 'node:fs';
+// at top
+import { app, BrowserWindow, shell } from 'electron';
+import path from 'node:path';
+import fs from 'node:fs';
 
-let mainWin: BrowserWindow | null = null;
+let win: BrowserWindow | null = null;
 
-/* ───── tiny logger to %APPDATA%/Icon Desktop/logs/main.log ───── */
-const LOG_DIR  = path.join(app.getPath('userData'), 'logs');
-const LOG_FILE = path.join(LOG_DIR, 'main.log');
-function log(...a: any[]) {
+// tiny file logger (no dependency)
+function log(...args: unknown[]) {
   try {
-    fs.mkdirSync(LOG_DIR, { recursive: true });
-    fs.appendFileSync(
-      LOG_FILE,
-      `[${new Date().toISOString()}] ${a.map(x => typeof x === 'string' ? x : JSON.stringify(x)).join(' ')}\n`
-    );
+    const line =
+      args.map(a =>
+        a instanceof Error ? (a.stack ?? a.message) :
+        typeof a === 'string' ? a :
+        JSON.stringify(a)
+      ).join(' ');
+    fs.appendFileSync(path.join(app.getPath('userData'), 'icon-desktop.log'), `[${new Date().toISOString()}] ${line}\n`);
   } catch {}
 }
-process.on('uncaughtException',  e => log('uncaughtException',  e?.stack || e));
-process.on('unhandledRejection', e => log('unhandledRejection', e?.stack || e));
 
-/* ───── single instance ───── */
-if (!app.requestSingleInstanceLock()) {
-  app.quit();
-} else {
-  app.on('second-instance', () => {
-    if (mainWin) { if (mainWin.isMinimized()) mainWin.restore(); mainWin.show(); mainWin.focus(); }
-  });
+process.on('uncaughtException', (e: unknown) => {
+  log('uncaughtException', e);
+});
+process.on('unhandledRejection', (e: unknown) => {
+  log('unhandledRejection', e);
+});
+
+function getPreloadPath() {
+  // in dist, this file lives in dist/main.mjs; preload.cjs is sibling
+  return app.isPackaged
+    ? path.join(__dirname, 'preload.cjs')
+    : path.join(__dirname, 'preload.cjs'); // dev also writes to dist via build:preload
 }
 
-/* ───── main window ───── */
-async function createMainWindow() {
-  log('createMainWindow');
-  const preload     = path.join(__dirname, 'preload.cjs');                 // <— correct file we ship
-  const libraryHtml = path.join(__dirname, '../windows/library.html');     // preferred UI
-  const fallback    = path.join(__dirname, 'renderer', 'index.html');      // tiny placeholder
+function getLibraryHtml() {
+  // During dev builds you kept windows/library.html at repo path.
+  // After packaging, ship windows/** and load from resourcesPath.
+  const devPath = path.resolve(__dirname, '..', 'windows', 'library.html');
+  const prodPath = path.join(process.resourcesPath, 'windows', 'library.html');
+  return app.isPackaged ? prodPath : devPath;
+}
 
-  mainWin = new BrowserWindow({
-    width: 1024, height: 720, minWidth: 800, minHeight: 560,
+async function createWindow() {
+  win = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    show: false,                      // prevent white flash
     backgroundColor: '#111111',
-    show: true,                                  // never start hidden
     webPreferences: {
-      preload,
-      sandbox: false,
+      preload: getPreloadPath(),
       contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: false
     }
   });
 
-  Menu.setApplicationMenu(Menu.buildFromTemplate([
-    { role: 'fileMenu', submenu: [
-      { label: 'Clear all stickers', accelerator: 'Ctrl+Shift+X',
-        click: () => import('./ipc/overlay.js').then(m => m.removeAllOverlays()) },
-      { type: 'separator' }, { role: 'quit' }
-    ]},
-    { role: 'viewMenu' }
-  ]));
+  win.on('ready-to-show', () => {
+    if (!win) return;
+    win.show();
+    win.focus();
+  });
 
-  mainWin.webContents.on('did-fail-load', (_e, code, desc, url) => log('did-fail-load', code, desc, url));
-  mainWin.webContents.on('render-process-gone', (_e, details) => log('render-process-gone', details));
-  mainWin.on('ready-to-show', () => { log('ready-to-show'); mainWin?.show(); mainWin?.focus(); });
-  mainWin.on('closed', () => { log('main window closed'); mainWin = null; });
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    // open external links in system browser
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
 
-  const useLibrary = fs.existsSync(libraryHtml);
-  log('loading', useLibrary ? libraryHtml : fallback);
-
-  if (useLibrary) {
-    mainWin.loadFile(libraryHtml);
-  } else {
-    const { pathToFileURL } = await import('node:url');
-    mainWin.loadURL(pathToFileURL(fallback).toString());
-  }
+  const html = getLibraryHtml();
+  log('Loading UI:', html);
+  await win.loadFile(html);
 }
 
-/* ───── app lifecycle + IPC ───── */
-app.whenReady().then(() => {
-  app.setAppUserModelId('com.prefc.icon-desktop');
-  log('app ready; userData=', app.getPath('userData'));
-  createMainWindow();
-  globalShortcut.register('CommandOrControl+Shift+X',
-    () => import('./ipc/overlay.js').then(m => m.removeAllOverlays()));
-});
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    if (win) {
+      if (win.isMinimized()) win.restore();
+      win.show(); win.focus();
+    }
+  });
 
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
-});
-app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit());
-
-ipcMain.handle('overlay:create', (_e, id: string, url: string) =>
-  import('./ipc/overlay.js').then(m => m.createOverlay(id, url)));
-ipcMain.handle('overlay:clearAll', () =>
-  import('./ipc/overlay.js').then(m => m.removeAllOverlays()));
+  app.whenReady().then(createWindow);
+  app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
+  app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) void createWindow(); });
+}
