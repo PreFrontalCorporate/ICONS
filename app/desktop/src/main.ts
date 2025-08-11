@@ -1,73 +1,71 @@
-// app/desktop/src/main.ts (TS/ESM)
-import { app, BrowserWindow } from 'electron';
+// app/desktop/src/main.ts
+import { app, BrowserWindow, Menu, globalShortcut, ipcMain, nativeTheme } from 'electron';
 import * as path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import * as fs from 'node:fs';
+import * as overlay from './ipc/overlay.js'; // <-- note the .js (TS -> dist/ipc/overlay.js)
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname  = path.dirname(__filename);
+let mainWin: BrowserWindow | null = null;
 
-function log(...args: unknown[]) {
-  try {
-    const p = path.join(app.getPath('userData'), 'debug.log');
-    const line = `[${new Date().toISOString()}] ${args.map(a =>
-      typeof a === 'string' ? a : JSON.stringify(a)
-    ).join(' ')}\n`;
-    fs.appendFileSync(p, line);
-  } catch {}
+function buildMenu() {
+  return Menu.buildFromTemplate([
+    {
+      label: 'File',
+      submenu: [
+        {
+          label: 'Edit overlays',
+          accelerator: 'CommandOrControl+Shift+E',
+          type: 'checkbox',
+          checked: overlay.inEditMode(),
+          click: (item) => overlay.setEditMode(item.checked),
+        },
+        {
+          label: 'Clear all overlays',
+          accelerator: 'CommandOrControl+Shift+X',
+          click: () => overlay.removeAllOverlays(),
+        },
+        { type: 'separator' },
+        { role: 'quit' },
+      ],
+    },
+  ]);
 }
 
-async function createMainWindow() {
-  const preload   = path.join(__dirname, 'preload.cjs');
-  const indexHtml = path.join(__dirname, 'renderer', 'index.html');
-
-  log('paths', { preload, indexHtml, isPackaged: app.isPackaged });
-
-  const win = new BrowserWindow({
-    width: 1100,
-    height: 700,
-    show: false,              // avoid white flash; we’ll show explicitly
-    autoHideMenuBar: true,
-    backgroundColor: '#121212',
-    // IMPORTANT: keep this visible in taskbar
-    skipTaskbar: false,
+function createMainWindow() {
+  mainWin = new BrowserWindow({
+    width: 1140,
+    height: 760,
+    minWidth: 920,
+    minHeight: 600,
+    show: false,
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#111111' : '#FFFFFF',
     webPreferences: {
-      preload,
+      preload: path.join(__dirname, 'preload.cjs'), // compiled by tsc + postbuild
+      sandbox: false,
       contextIsolation: true,
-      nodeIntegration: false,
-      sandbox: false
-    }
+    },
   });
 
-  // If the renderer fails to load (bad path, etc.), log & show a fallback
-  win.webContents.on('did-fail-load', (_e, code, desc, url) => {
-    log('did-fail-load', code, desc, url);
-    win.loadURL(`data:text/html,<h1>Renderer failed to load</h1><p>${desc}</p>`);
-    setTimeout(() => { if (!win.isVisible()) win.show(); }, 50);
-  });
+  mainWin.setMenu(buildMenu());
+  mainWin.on('ready-to-show', () => mainWin?.show());
+  mainWin.on('closed', () => (mainWin = null));
 
-  win.webContents.once('did-finish-load', () => {
-    log('did-finish-load');
-    if (!win.isVisible()) win.show();
-    win.focus();
-  });
-
-  // Belt-and-suspenders: even if no events fire, show anyway
-  setTimeout(() => { if (!win.isVisible()) { log('fallback show'); win.show(); } }, 4000);
-
-  try {
-    if (app.isPackaged) {
-      await win.loadFile(indexHtml);
-    } else {
-      const devUrl = process.env.VITE_DEV_SERVER_URL ?? 'http://localhost:5173';
-      await win.loadURL(devUrl);
-    }
-  } catch (err) {
-    log('load error', err);
-    if (!win.isVisible()) win.show();
-  }
+  // IMPORTANT: load the real app shell (embeds your hosted Library)
+  mainWin.loadFile(path.join(__dirname, '../windows/library.html'));
 }
 
-app.whenReady().then(createMainWindow);
-app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
-app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createMainWindow(); });
+app.whenReady().then(() => {
+  createMainWindow();
+
+  // Shortcuts mirror the menu
+  globalShortcut.register('CommandOrControl+Shift+E', overlay.toggleEditMode);
+  globalShortcut.register('CommandOrControl+Shift+X', overlay.removeAllOverlays);
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
+
+/* IPC wired to overlay helpers */
+ipcMain.handle('overlay:create', (_e, id: string, url: string) => overlay.createOverlay(id, url));
+ipcMain.handle('overlay:clearAll', () => overlay.removeAllOverlays());
+ipcMain.handle('overlay:setEditMode', (_e, on: boolean) => overlay.setEditMode(!!on));
+ipcMain.handle('overlay:toggleEdit', () => overlay.toggleEditMode());
