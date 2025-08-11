@@ -15,6 +15,6 @@
     "src/ipc/**/*.ts"
   ],
   "exclude": [
-    "src/renderer/**/*"
+    "src/renderer/**/*", "src/ipc/firestore.ts"
   ]
 }

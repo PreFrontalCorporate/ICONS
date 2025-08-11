@@ -14,26 +14,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Let the action read the exact pnpm version from your root package.json "packageManager"
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
+          run_install: true
 
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
 
-      - name: Install (workspace)
-        run: pnpm -w install --frozen-lockfile
+      - name: Build (desktop only)
+        run: |
+          pnpm --dir app/desktop run build
+          pnpm --dir app/desktop run postbuild
 
-      - name: Build desktop (under Xvfb)
-        run: xvfb-run --auto-servernum pnpm --dir app/desktop run build
-
-      # Build & (on tags) publish installers with electron-builder
-      - name: Package & publish
-        uses: samuelmeuli/action-electron-builder@v1
+      - name: Upload desktop dist
+        uses: actions/upload-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          package_root: app/desktop
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: desktop-dist
+          path: app/desktop/dist/**

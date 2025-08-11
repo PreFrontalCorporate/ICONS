@@ -26,8 +26,8 @@ let mainWin: BrowserWindow | null = null;
 
 // lazy import to avoid circular import during transpile
 const overlay = {
-  create: (id: string, url: string) => import('./ipc/overlay').then(m => m.createOverlay(id, url)),
-  clearAll: () => import('./ipc/overlay').then(m => m.removeAllOverlays())
+  create: (id: string, url: string) => import('./ipc/overlay.js').then(m => m.createOverlay(id, url)),
+  clearAll: () => import('./ipc/overlay.js').then(m => m.removeAllOverlays())
 };
 
 function buildMenu() {
