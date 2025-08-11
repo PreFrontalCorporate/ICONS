@@ -1,9 +1,8 @@
-
 {
   "name": "icon-desktop",
   "productName": "Icon Desktop",
   "version": "1.0.101",
-  "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.", 
+  "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
   "license": "MIT",
   "homepage": "https://github.com/PreFrontalCorporate/icon",
   "repository": { "type": "git", "url": "https://github.com/PreFrontalCorporate/icon.git" },
@@ -39,8 +38,8 @@
 
   "build": {
     "asar": true,
-    "asarUnpack": [ "dist/preload.cjs" ],
-    "files": [ "dist/**/*", "windows/**/*", "build/icon.*", "packages/stickers/**/*" ],
+    "asarUnpack": ["dist/preload.cjs"],
+    "files": ["dist/**/*", "windows/**/*", "build/icon.*", "packages/stickers/**/*"],
     "mac":   { "target": ["dmg", "zip"], "category": "public.app-category.graphics-design" },
     "win":   {
       "target": [
@@ -49,7 +48,11 @@
       ],
       "publisherName": "PreFrontal Corporate"
     },
-    "linux": { "maintainer": "PreFrontal Corporate <support@cbb.homes>", "category": "Utility", "target": ["AppImage">
+    "linux": {
+      "maintainer": "PreFrontal Corporate <support@cbb.homes>",
+      "category": "Utility",
+      "target": ["AppImage", "deb", "rpm"]
+    },
     "publish": { "provider": "github", "owner": "PreFrontalCorporate", "repo": "icon" }
   }
 }
