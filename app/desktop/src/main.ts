@@ -1,88 +1,116 @@
-// at top
-import { app, BrowserWindow, shell } from 'electron';
+// app/desktop/src/main.ts
+import { app, BrowserWindow, shell, dialog } from 'electron';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
 
-let win: BrowserWindow | null = null;
+let mainWin: BrowserWindow | null = null;
 
-// tiny file logger (no dependency)
+// simple logfile in %APPDATA%/Icon Desktop/icon-desktop.log
+const logDir = app.getPath('userData');
+const logFile = path.join(logDir, 'icon-desktop.log');
 function log(...args: unknown[]) {
-  try {
-    const line =
-      args.map(a =>
-        a instanceof Error ? (a.stack ?? a.message) :
-        typeof a === 'string' ? a :
-        JSON.stringify(a)
-      ).join(' ');
-    fs.appendFileSync(path.join(app.getPath('userData'), 'icon-desktop.log'), `[${new Date().toISOString()}] ${line}\n`);
-  } catch {}
+  try { fs.appendFileSync(logFile, `[${new Date().toISOString()}] ${args.map(a => (typeof a === 'string' ? a : JSON.stringify(a))).join(' ')}\n`); } catch {}
+}
+
+function showErrorBox(title: string, content: string) {
+  log('ERROR', title, content);
+  try { dialog.showErrorBox(title, content); } catch {}
 }
 
 process.on('uncaughtException', (e: unknown) => {
-  log('uncaughtException', e);
+  const msg = e instanceof Error ? `${e.name}: ${e.message}\n${e.stack ?? ''}` : String(e);
+  log('uncaughtException', msg);
+  showErrorBox('Crash in main', msg);
 });
+
 process.on('unhandledRejection', (e: unknown) => {
-  log('unhandledRejection', e);
+  const msg = e instanceof Error ? `${e.name}: ${e.message}\n${e.stack ?? ''}` : String(e);
+  log('unhandledRejection', msg);
 });
 
-function getPreloadPath() {
-  // in dist, this file lives in dist/main.mjs; preload.cjs is sibling
-  return app.isPackaged
-    ? path.join(__dirname, 'preload.cjs')
-    : path.join(__dirname, 'preload.cjs'); // dev also writes to dist via build:preload
-}
+async function createMainWindow() {
+  const appPath = app.getAppPath(); // points to app.asar in prod
+  const preload = path.join(appPath, 'dist', 'preload.cjs');
+  const libraryHtml = path.join(appPath, 'windows', 'library.html');
 
-function getLibraryHtml() {
-  // During dev builds you kept windows/library.html at repo path.
-  // After packaging, ship windows/** and load from resourcesPath.
-  const devPath = path.resolve(__dirname, '..', 'windows', 'library.html');
-  const prodPath = path.join(process.resourcesPath, 'windows', 'library.html');
-  return app.isPackaged ? prodPath : devPath;
-}
+  log('appPath', appPath);
+  log('preload', preload, 'exists?', fs.existsSync(preload));
+  log('libraryHtml', libraryHtml, 'exists?', fs.existsSync(libraryHtml));
 
-async function createWindow() {
-  win = new BrowserWindow({
+  if (!fs.existsSync(libraryHtml)) {
+    // last‑ditch: try dist/renderer (your earlier placeholder)
+    const fallback = path.join(appPath, 'dist', 'renderer', 'index.html');
+    log('library missing, fallback to', fallback, 'exists?', fs.existsSync(fallback));
+  }
+
+  mainWin = new BrowserWindow({
     width: 1200,
     height: 800,
-    show: false,                      // prevent white flash
-    backgroundColor: '#111111',
+    show: false, // we’ll show on ready or timeout
     webPreferences: {
-      preload: getPreloadPath(),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: false
-    }
+      preload,
+      sandbox: false,
+    },
   });
 
-  win.on('ready-to-show', () => {
-    if (!win) return;
-    win.show();
-    win.focus();
+  // helpful diagnostics in prod
+  mainWin.webContents.on('did-finish-load', () => { log('did-finish-load'); });
+  mainWin.webContents.on('did-fail-load', (_, code, desc, url, isMainFrame) => {
+    const s = `did-fail-load code=${code} desc=${desc} url=${url} main=${isMainFrame}`;
+    log(s);
+    showErrorBox('Failed to load UI', s);
+    // always show *something* so the app isn't invisible
+    if (mainWin && !mainWin.isVisible()) mainWin.show();
   });
 
-  win.webContents.setWindowOpenHandler(({ url }) => {
-    // open external links in system browser
-    shell.openExternal(url);
+  // open external links in default browser
+  mainWin.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url).catch(() => {});
     return { action: 'deny' };
   });
 
-  const html = getLibraryHtml();
-  log('Loading UI:', html);
-  await win.loadFile(html);
-}
+  // try library; if missing, fall back to placeholder
+  const target = fs.existsSync(libraryHtml)
+    ? libraryHtml
+    : path.join(appPath, 'dist', 'renderer', 'index.html');
 
-const gotLock = app.requestSingleInstanceLock();
-if (!gotLock) {
-  app.quit();
-} else {
-  app.on('second-instance', () => {
-    if (win) {
-      if (win.isMinimized()) win.restore();
-      win.show(); win.focus();
-    }
+  log('loading file', target);
+  await mainWin.loadFile(target).catch((e: unknown) => {
+    const msg = e instanceof Error ? `${e.message}\n${e.stack ?? ''}` : String(e);
+    log('loadFile error', msg);
+    showErrorBox('Load error', msg);
   });
 
-  app.whenReady().then(createWindow);
-  app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
-  app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) void createWindow(); });
+  // show ASAP
+  mainWin.once('ready-to-show', () => {
+    log('ready-to-show');
+    if (mainWin) { mainWin.show(); mainWin.focus(); }
+  });
+  // force show after 1500ms even if ready-to-show never fires
+  setTimeout(() => {
+    if (mainWin && !mainWin.isVisible()) {
+      log('force show after timeout');
+      mainWin.show();
+      mainWin.focus();
+    }
+  }, 1500);
+
+  mainWin.on('closed', () => { mainWin = null; });
 }
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
+
+app.whenReady().then(() => {
+  createMainWindow().catch((e) => {
+    const msg = e instanceof Error ? `${e.message}\n${e.stack ?? ''}` : String(e);
+    log('createMainWindow error', msg);
+    showErrorBox('Boot error', msg);
+  });
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) createMainWindow().catch(()=>{});
+  });
+});
