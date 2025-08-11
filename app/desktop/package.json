@@ -1,9 +1,9 @@
-<<<<<<< HEAD
+
 {
   "name": "icon-desktop",
   "productName": "Icon Desktop",
-  "version": "1.0.94",
-  "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
+  "version": "1.0.101",
+  "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.", 
   "license": "MIT",
   "homepage": "https://github.com/PreFrontalCorporate/icon",
   "repository": { "type": "git", "url": "https://github.com/PreFrontalCorporate/icon.git" },
@@ -53,7 +53,3 @@
     "publish": { "provider": "github", "owner": "PreFrontalCorporate", "repo": "icon" }
   }
 }
-=======
-
-sartorialsynapse@icon-dev-01:/srv/icon$ 
->>>>>>> af73a3b (fix(desktop): NodeNext-compatible imports for core modules; bump to 1.0.86)
