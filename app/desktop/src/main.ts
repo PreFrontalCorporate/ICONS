@@ -1,184 +1,149 @@
 // app/desktop/src/main.ts
-import { app, BrowserWindow, shell, session, screen, globalShortcut } from 'electron';
-import { join } from 'node:path';
+import { app, BrowserWindow, ipcMain, session, screen } from 'electron';
+import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { existsSync, mkdirSync, appendFileSync } from 'node:fs';
 
-// ---------- logging ----------
-const here = fileURLToPath(new URL('.', import.meta.url));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname  = path.dirname(__filename);
+
 let mainWindow: BrowserWindow | null = null;
+let overlayCount = 0;
 
-let appLogPath = '';
-function log(...args: any[]) {
-  const line = `[${new Date().toISOString()}] ${args.join(' ')}\n`;
-  try { if (appLogPath) appendFileSync(appLogPath, line); } catch {}
-  // keep console logging for --enable-logging
-  // eslint-disable-next-line no-console
-  console.log(line.trim());
-}
+// --- util paths (work for unpacked + asar) ---
+const appRoot      = app.getAppPath(); // points to app.asar root at runtime
+const preloadPath  = path.join(appRoot, 'dist', 'preload.cjs');
+const libraryHtml  = path.join(appRoot, 'windows', 'library.html');
+const webviewPreloadPath = path.join(appRoot, 'windows', 'webview-preload.js');
 
-// ---------- resource resolution ----------
-function resolveResource(...parts: string[]) {
-  // When packaged, app files live under process.resourcesPath/app.asar
-  const base = app.isPackaged ? join(process.resourcesPath, 'app.asar') : here;
-  return join(base, ...parts);
-}
-
-// ---------- window helpers ----------
-function ensureOnScreen(win: BrowserWindow) {
-  try {
-    const b = win.getBounds();
-    const displays = screen.getAllDisplays();
-    const inAnyDisplay = displays.some(d => {
-      const wa = d.workArea; // x, y, width, height
-      const right = b.x + Math.max(60, b.width);
-      const bottom = b.y + Math.max(60, b.height);
-      return right > wa.x && b.x < wa.x + wa.width && bottom > wa.y && b.y < wa.y + wa.height;
-    });
-
-    if (!inAnyDisplay) {
-      const wa = screen.getPrimaryDisplay().workArea;
-      const width = Math.min(Math.max(1100, Math.floor(wa.width * 0.7)), wa.width);
-      const height = Math.min(Math.max(720, Math.floor(wa.height * 0.75)), wa.height);
-      const x = wa.x + Math.floor((wa.width - width) / 2);
-      const y = wa.y + Math.floor((wa.height - height) / 2);
-      win.setBounds({ x, y, width, height });
-      log('ensureOnScreen → centered window', JSON.stringify({ x, y, width, height }));
-    }
-  } catch {}
-}
-
-function forceFront(win: BrowserWindow) {
-  try {
-    win.show();
-    win.focus();
-    // If something still covers us, briefly pulse always-on-top to surface
-    if (!win.isVisible() || !win.isFocused()) {
-      win.setAlwaysOnTop(true, 'screen-saver');
-      win.show();
-      win.focus();
-      setTimeout(() => {
-        try { win.setAlwaysOnTop(false); } catch {}
-      }, 750);
-      log('forceFront → pulsed always-on-top');
-    }
-  } catch {}
-}
-
-// ---------- main window ----------
-async function createWindow() {
-  const preload = resolveResource('dist', 'preload.cjs');
-  const libraryHtml = resolveResource('windows', 'library.html');
-  const fallbackHtml = resolveResource('dist', 'renderer', 'index.html');
-
-  log('appPath', resolveResource());
-  log('preload', preload, 'exists?', String(existsSync(preload)));
-  log('libraryHtml', libraryHtml, 'exists?', String(existsSync(libraryHtml)));
-  log('fallbackHtml', fallbackHtml, 'exists?', String(existsSync(fallbackHtml)));
-
+function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: 1100,
     height: 720,
-    show: false,             // show once ready + surfaced
-    backgroundColor: '#121212',
-    autoHideMenuBar: true,
-    center: true,
+    minWidth: 900,
+    minHeight: 600,
+    show: false,
+    backgroundColor: '#111111',
+    titleBarStyle: 'hiddenInset',
+    titleBarOverlay: { color: '#111111', symbolColor: '#dddddd', height: 32 },
     webPreferences: {
-      preload,
-      contextIsolation: true,
+      preload: preloadPath,
       nodeIntegration: false,
-      webviewTag: true,      // host <webview> in library.html
+      contextIsolation: true,
+      backgroundThrottling: false,
+      spellcheck: false,
+      webviewTag: true,
     },
   });
 
-  // Security + external links: open in default browser
-  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    try { shell.openExternal(url); } catch {}
-    return { action: 'deny' };
-  });
+  session.fromPartition('persist:icon-app').setPermissionCheckHandler(() => true);
 
-  // <webview> hardening + preload injection
-  mainWindow.webContents.on('will-attach-webview', (event, webPreferences, params) => {
-    const webviewPreload = resolveResource('windows', 'webview-preload.js');
-    webPreferences.preload = webviewPreload;
+  mainWindow.webContents.on('will-attach-webview', (_e, webPreferences) => {
+    webPreferences.preload = webviewPreloadPath;
+    webPreferences.partition = 'persist:icon-app';
     webPreferences.contextIsolation = true;
     webPreferences.nodeIntegration = false;
-    // enforce our persisted partition for auth/session
-    if (!params.partition) params.partition = 'persist:icon-app';
-    log('will-attach-webview → preload', webviewPreload, 'partition', params.partition);
+    webPreferences.javascript = true;
   });
 
-  // Ready lifecycle
+  mainWindow.loadFile(libraryHtml).catch(err => {
+    console.error('Failed to load library.html', err);
+  });
+
   mainWindow.once('ready-to-show', () => {
-    if (!mainWindow) return;
-    ensureOnScreen(mainWindow);
-    forceFront(mainWindow);
-    log('ready-to-show');
+    mainWindow?.show();
+    mainWindow?.focus();
   });
 
-  // Hard fallback if something stalls
-  setTimeout(() => { if (mainWindow) forceFront(mainWindow); }, 2000);
-
-  mainWindow.webContents.on('did-finish-load', () => {
-    if (!mainWindow) return;
-    ensureOnScreen(mainWindow);
-    forceFront(mainWindow);
-    log('did-finish-load');
-  });
-  mainWindow.on('unresponsive', () => log('renderer unresponsive'));
-
-  try {
-    if (!existsSync(libraryHtml)) throw new Error('library.html not found');
-    await mainWindow.loadFile(libraryHtml);
-    log('loaded library.html');
-  } catch (err: any) {
-    log('loadFile(libraryHtml) failed:', err?.message ?? String(err));
-    if (existsSync(fallbackHtml)) {
-      await mainWindow.loadFile(fallbackHtml);
-      log('loaded fallback renderer/index.html');
-    } else {
-      mainWindow.loadURL('about:blank');
-      log('loaded about:blank (no html available)');
+  setTimeout(() => {
+    if (!mainWindow?.isVisible()) {
+      console.log('force show after timeout');
+      mainWindow?.show();
+      mainWindow?.focus();
     }
-  }
+  }, 1200);
 
-  // keep our overlay panel shortcut
+  mainWindow.on('closed', () => (mainWindow = null));
+}
+
+// ---- Overlay handling -------------------------------------------------------
+
+type AddStickerPayload = { packId: string; stickerId: string; src?: string };
+type AddStickerResolved = AddStickerPayload & { basePath: string };
+
+function createOverlayWindow(payload: AddStickerResolved) {
+  const overlay = new BrowserWindow({
+    width: 256,
+    height: 256,
+    frame: false,
+    transparent: true,
+    resizable: false,
+    alwaysOnTop: true,
+    focusable: false,
+    skipTaskbar: true,
+    hasShadow: false,
+    backgroundColor: '#00000000',
+    webPreferences: {
+      contextIsolation: true,
+      devTools: false,
+    },
+  });
+
+  const pt = screen.getCursorScreenPoint();
+  const x = Math.max(0, (pt?.x ?? 120) - 64);
+  const y = Math.max(0, (pt?.y ?? 120) - 64);
+  overlay.setPosition(x, y);
+
+  const data = encodeURIComponent(JSON.stringify(payload));
+  overlay.loadURL(
+    `data:text/html;charset=utf-8,` +
+      encodeURIComponent(`
+      <!doctype html>
+      <html><head><meta charset="utf-8"><style>
+        html,body{margin:0;height:100%;background:transparent;overflow:hidden}
+        img{max-width:100%;max-height:100%;display:block}
+      </style></head>
+      <body><img id="s"></body>
+      <script>
+        const p = JSON.parse(decodeURIComponent("${data}"));
+        const guess = (p) => "file://" + p.basePath + "/" + p.packId + "/" + p.stickerId + ".webp";
+        const src = p.src || guess(p);
+        document.getElementById('s').src = src;
+      </script>
+      </html>
+    `)
+  );
+
+  overlayCount += 1;
+  mainWindow?.webContents.send('icon:overlay-count', overlayCount);
+
+  overlay.on('closed', () => {
+    overlayCount = Math.max(0, overlayCount - 1);
+    mainWindow?.webContents.send('icon:overlay-count', overlayCount);
+  });
+}
+
+ipcMain.on('icon:add-sticker', (_evt, payload: AddStickerPayload) => {
   try {
-    globalShortcut.register('CommandOrControl+Shift+O', () => {
-      if (mainWindow) mainWindow.webContents.send('overlay:panel/toggle');
-    });
-  } catch {}
-  mainWindow.on('closed', () => { mainWindow = null; });
+    const stickersBase = path.join(appRoot, 'packages', 'stickers', 'packs');
+    const full: AddStickerResolved = { ...payload, basePath: stickersBase };
+    createOverlayWindow(full);
+  } catch (e) {
+    console.error('add-sticker failed', e);
+  }
+});
+
+// ---- App lifecycle ----------------------------------------------------------
+
+app.once('ready', createMainWindow);
+
+app.on('second-instance', () => {
+  if (mainWindow) {
+    if (!mainWindow.isVisible()) mainWindow.show();
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.focus();
+  }
+});
+
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
 }
-
-// ---------- single instance & lifecycle ----------
-function setupSingleInstance() {
-  const gotLock = app.requestSingleInstanceLock();
-  if (!gotLock) { app.quit(); return; }
-  app.on('second-instance', () => { if (mainWindow) forceFront(mainWindow); });
-}
-
-app.whenReady().then(() => {
-  // prepare log path now that app is ready
-  const userData = app.getPath('userData');
-  try { mkdirSync(userData, { recursive: true }); } catch {}
-  appLogPath = join(userData, 'icon-desktop.log');
-  log('userData', userData);
-
-  // conservative CORS/permissions on the library partition
-  const lib = session.fromPartition('persist:icon-app');
-  lib.setPermissionRequestHandler((_wc, _perm, cb) => cb(true));
-
-  setupSingleInstance();
-  createWindow();
-});
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
-});
-app.on('activate', () => {
-  if (mainWindow === null) createWindow();
-});
-app.on('will-quit', () => {
-  try { globalShortcut.unregisterAll(); } catch {}
-});
