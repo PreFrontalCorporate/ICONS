@@ -1,10 +1,10 @@
 // app/desktop/src/main.ts
-import { app, BrowserWindow, shell, globalShortcut, ipcMain, WebContents } from 'electron';
+import { app, BrowserWindow, shell, session, screen, globalShortcut } from 'electron';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync, mkdirSync, appendFileSync } from 'node:fs';
-import { registerOverlayIpc } from './ipc/overlay';
 
+// ---------- logging ----------
 const here = fileURLToPath(new URL('.', import.meta.url));
 let mainWindow: BrowserWindow | null = null;
 
@@ -12,39 +12,60 @@ let appLogPath = '';
 function log(...args: any[]) {
   const line = `[${new Date().toISOString()}] ${args.join(' ')}\n`;
   try { if (appLogPath) appendFileSync(appLogPath, line); } catch {}
+  // keep console logging for --enable-logging
   // eslint-disable-next-line no-console
   console.log(line.trim());
 }
 
+// ---------- resource resolution ----------
 function resolveResource(...parts: string[]) {
-  const base = app.isPackaged
-    ? join(process.resourcesPath, 'app.asar')
-    : here;
+  // When packaged, app files live under process.resourcesPath/app.asar
+  const base = app.isPackaged ? join(process.resourcesPath, 'app.asar') : here;
   return join(base, ...parts);
 }
 
-function wireWebContentsSecurityHooks() {
-  // Set <webview> preload, tighten prefs, and route window.open to shell.openExternal
-  app.on('web-contents-created', (_event, contents: WebContents) => {
-    // Give webviews our preload so they can talk to the host using sendToHost
-    contents.on('will-attach-webview', (event, webPreferences, params) => {
-      webPreferences.preload = resolveResource('windows', 'webview-preload.js'); // runs inside guest
-      webPreferences.contextIsolation = true;
-      webPreferences.sandbox = false;
-      webPreferences.nodeIntegration = false;
-      // optional: restrict permissions, verify URL, etc.
-      log('will-attach-webview → preload', webPreferences.preload, 'src=', params.src);
+// ---------- window helpers ----------
+function ensureOnScreen(win: BrowserWindow) {
+  try {
+    const b = win.getBounds();
+    const displays = screen.getAllDisplays();
+    const inAnyDisplay = displays.some(d => {
+      const wa = d.workArea; // x, y, width, height
+      const right = b.x + Math.max(60, b.width);
+      const bottom = b.y + Math.max(60, b.height);
+      return right > wa.x && b.x < wa.x + wa.width && bottom > wa.y && b.y < wa.y + wa.height;
     });
 
-    // Make target=_blank etc. open externally
-    // (Electron docs now prefer setWindowOpenHandler over new-window) 
-    contents.setWindowOpenHandler(({ url }) => {
-      shell.openExternal(url); // open in user’s default browser
-      return { action: 'deny' };
-    });
-  });
+    if (!inAnyDisplay) {
+      const wa = screen.getPrimaryDisplay().workArea;
+      const width = Math.min(Math.max(1100, Math.floor(wa.width * 0.7)), wa.width);
+      const height = Math.min(Math.max(720, Math.floor(wa.height * 0.75)), wa.height);
+      const x = wa.x + Math.floor((wa.width - width) / 2);
+      const y = wa.y + Math.floor((wa.height - height) / 2);
+      win.setBounds({ x, y, width, height });
+      log('ensureOnScreen → centered window', JSON.stringify({ x, y, width, height }));
+    }
+  } catch {}
 }
 
+function forceFront(win: BrowserWindow) {
+  try {
+    win.show();
+    win.focus();
+    // If something still covers us, briefly pulse always-on-top to surface
+    if (!win.isVisible() || !win.isFocused()) {
+      win.setAlwaysOnTop(true, 'screen-saver');
+      win.show();
+      win.focus();
+      setTimeout(() => {
+        try { win.setAlwaysOnTop(false); } catch {}
+      }, 750);
+      log('forceFront → pulsed always-on-top');
+    }
+  } catch {}
+}
+
+// ---------- main window ----------
 async function createWindow() {
   const preload = resolveResource('dist', 'preload.cjs');
   const libraryHtml = resolveResource('windows', 'library.html');
@@ -58,46 +79,56 @@ async function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1100,
     height: 720,
-    show: true,
+    show: false,             // show once ready + surfaced
     backgroundColor: '#121212',
     autoHideMenuBar: true,
+    center: true,
     webPreferences: {
       preload,
       contextIsolation: true,
       nodeIntegration: false,
-      webviewTag: true, // we host the Library in a <webview>
+      webviewTag: true,      // host <webview> in library.html
     },
   });
 
+  // Security + external links: open in default browser
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    try { shell.openExternal(url); } catch {}
+    return { action: 'deny' };
+  });
+
+  // <webview> hardening + preload injection
+  mainWindow.webContents.on('will-attach-webview', (event, webPreferences, params) => {
+    const webviewPreload = resolveResource('windows', 'webview-preload.js');
+    webPreferences.preload = webviewPreload;
+    webPreferences.contextIsolation = true;
+    webPreferences.nodeIntegration = false;
+    // enforce our persisted partition for auth/session
+    if (!params.partition) params.partition = 'persist:icon-app';
+    log('will-attach-webview → preload', webviewPreload, 'partition', params.partition);
+  });
+
+  // Ready lifecycle
   mainWindow.once('ready-to-show', () => {
-    if (mainWindow && !mainWindow.isVisible()) {
-      mainWindow.show();
-      log('ready-to-show → show()');
-    }
+    if (!mainWindow) return;
+    ensureOnScreen(mainWindow);
+    forceFront(mainWindow);
+    log('ready-to-show');
   });
 
-  setTimeout(() => {
-    if (mainWindow && !mainWindow.isVisible()) {
-      mainWindow.show();
-      mainWindow.focus();
-      log('force show after timeout');
-    }
-  }, 1500);
+  // Hard fallback if something stalls
+  setTimeout(() => { if (mainWindow) forceFront(mainWindow); }, 2000);
 
-  mainWindow.webContents.on('did-finish-load', () => log('did-finish-load'));
+  mainWindow.webContents.on('did-finish-load', () => {
+    if (!mainWindow) return;
+    ensureOnScreen(mainWindow);
+    forceFront(mainWindow);
+    log('did-finish-load');
+  });
   mainWindow.on('unresponsive', () => log('renderer unresponsive'));
-
-  // Open any navigations to http/https externally if they somehow hit the host page
-  mainWindow.webContents.on('will-navigate', (e, url) => {
-    if (!/^file:/i.test(url)) {
-      e.preventDefault();
-      shell.openExternal(url);
-    }
-  });
 
   try {
     if (!existsSync(libraryHtml)) throw new Error('library.html not found');
-    log('loading file', libraryHtml);
     await mainWindow.loadFile(libraryHtml);
     log('loaded library.html');
   } catch (err: any) {
@@ -111,59 +142,43 @@ async function createWindow() {
     }
   }
 
+  // keep our overlay panel shortcut
+  try {
+    globalShortcut.register('CommandOrControl+Shift+O', () => {
+      if (mainWindow) mainWindow.webContents.send('overlay:panel/toggle');
+    });
+  } catch {}
   mainWindow.on('closed', () => { mainWindow = null; });
 }
 
+// ---------- single instance & lifecycle ----------
 function setupSingleInstance() {
   const gotLock = app.requestSingleInstanceLock();
-  if (!gotLock) {
-    app.quit();
-    return;
-  }
-  app.on('second-instance', () => {
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore();
-      mainWindow.show();
-      mainWindow.focus();
-      log('second-instance → focused existing window');
-    }
-  });
-}
-
-function registerShortcuts() {
-  // Toggle overlay panel (renderer listens for this event)
-  globalShortcut.register('CommandOrControl+Shift+O', () => {
-    if (mainWindow) mainWindow.webContents.send('overlay:panel/toggle');
-  });
-  // Clear all stickers/overlays
-  globalShortcut.register('CommandOrControl+Shift+Backspace', () => {
-    ipcMain.emit('overlay:clearAll-request');
-  });
+  if (!gotLock) { app.quit(); return; }
+  app.on('second-instance', () => { if (mainWindow) forceFront(mainWindow); });
 }
 
 app.whenReady().then(() => {
+  // prepare log path now that app is ready
   const userData = app.getPath('userData');
   try { mkdirSync(userData, { recursive: true }); } catch {}
   appLogPath = join(userData, 'icon-desktop.log');
   log('userData', userData);
 
-  wireWebContentsSecurityHooks();
+  // conservative CORS/permissions on the library partition
+  const lib = session.fromPartition('persist:icon-app');
+  lib.setPermissionRequestHandler((_wc, _perm, cb) => cb(true));
+
   setupSingleInstance();
-
-  // IPC for overlays + “open external”
-  registerOverlayIpc(log);
-  ipcMain.handle('app/openExternal', async (_e, url: string) => {
-    try { await shell.openExternal(url); } catch (err) { log('openExternal error', String(err)); }
-  });
-
-  registerShortcuts();
   createWindow();
 });
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
-
 app.on('activate', () => {
   if (mainWindow === null) createWindow();
+});
+app.on('will-quit', () => {
+  try { globalShortcut.unregisterAll(); } catch {}
 });
