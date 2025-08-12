@@ -1,36 +1,45 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <title>icon – library</title>
-  <style>
-    html, body { margin: 0; height: 100%; background: #151515; color: #eee; }
-    webview { display: block; width: 100%; height: 100%; border: 0; }
-  </style>
+<meta charset="utf-8"/>
+<title>icon – library</title>
+<style>
+  html,body{margin:0;height:100%}
+  body{background:#151515;color:#eee}
+  /* Make the webview fill the window */
+  #libview{
+    position: fixed; inset: 0;
+    width: 100%; height: 100%;
+    border: 0; display: block;
+  }
+</style>
 </head>
 <body>
 
-  <!-- Host the web Library UI in an isolated, first-party session -->
-  <webview
-    id="libview"
-    src="https://icon-web-two.vercel.app/library"
-    partition="persist:icon-app"
-    allowpopups
-  ></webview>
+<!-- Persisted session so login sticks; preload runs inside the guest page -->
+<webview
+  id="libview"
+  src="https://icon-web-two.vercel.app/library"
+  partition="persist:icon-app"
+  allowpopups
+  preload="./webview-preload.js">
+</webview>
 
-  <script>
-    const wv = document.getElementById('libview');
-
-    // Smooth focus once the webview has a DOM
-    wv.addEventListener('dom-ready', () => {
-      try { wv.focus(); } catch {}
-    });
-
-    // If the site tries to open a window (target=_blank), forward to host.
-    // main.ts intercepts window.open and opens externally.
-    wv.addEventListener('new-window', (e) => {
-      try { window.open(e.url); } catch {}
-    });
-  </script>
+<script>
+  // Host-side bridge: receive events from the webview preload
+  const lib = document.getElementById('libview');
+  lib.addEventListener('ipc-message', (ev) => {
+    try {
+      if (ev.channel === 'pin-sticker') {
+        const { url } = (ev.args && ev.args[0]) || {};
+        if (url && window.api?.overlays?.pinFromUrl) window.api.overlays.pinFromUrl(url);
+      }
+      if (ev.channel === 'open-external') {
+        const { url } = (ev.args && ev.args[0]) || {};
+        if (url && window.api?.openExternal) window.api.openExternal(url);
+      }
+    } catch {}
+  });
+</script>
 </body>
 </html>

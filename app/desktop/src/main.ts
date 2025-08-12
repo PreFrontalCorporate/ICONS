@@ -1,8 +1,9 @@
 // app/desktop/src/main.ts
-import { app, BrowserWindow, globalShortcut, shell } from 'electron';
+import { app, BrowserWindow, shell, globalShortcut, ipcMain, WebContents } from 'electron';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync, mkdirSync, appendFileSync } from 'node:fs';
+import { registerOverlayIpc } from './ipc/overlay';
 
 const here = fileURLToPath(new URL('.', import.meta.url));
 let mainWindow: BrowserWindow | null = null;
@@ -10,28 +11,37 @@ let mainWindow: BrowserWindow | null = null;
 let appLogPath = '';
 function log(...args: any[]) {
   const line = `[${new Date().toISOString()}] ${args.join(' ')}\n`;
-  try { if (appLogPath) appendFileSync(appLogPath, line); } catch { /* ignore */ }
-  // keep console logging for --enable-logging
+  try { if (appLogPath) appendFileSync(appLogPath, line); } catch {}
   // eslint-disable-next-line no-console
   console.log(line.trim());
 }
 
 function resolveResource(...parts: string[]) {
-  // When packaged, resources live under process.resourcesPath/app.asar
-  // Otherwise, we’re running from dist next to this file.
   const base = app.isPackaged
-    ? join(process.resourcesPath, 'app.asar')  // docs: process.resourcesPath
+    ? join(process.resourcesPath, 'app.asar')
     : here;
   return join(base, ...parts);
 }
 
-function registerShortcuts() {
-  // Toggle/clear the inline overlay panel from anywhere
-  globalShortcut.register('CommandOrControl+Shift+O', () => {
-    if (mainWindow) mainWindow.webContents.send('overlay:panel/toggle');
-  });
-  globalShortcut.register('CommandOrControl+Shift+Backspace', () => {
-    if (mainWindow) mainWindow.webContents.send('overlay:panel/clear');
+function wireWebContentsSecurityHooks() {
+  // Set <webview> preload, tighten prefs, and route window.open to shell.openExternal
+  app.on('web-contents-created', (_event, contents: WebContents) => {
+    // Give webviews our preload so they can talk to the host using sendToHost
+    contents.on('will-attach-webview', (event, webPreferences, params) => {
+      webPreferences.preload = resolveResource('windows', 'webview-preload.js'); // runs inside guest
+      webPreferences.contextIsolation = true;
+      webPreferences.sandbox = false;
+      webPreferences.nodeIntegration = false;
+      // optional: restrict permissions, verify URL, etc.
+      log('will-attach-webview → preload', webPreferences.preload, 'src=', params.src);
+    });
+
+    // Make target=_blank etc. open externally
+    // (Electron docs now prefer setWindowOpenHandler over new-window) 
+    contents.setWindowOpenHandler(({ url }) => {
+      shell.openExternal(url); // open in user’s default browser
+      return { action: 'deny' };
+    });
   });
 }
 
@@ -48,15 +58,14 @@ async function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1100,
     height: 720,
-    show: true, // show immediately (avoid “background only”)
+    show: true,
     backgroundColor: '#121212',
     autoHideMenuBar: true,
     webPreferences: {
       preload,
       contextIsolation: true,
       nodeIntegration: false,
-      // Needed for <webview> in library.html
-      webviewTag: true, // BrowserWindow webPreferences -> enable <webview>
+      webviewTag: true, // we host the Library in a <webview>
     },
   });
 
@@ -67,27 +76,29 @@ async function createWindow() {
     }
   });
 
-  // Hard fallback in case ready-to-show never fires in some edge case
   setTimeout(() => {
     if (mainWindow && !mainWindow.isVisible()) {
       mainWindow.show();
       mainWindow.focus();
-      log('force show fallback after timeout');
+      log('force show after timeout');
     }
   }, 1500);
 
   mainWindow.webContents.on('did-finish-load', () => log('did-finish-load'));
   mainWindow.on('unresponsive', () => log('renderer unresponsive'));
 
-  // Any window.open() that bubbles up (we forward from <webview>) opens in default browser
-  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url);
-    return { action: 'deny' };
+  // Open any navigations to http/https externally if they somehow hit the host page
+  mainWindow.webContents.on('will-navigate', (e, url) => {
+    if (!/^file:/i.test(url)) {
+      e.preventDefault();
+      shell.openExternal(url);
+    }
   });
 
   try {
     if (!existsSync(libraryHtml)) throw new Error('library.html not found');
-    await mainWindow.loadFile(libraryHtml); // local host shell with <webview>
+    log('loading file', libraryHtml);
+    await mainWindow.loadFile(libraryHtml);
     log('loaded library.html');
   } catch (err: any) {
     log('loadFile(libraryHtml) failed:', err?.message ?? String(err));
@@ -119,24 +130,37 @@ function setupSingleInstance() {
   });
 }
 
+function registerShortcuts() {
+  // Toggle overlay panel (renderer listens for this event)
+  globalShortcut.register('CommandOrControl+Shift+O', () => {
+    if (mainWindow) mainWindow.webContents.send('overlay:panel/toggle');
+  });
+  // Clear all stickers/overlays
+  globalShortcut.register('CommandOrControl+Shift+Backspace', () => {
+    ipcMain.emit('overlay:clearAll-request');
+  });
+}
+
 app.whenReady().then(() => {
-  // prepare log path now that app is ready
   const userData = app.getPath('userData');
   try { mkdirSync(userData, { recursive: true }); } catch {}
   appLogPath = join(userData, 'icon-desktop.log');
   log('userData', userData);
 
+  wireWebContentsSecurityHooks();
   setupSingleInstance();
+
+  // IPC for overlays + “open external”
+  registerOverlayIpc(log);
+  ipcMain.handle('app/openExternal', async (_e, url: string) => {
+    try { await shell.openExternal(url); } catch (err) { log('openExternal error', String(err)); }
+  });
+
   registerShortcuts();
   createWindow();
 });
 
-app.on('will-quit', () => {
-  globalShortcut.unregisterAll();
-});
-
 app.on('window-all-closed', () => {
-  // Quit on Windows/Linux; keep running on macOS
   if (process.platform !== 'darwin') app.quit();
 });
 
