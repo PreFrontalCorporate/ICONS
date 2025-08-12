@@ -1,5 +1,5 @@
 // app/desktop/src/main.ts
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, globalShortcut, shell } from 'electron';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync, mkdirSync, appendFileSync } from 'node:fs';
@@ -10,7 +10,7 @@ let mainWindow: BrowserWindow | null = null;
 let appLogPath = '';
 function log(...args: any[]) {
   const line = `[${new Date().toISOString()}] ${args.join(' ')}\n`;
-  try { if (appLogPath) appendFileSync(appLogPath, line); } catch {}
+  try { if (appLogPath) appendFileSync(appLogPath, line); } catch { /* ignore */ }
   // keep console logging for --enable-logging
   // eslint-disable-next-line no-console
   console.log(line.trim());
@@ -23,6 +23,16 @@ function resolveResource(...parts: string[]) {
     ? join(process.resourcesPath, 'app.asar')  // docs: process.resourcesPath
     : here;
   return join(base, ...parts);
+}
+
+function registerShortcuts() {
+  // Toggle/clear the inline overlay panel from anywhere
+  globalShortcut.register('CommandOrControl+Shift+O', () => {
+    if (mainWindow) mainWindow.webContents.send('overlay:panel/toggle');
+  });
+  globalShortcut.register('CommandOrControl+Shift+Backspace', () => {
+    if (mainWindow) mainWindow.webContents.send('overlay:panel/clear');
+  });
 }
 
 async function createWindow() {
@@ -45,12 +55,12 @@ async function createWindow() {
       preload,
       contextIsolation: true,
       nodeIntegration: false,
+      // Needed for <webview> in library.html
+      webviewTag: true, // BrowserWindow webPreferences -> enable <webview>
     },
   });
 
   mainWindow.once('ready-to-show', () => {
-    // Recommended by Electron—show gracefully once painted
-    // (we already set show:true, but this helps if it was hidden)
     if (mainWindow && !mainWindow.isVisible()) {
       mainWindow.show();
       log('ready-to-show → show()');
@@ -69,9 +79,15 @@ async function createWindow() {
   mainWindow.webContents.on('did-finish-load', () => log('did-finish-load'));
   mainWindow.on('unresponsive', () => log('renderer unresponsive'));
 
+  // Any window.open() that bubbles up (we forward from <webview>) opens in default browser
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
+
   try {
     if (!existsSync(libraryHtml)) throw new Error('library.html not found');
-    await mainWindow.loadFile(libraryHtml); // docs: BrowserWindow.loadFile
+    await mainWindow.loadFile(libraryHtml); // local host shell with <webview>
     log('loaded library.html');
   } catch (err: any) {
     log('loadFile(libraryHtml) failed:', err?.message ?? String(err));
@@ -88,8 +104,6 @@ async function createWindow() {
 }
 
 function setupSingleInstance() {
-  // Ensure one instance; focus existing window when re-launched
-  // (docs: app.requestSingleInstanceLock)
   const gotLock = app.requestSingleInstanceLock();
   if (!gotLock) {
     app.quit();
@@ -113,7 +127,12 @@ app.whenReady().then(() => {
   log('userData', userData);
 
   setupSingleInstance();
+  registerShortcuts();
   createWindow();
+});
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll();
 });
 
 app.on('window-all-closed', () => {

@@ -1,6 +1,5 @@
+// app/desktop/src/preload.ts
 import { contextBridge, ipcRenderer } from 'electron';
-
-type Rect = import('electron').Rectangle;
 
 contextBridge.exposeInMainWorld('api', {
   overlays: {
@@ -13,7 +12,7 @@ contextBridge.exposeInMainWorld('api', {
   },
 });
 
-// ——— Inline overlay panel on the Library page ———
+// ——— Inline overlay panel on the Library host page ———
 const bootOverlayPanel = () => {
   if (document.getElementById('icon-overlay-panel')) return;
 
@@ -34,8 +33,10 @@ const bootOverlayPanel = () => {
         style="margin-left:8px; border:0; background:#ef4444; color:white; font-size:12px; padding:6px 8px; border-radius:8px; cursor:pointer">
         Clear
       </button>
-      <button id="icon-overlay-close"
-        style="margin-left:6px; border:0; background:transparent; color:#aaa; font-size:18px; line-height:1; cursor:pointer">&times;</button>
+      <button id="icon-overlay-close" title="Close"
+        style="margin-left:6px; border:0; background:transparent; color:#aaa; font-size:18px; line-height:1; cursor:pointer">
+        &times;
+      </button>
     </div>
     <div id="icon-overlay-body" style="padding:10px 12px; font-size:13px; line-height:1.4; color:#d9d9d9">
       <div>Manage overlay windows created from this app.</div>
@@ -47,13 +48,18 @@ const bootOverlayPanel = () => {
   document.body.appendChild(panel);
 
   const refreshCount = async () => {
-    const n = await (window as any).api.overlays.count();
-    const el = document.getElementById('icon-overlay-count');
-    if (el) el.textContent = String(n);
+    try {
+      // window.api comes from contextBridge above
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const n = await (window as any).api.overlays.count();
+      const el = document.getElementById('icon-overlay-count');
+      if (el) el.textContent = String(n);
+    } catch { /* ignore */ }
   };
 
   // Wire buttons
   document.getElementById('icon-overlay-clear')?.addEventListener('click', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (window as any).api.overlays.clearAll();
     refreshCount();
   });
@@ -63,8 +69,17 @@ const bootOverlayPanel = () => {
   });
 
   // React to menu/shortcut
+  // Toggle visibility
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (window as any).api.onToggleOverlayPanel(() => {
     panel.style.display = panel.style.display === 'none' ? '' : 'none';
+  });
+
+  // Clear via global shortcut
+  ipcRenderer.on('overlay:panel/clear', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (window as any).api.overlays.clearAll();
+    refreshCount();
   });
 
   // Initial count

@@ -1,22 +1,36 @@
-<!doctype html><html><head>
-<meta charset="utf-8"/>
-<title>icon – library</title>
-<style>
-  html,body{margin:0;height:100%}
-  iframe{border:0;width:100%;height:100%}
-  body{background:#151515;color:#eee}
-</style>
-</head><body>
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>icon – library</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #151515; color: #eee; }
+    webview { display: block; width: 100%; height: 100%; border: 0; }
+  </style>
+</head>
+<body>
 
-<!-- Host the web Library UI inside the desktop shell -->
-<iframe src="https://icon-web-two.vercel.app/library"></iframe>
+  <!-- Host the web Library UI in an isolated, first-party session -->
+  <webview
+    id="libview"
+    src="https://icon-web-two.vercel.app/library"
+    partition="persist:icon-app"
+    allowpopups
+  ></webview>
 
-<script>
-  // Forward messages from the library to the preload API
-  window.addEventListener('message', ev=>{
-    const {cmd,id,url} = ev.data||{};
-    if (cmd==='pinSticker') window.iconOverlay.pinSticker(id,url);
-    if (cmd==='clearAll')   window.iconOverlay.clearAll();
-  });
-</script>
-</body></html>
+  <script>
+    const wv = document.getElementById('libview');
+
+    // Smooth focus once the webview has a DOM
+    wv.addEventListener('dom-ready', () => {
+      try { wv.focus(); } catch {}
+    });
+
+    // If the site tries to open a window (target=_blank), forward to host.
+    // main.ts intercepts window.open and opens externally.
+    wv.addEventListener('new-window', (e) => {
+      try { window.open(e.url); } catch {}
+    });
+  </script>
+</body>
+</html>
