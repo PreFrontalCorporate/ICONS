@@ -1,6 +1,9 @@
 // app/desktop/src/preload.ts
 import { contextBridge, ipcRenderer } from 'electron';
 
+/**
+ * Keep your existing "api" surface (used by keyboard shortcuts and the small overlay panel)
+ */
 contextBridge.exposeInMainWorld('api', {
   overlays: {
     count: () => ipcRenderer.invoke('overlay/count') as Promise<number>,
@@ -14,7 +17,28 @@ contextBridge.exposeInMainWorld('api', {
   },
 });
 
-// ——— Inline overlay panel (small, collapsible) ———
+/**
+ * NEW: minimal, safe bridge for the Library window to talk to main.
+ * Library looks for window.icon.* — this is what unblocks clicks.
+ */
+contextBridge.exposeInMainWorld('icon', {
+  addSticker(payload: { packId: string; stickerId: string; src: string }) {
+    ipcRenderer.send('icon:add-sticker', payload);
+  },
+  clearOverlays() {
+    ipcRenderer.send('icon:clear-overlays');
+  },
+  onOverlayCount(cb: (n: number) => void) {
+    const handler = (_: unknown, n: number) => cb(n);
+    ipcRenderer.on('icon:overlay-count', handler);
+    return () => ipcRenderer.removeListener('icon:overlay-count', handler);
+  },
+});
+
+/**
+ * ——— Inline overlay panel (small, collapsible)
+ * We keep it globally (hotkeys etc). The Library window will hide it via CSS.
+ */
 const bootOverlayPanel = () => {
   if (document.getElementById('icon-overlay-panel')) return;
 
@@ -36,7 +60,9 @@ const bootOverlayPanel = () => {
         Clear
       </button>
       <button id="icon-overlay-close" title="Hide"
-        style="margin-left:6px; border:0; background:transparent; color:#aaa; font-size:18px; line-height:1; cursor:pointer">×</button>
+        style="margin-left:6px; border:0; background:transparent; color:#aaa; font-size:18px; line-height:1; cursor:pointer">
+        &times;
+      </button>
     </div>
     <div id="icon-overlay-body" style="padding:8px 10px; font-size:12px; line-height:1.4; color:#d9d9d9">
       <div>Manage overlay windows created from this app.</div>
@@ -49,17 +75,22 @@ const bootOverlayPanel = () => {
 
   const refreshCount = async () => {
     const api: any = (window as any).api;
-    if (!api) return; // be defensive
-    const n = await api.overlays.count();
-    const el = document.getElementById('icon-overlay-count');
-    if (el) el.textContent = String(n);
+    if (!api) return;
+    try {
+      const n = await api.overlays.count();
+      const el = document.getElementById('icon-overlay-count');
+      if (el) el.textContent = String(n);
+    } catch {}
   };
 
   document.getElementById('icon-overlay-clear')?.addEventListener('click', async () => {
     const api: any = (window as any).api;
     if (!api) return;
-    await api.overlays.clearAll();
-    refreshCount();
+    try {
+      await api.overlays.clearAll();
+    } finally {
+      refreshCount();
+    }
   });
 
   document.getElementById('icon-overlay-close')?.addEventListener('click', () => {
@@ -74,5 +105,5 @@ const bootOverlayPanel = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  try { bootOverlayPanel(); } catch { /* no-op */ }
+  try { bootOverlayPanel(); } catch {}
 });

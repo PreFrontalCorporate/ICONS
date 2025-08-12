@@ -4,26 +4,27 @@
     <meta charset="utf-8" />
     <title>icon – library</title>
     <style>
-      /* Kill margins, make webview truly full-bleed */
+      /* Full-bleed webview */
       html, body { height: 100%; margin: 0; background: #111; }
-      #libview {
-        position: fixed;
-        inset: 0;              /* fills the window; no huge black bands */
-        border: 0;
-      }
-      /* Small HUD in front of the webview */
+      #libview { position: fixed; inset: 0; border: 0; }
+
+      /* Hide the small, generic overlay panel in this window (we keep the nicer HUD below) */
+      #icon-overlay-panel { display: none !important; }
+
+      /* Library HUD – wider, lighter, can't close */
       #hud {
         position: fixed;
-        right: 16px;
-        bottom: 16px;
+        right: 24px;
+        bottom: 24px;
         z-index: 10;
-        background: rgba(0,0,0,.8);
+        background: rgba(22,22,22,.92);
         color: #fff;
-        padding: 12px 14px;
-        border-radius: 12px;
+        padding: 14px 16px;
+        border-radius: 14px;
         font: 13px/1.35 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-        box-shadow: 0 10px 24px rgba(0,0,0,.35);
-        max-width: 320px;
+        box-shadow: 0 12px 28px rgba(0,0,0,.35);
+        width: 360px;
+        max-width: calc(100vw - 48px);
       }
       #hud button {
         appearance: none; border: 0; border-radius: 10px; padding: 6px 10px;
@@ -33,26 +34,28 @@
     </style>
   </head>
   <body>
-    <!-- The hosted library UI -->
+    <!-- Hosted library UI -->
     <webview id="libview" src="https://icon-web-two.vercel.app/library" allowpopups></webview>
 
-    <!-- Minimal overlays HUD -->
+    <!-- Overlays HUD -->
     <div id="hud" role="status" aria-live="polite">
-      <strong>Overlays</strong> <span id="count">0</span>
-      <button id="clear" title="Close all overlays">Clear</button>
-      <div style="opacity:.7;margin-top:6px;font-size:12px">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px">
+        <strong style="font-size:13px; letter-spacing:.3px;">Overlays</strong>
+        <span id="count" style="opacity:.8; font-size:12px; margin-left:auto">0</span>
+        <button id="clear" title="Close all overlays">Clear</button>
+      </div>
+      <div style="opacity:.7;font-size:12px">
         Tip: Ctrl/⌘+Shift+0 toggles this panel; Ctrl/⌘+Shift+Backspace clears.
       </div>
     </div>
 
     <script>
-      // Preload bridges – accept any of these names the app may expose.
+      // Prefer this new bridge; fall back to any older ones if present.
       const bridge =
         (window.icon && window.icon) ||
         (window.desktop && window.desktop) ||
         (window.electron && window.electron) || null;
 
-      // Send "add sticker" to main via whichever bridge is available.
       function addSticker(payload) {
         try {
           if (window.icon?.addSticker) return window.icon.addSticker(payload);
@@ -64,7 +67,6 @@
         }
       }
 
-      // Clear all overlays (if your preload exposes it).
       function clearOverlays() {
         try {
           if (window.icon?.clearOverlays) return window.icon.clearOverlays();
@@ -75,7 +77,7 @@
         }
       }
 
-      // Update the counter when main broadcasts overlay-count.
+      // Update HUD count when main broadcasts totals
       try {
         (window.icon?.onOverlayCount || window.desktop?.onOverlayCount)?.(function (n) {
           const el = document.getElementById('count');
@@ -83,18 +85,17 @@
         });
       } catch {}
 
-      // Wire the Clear button.
+      // Wire HUD
       document.getElementById('clear')?.addEventListener('click', clearOverlays);
 
-      // Listen to messages coming from inside the <webview>.
+      // Relay messages from the <webview> (webview-preload sends icon:webview-sticker)
       const libview = document.getElementById('libview');
       libview.addEventListener('ipc-message', (ev) => {
         if (ev.channel === 'icon:webview-sticker' && ev.args && ev.args[0]) {
-          addSticker(ev.args[0]); // { packId: 'url', stickerId, src }
+          addSticker(ev.args[0]); // { packId, stickerId, src }
         }
       });
 
-      // Optional: show when the guest is ready
       libview.addEventListener('dom-ready', () => {
         libview.focus();
         console.debug('[icon:library] webview dom-ready');
