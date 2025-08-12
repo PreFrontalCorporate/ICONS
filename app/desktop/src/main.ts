@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron';
+import { app, BrowserWindow, ipcMain, globalShortcut, WebContents } from 'electron';
 import * as path from 'node:path';
 
 let mainWin: BrowserWindow | null = null;
@@ -37,7 +37,6 @@ function createOverlay(imageUrl: string) {
     sendOverlayCount();
   });
 
-  // Pass the image URL via hash so overlay.html can read it
   win.loadFile(overlayHtmlPath(), { hash: encodeURIComponent(imageUrl) });
   overlays.add(win);
   sendOverlayCount();
@@ -53,6 +52,8 @@ async function createWindow() {
       preload: path.join(app.getAppPath(), 'dist', 'preload.cjs'),
       webviewTag: true,
       sandbox: false,
+      // Let the webview’s preload use require('electron') safely:
+      nodeIntegrationInSubFrames: true,
     },
   });
 
@@ -69,11 +70,22 @@ async function createWindow() {
     sendOverlayCount();
   });
 
-  // Send initial overlay count
   sendOverlayCount();
 }
 
+// Ensure the <webview> always gets our preload (absolute path)
+app.on('web-contents-created', (_evt, contents: WebContents) => {
+  contents.on('will-attach-webview', (event, params) => {
+    // Force a safe, absolute preload path
+    params.preload = path.join(app.getAppPath(), 'windows', 'webview-preload.js');
+    // Lock down permissions as a sanity check
+    delete (params as any).partition;
+    delete (params as any).webSecurity; // keep defaults
+  });
+});
+
 app.whenReady().then(createWindow);
+
 app.on('will-quit', () => {
   globalShortcut.unregisterAll();
 });
