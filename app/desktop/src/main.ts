@@ -52,7 +52,6 @@ async function createWindow() {
       preload: path.join(app.getAppPath(), 'dist', 'preload.cjs'),
       webviewTag: true,
       sandbox: false,
-      // Let the webview’s preload use require('electron') safely:
       nodeIntegrationInSubFrames: true,
     },
   });
@@ -60,7 +59,6 @@ async function createWindow() {
   const lib = path.join(app.getAppPath(), 'windows', 'library.html');
   await mainWin.loadFile(lib);
 
-  // Global hotkeys
   globalShortcut.register('CommandOrControl+Shift+0', () => {
     mainWin?.webContents.send('overlay:panel/toggle');
   });
@@ -73,22 +71,22 @@ async function createWindow() {
   sendOverlayCount();
 }
 
-// Ensure the <webview> always gets our preload (absolute path)
+// Ensure the <webview> always gets our preload (absolute path) and a persisted session
 app.on('web-contents-created', (_evt, contents: WebContents) => {
   contents.on('will-attach-webview', (event, params) => {
-    // Force a safe, absolute preload path
     params.preload = path.join(app.getAppPath(), 'windows', 'webview-preload.js');
-    // Lock down permissions as a sanity check
-    delete (params as any).partition;
-    delete (params as any).webSecurity; // keep defaults
+    params.partition = 'persist:icon-app';
+    // Conservative lockdown
+    delete (params as any).webSecurity;
+    // Debug breadcrumb in packaged builds
+    try {
+      console.log(`[will-attach-webview] preload=${params.preload} partition=${params.partition}`);
+    } catch {}
   });
 });
 
 app.whenReady().then(createWindow);
-
-app.on('will-quit', () => {
-  globalShortcut.unregisterAll();
-});
+app.on('will-quit', () => globalShortcut.unregisterAll());
 
 // Close every overlay on app quit to avoid stragglers
 app.on('before-quit', () => {
@@ -113,7 +111,6 @@ ipcMain.handle('overlay/clearAll', () => {
   return overlays.size;
 });
 
-// Called from the overlay window itself to close just that one
 ipcMain.handle('overlay/closeSelf', (e) => {
   const win = BrowserWindow.fromWebContents(e.sender);
   if (win && overlays.has(win)) win.close();
