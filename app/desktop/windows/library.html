@@ -17,7 +17,7 @@
     </style>
   </head>
   <body>
-    <!-- Hosted Library inside a webview; preload injects a click relay -->
+    <!-- IMPORTANT: preload is our fixed bridge above -->
     <webview
       id="libview"
       src="https://icon-web-two.vercel.app/library"
@@ -26,7 +26,6 @@
       partition="persist:iconlib">
     </webview>
 
-    <!-- Minimal HUD -->
     <div id="hud" role="status" aria-live="polite">
       <strong>Overlays</strong> <span id="count">0</span>
       <button id="clear">Clear</button>
@@ -36,19 +35,20 @@
     </div>
 
     <script>
-      // talk to the app via preload compat bridge
       const addSticker = (p) => window.icon?.addSticker?.(p);
       const clearOverlays = () => window.icon?.clearOverlays?.();
+
       window.icon?.onOverlayCount?.((n)=>{ const el=document.getElementById('count'); if(el) el.textContent=String(n); });
       document.getElementById('clear')?.addEventListener('click', clearOverlays);
 
       const libview = document.getElementById('libview');
       libview.addEventListener('ipc-message', (ev) => {
-        if (ev.channel === 'icon:webview-sticker' && ev.args && ev.args[0]) {
-          addSticker(ev.args[0]); // { src }
-        }
+        if (ev.channel === 'icon:webview-sticker' && ev.args?.[0]) addSticker(ev.args[0]);
+        if (ev.channel === 'icon:webview-clear') clearOverlays();
+        // optional: console.debug('webview msg', ev.channel, ev.args);
       });
-      libview.addEventListener('dom-ready', () => { libview.focus(); console.debug('[library] webview dom-ready'); });
+
+      libview.addEventListener('dom-ready', () => libview.focus());
     </script>
   </body>
 </html>

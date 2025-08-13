@@ -1,31 +1,53 @@
-// Runs inside the <webview> page context
-const send = (payload) => {
-  try { window.parent && window.electron?.ipcRenderer?.sendToHost?.('icon:webview-sticker', payload); }
-  catch { /* in webview preload, sendToHost is exposed directly on 'ipcRenderer' */ }
-  try { require('electron').ipcRenderer.sendToHost('icon:webview-sticker', payload); } catch {}
+// app/desktop/windows/webview-preload.js
+// Runs INSIDE the <webview> (remote Library). Provide the bridge the Library expects
+// and also a robust click-fallback that extracts an image URL.
+
+const { contextBridge, ipcRenderer } = require('electron');
+
+const sendToHost = (ch, payload) => {
+  try { ipcRenderer.sendToHost(ch, payload); } catch {}
 };
 
+const forwardSticker = (payload) => {
+  // normalize: accept {url} or {src}
+  const url = payload?.url || payload?.src;
+  if (url) sendToHost('icon:webview-sticker', { src: url });
+};
+
+// 1) Expose the bridges the Library may call
+const bridge = {
+  addSticker: (payload) => forwardSticker(payload || {}),
+  clearOverlays: () => sendToHost('icon:webview-clear'),
+};
+contextBridge.exposeInMainWorld('icon', bridge);
+contextBridge.exposeInMainWorld('desktop', bridge);
+
+// 2) Click fallback: capture any click, walk up DOM to find an image-like URL
 const extractUrl = (start) => {
   let el = start;
   for (let i = 0; el && i < 8; i++, el = el.parentElement) {
-    const img = el.matches?.('img') ? el : el.querySelector?.('img');
-    if (img && img.src) return img.src;
+    // <img>
+    if (el.tagName === 'IMG' && el.src) return el.src;
 
-    const source = el.querySelector?.('source[srcset]');
-    if (source?.srcset) {
-      const first = source.srcset.split(',')[0]?.trim().split(' ')[0];
+    // <source srcset>
+    const s = el.querySelector?.('source[srcset]');
+    if (s?.srcset) {
+      const first = s.srcset.split(',')[0]?.trim().split(' ')[0];
       if (first) return first;
     }
 
-    if (el instanceof HTMLAnchorElement && el.href && /\.(png|jpe?g|gif|webp|svg)(\?|#|$)/i.test(el.href)) {
+    // <a href="...png|jpg|webp">
+    if (el.tagName === 'A' && el.href && /\.(png|jpe?g|gif|webp|svg)(\?|#|$)/i.test(el.href)) {
       return el.href;
     }
 
-    const bg = getComputedStyle(el).backgroundImage || '';
+    // background-image: url("...")
+    const bg = (el instanceof Element) ? getComputedStyle(el).backgroundImage || '' : '';
     const m = bg.match(/url\(["']?(.*?)["']?\)/i);
     if (m?.[1]) return m[1];
 
-    const d = el.dataset || {};
+    // data attributes some UIs use
+    const d = (el instanceof Element && el.dataset) || {};
     if (d.stickerSrc) return d.stickerSrc;
     if (d.src) return d.src;
     if (d.image) return d.image;
@@ -34,13 +56,17 @@ const extractUrl = (start) => {
   return null;
 };
 
-const handler = (ev) => {
+const clickHandler = (ev) => {
   const url = extractUrl(ev.target);
   if (!url) return;
-  ev.preventDefault(); ev.stopPropagation();
-  send({ src: url });
+  ev.preventDefault();
+  ev.stopPropagation();
+  sendToHost('icon:webview-sticker', { src: url });
 };
 
-window.addEventListener('click', handler, true);
-window.addEventListener('pointerdown', handler, true);
-window.addEventListener('auxclick', handler, true);
+// Capture early so we beat the site’s handlers
+window.addEventListener('click', clickHandler, true);
+window.addEventListener('pointerdown', clickHandler, true);
+
+// (Optional) sanity ping so the host can know preload is alive (not required for functionality)
+sendToHost('icon:webview-ready', null);
