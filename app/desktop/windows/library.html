@@ -20,14 +20,20 @@
     </style>
   </head>
   <body>
-    <!-- IMPORTANT: preload so the hosted guest can talk to us via ipcRenderer.sendToHost/postMessage -->
-    <webview id="libview" src="https://icon-web-two.vercel.app/library" allowpopups preload="webview-preload.js"></webview>
+    <!-- Explicit preload + persisted session for the guest -->
+    <webview
+      id="libview"
+      src="https://icon-web-two.vercel.app/library"
+      allowpopups
+      preload="webview-preload.js"
+      partition="persist:icon-app"
+    ></webview>
 
     <div id="hud" role="status" aria-live="polite">
       <strong>Overlays</strong> <span id="count">0</span>
       <button id="clear" title="Close all overlays">Clear</button>
       <div style="opacity:.7;margin-top:6px;font-size:12px">
-        Tip: Ctrl/⌘+Shift+0 toggles this panel; Ctrl/⌘+Shift+Backspace clears.
+        Tip: Ctrl/⌘+Shift+O toggles this panel; Ctrl/⌘+Shift+Backspace clears.
       </div>
     </div>
 
@@ -36,39 +42,28 @@
       const addSticker = (p) => window.icon?.addSticker?.(p);
       const clearOverlays = () => window.icon?.clearOverlays?.();
 
-      // Live counts from main
+      // Live counts
       window.icon?.onOverlayCount?.((n) => {
         const el = document.getElementById('count'); if (el) el.textContent = String(n);
       });
 
-      // Wire HUD Clear
       document.getElementById('clear')?.addEventListener('click', clearOverlays);
 
-      // Toggle HUD visibility with the same hotkey main sends to pages
-      window.api?.onToggleOverlayPanel?.(() => {
-        const hud = document.getElementById('hud');
-        hud.style.display = hud.style.display === 'none' ? '' : 'none';
-      });
-
-      // Messages coming from inside the <webview>.
       const libview = document.getElementById('libview');
 
-      // 1) Electron "ipc-message" from webview guest (ipcRenderer.sendToHost)
+      // Receive messages from the guest preload
       libview.addEventListener('ipc-message', (ev) => {
         if (ev.channel === 'icon:webview-sticker' && ev.args && ev.args[0]) {
-          addSticker(ev.args[0]); // { packId?, stickerId?, src | url }
+          addSticker(ev.args[0]); // { url }
+          console.debug('[icon:library] received sticker', ev.args[0]);
         }
       });
 
-      // 2) Plain postMessage fallback
-      libview.addEventListener('message', (ev) => {
-        const data = ev.data || {};
-        if (data && (data.type === 'icon:webview-sticker' || data.channel === 'icon:webview-sticker')) {
-          addSticker(data.payload || data); // tolerate either shape
-        }
+      // Debug any console logs from the guest page/preload
+      libview.addEventListener('console-message', (e) => {
+        console.debug('[guest-console]', e.message);
       });
 
-      // Optional: focus when ready
       libview.addEventListener('dom-ready', () => {
         libview.focus();
         console.debug('[icon:library] webview dom-ready');
