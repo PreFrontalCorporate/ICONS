@@ -1,46 +1,59 @@
-// app/desktop/windows/webview-preload.js
-// Runs inside the <webview>. Forwards sticker clicks back to host.
+// Runs inside the <webview> guest page
 const { ipcRenderer } = require('electron');
 
-function send(payload) {
-  try { ipcRenderer.sendToHost('icon:webview-sticker', payload); }
-  catch (e) { /* ignore */ }
+// Helper to emit to host page
+function sendSticker(url) {
+  if (!url) return;
+  ipcRenderer.sendToHost('icon:webview-sticker', { url });
 }
 
-// Heuristic: find a usable image URL near the click target
-function findImageUrl(start) {
-  let el = start;
-  for (let i = 0; i < 5 && el; i++, el = el.parentElement) {
-    // common data attributes
-    const ds = el.dataset || {};
-    const cand = ds.stickerSrc || ds.src || ds.url || el.getAttribute?.('data-sticker-src') || el.getAttribute?.('data-src') || el.getAttribute?.('data-url');
-    if (cand) return cand;
-
-    // image inside
-    const img = (el.tagName === 'IMG' ? el : el.querySelector?.('img[src]'));
-    if (img?.src) return img.src;
-
-    // anchor with href to a direct image
-    if (el.tagName === 'A') {
-      const href = el.getAttribute('href');
-      if (href && /\.(png|jpe?g|gif|webp|svg)$/i.test(href)) return href;
-    }
-  }
-  return null;
-}
-
+// 1) Generic click catcher: pick the nearest <img> (or background-image)
 window.addEventListener('click', (ev) => {
-  const url = findImageUrl(ev.target);
-  if (url) {
-    ev.preventDefault();
-    ev.stopPropagation();
-    send({ url, src: url });
-  }
+  try {
+    const el = ev.target;
+    if (!el) return;
+
+    // If the element itself is an IMG, use it; otherwise look inside/above.
+    let img = el.closest && el.closest('img');
+    if (!img && el.querySelector) img = el.querySelector('img');
+
+    if (img && img.src) {
+      ev.preventDefault();
+      sendSticker(img.src);
+      return;
+    }
+
+    // Look for background-image
+    const node = /** @type {HTMLElement} */(el.closest && el.closest('[style]'));
+    if (node) {
+      const bg = getComputedStyle(node).backgroundImage || '';
+      const m = bg.match(/url\(["']?(.*?)["']?\)/i);
+      if (m && m[1]) {
+        ev.preventDefault();
+        sendSticker(m[1]);
+      }
+    }
+  } catch {}
 }, true);
 
-// Optional: if the app’s guest page posts a message instead
-window.addEventListener('message', (ev) => {
-  const p = ev?.data;
-  if (p && (p.url || p.src)) send({ url: p.url || p.src, src: p.src || p.url });
+// 2) Also accept postMessage from the site: {type:'icon:add-sticker', url}
+window.addEventListener('message', (e) => {
+  try {
+    const d = e.data || {};
+    if (d && (d.type === 'icon:add-sticker') && d.url) sendSticker(d.url);
+  } catch {}
 });
 
+// 3) Fallback: hijack console-message with a magic prefix
+const origLog = console.log.bind(console);
+console.log = (...args) => {
+  try {
+    const a0 = String(args[0] ?? '');
+    if (a0.startsWith('[icon:sticker]')) {
+      const url = String(args[1] ?? '').trim();
+      if (url) sendSticker(url);
+      return;
+    }
+  } catch {}
+  origLog(...args);
+};

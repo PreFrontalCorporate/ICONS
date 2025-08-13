@@ -1,61 +1,93 @@
 <!doctype html>
-<html>
-<head>
-  <meta charset="utf-8"/>
-  <title>overlay</title>
-  <style>
-    html, body { margin:0; height:100%; background: transparent; }
-    /* Make the whole window draggable unless explicitly opted-out */
-    .drag { -webkit-app-region: drag; position: absolute; inset: 0; }
-    .chrome { position: absolute; top: 8px; right: 8px; display: flex; gap: 6px; -webkit-app-region: no-drag; }
-    .btn {
-      border:0; padding:6px 8px; border-radius:8px; font:12px/1 ui-sans-serif, system-ui;
-      color:#fff; background:rgba(0,0,0,.55); cursor:pointer;
-    }
-    #wrap { position:absolute; inset:0; display:grid; place-items:center; -webkit-app-region: no-drag; }
-    #img { max-width:100%; max-height:100%; transform-origin:center center; image-rendering: auto; }
-  </style>
-</head>
+<meta charset="utf-8" />
+<title>overlay</title>
+<style>
+  :root { --ang: 0deg; --scale: 1; }
+  html, body { margin: 0; background: transparent; }
+  /* Drag region (toolbar) */
+  #bar {
+    -webkit-app-region: drag;
+    position: fixed; left: 0; right: 0; top: 0; height: 34px;
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 8px; color: #fff; font: 12px/1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: rgba(0,0,0,.35);
+    border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;
+    backdrop-filter: blur(6px);
+  }
+  #bar button {
+    -webkit-app-region: no-drag;
+    appearance: none; border: 0; border-radius: 8px; padding: 4px 8px; cursor: pointer;
+    background: rgba(255,255,255,.15); color: #fff; font-weight: 600;
+  }
+  #wrap {
+    position: fixed; inset: 0; display: grid; place-items: center; padding-top: 34px;
+  }
+  #fig {
+    transform: rotate(var(--ang)) scale(var(--scale));
+    transform-origin: center center;
+    pointer-events: auto;
+    user-select: none;
+  }
+  #fig img { display:block; max-width: 90vw; max-height: 85vh; }
+</style>
 <body>
-  <div class="drag"></div>
-  <div class="chrome">
-    <button id="smaller" class="btn" title="Alt+-">–</button>
-    <button id="bigger" class="btn" title="Alt+=">+</button>
-    <button id="rotate" class="btn" title="Alt+R">⟳</button>
-    <button id="close"  class="btn" title="Close">✕</button>
+  <div id="bar">
+    <div style="opacity:.8">Overlay</div>
+    <div style="margin-left:auto"></div>
+    <button id="smaller" title="Smaller">–</button>
+    <button id="bigger" title="Bigger">+</button>
+    <button id="rotL" title="Rotate left">⟲</button>
+    <button id="rotR" title="Rotate right">⟳</button>
+    <button id="close" title="Close">✕</button>
   </div>
-  <div id="wrap"><img id="img" alt="overlay"/></div>
-
+  <div id="wrap">
+    <figure id="fig"><img id="img" alt=""></figure>
+  </div>
   <script>
-    const params = decodeURIComponent(location.hash.slice(1) || '');
-    const src = params || '';
-    const img = document.getElementById('img');
-    img.src = src;
+    const $ = (s) => document.querySelector(s);
 
-    const stateKey = 'overlay:state:' + (src || 'unknown');
-    const state = (() => {
-      try { return JSON.parse(localStorage.getItem(stateKey) || '{"scale":1,"rot":0}'); }
-      catch { return { scale:1, rot:0 }; }
-    })();
+    // image from main via hash
+    const src = decodeURIComponent(location.hash.slice(1));
+    const img = $('#img');
+    if (src) img.src = src;
 
-    function apply() {
-      img.style.transform = `scale(${state.scale}) rotate(${state.rot}deg)`;
-      try { localStorage.setItem(stateKey, JSON.stringify(state)); } catch {}
-    }
-    apply();
+    // controls
+    const root = document.documentElement;
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
-    document.getElementById('close')?.addEventListener('click', () => window.electronAPI?.closeSelf?.());
-    document.getElementById('rotate')?.addEventListener('click', () => { state.rot = (state.rot + 90) % 360; apply(); });
-    document.getElementById('bigger')?.addEventListener('click', () => { state.scale = Math.min(5, state.scale + 0.1); apply(); });
-    document.getElementById('smaller')?.addEventListener('click', () => { state.scale = Math.max(0.1, state.scale - 0.1); apply(); });
-
-    // Hotkeys
-    window.addEventListener('keydown', (e) => {
-      if (!e.altKey) return;
-      if (e.code === 'KeyR') { state.rot = (state.rot + 90) % 360; apply(); }
-      if (e.key === '=' || e.code === 'Equal') { state.scale = Math.min(5, state.scale + 0.1); apply(); }
-      if (e.key === '-' || e.code === 'Minus') { state.scale = Math.max(0.1, state.scale - 0.1); apply(); }
+    $('#bigger').addEventListener('click', () => {
+      const s = parseFloat(getComputedStyle(root).getPropertyValue('--scale')) || 1;
+      root.style.setProperty('--scale', String(clamp(s * 1.1, 0.1, 10)));
     });
+    $('#smaller').addEventListener('click', () => {
+      const s = parseFloat(getComputedStyle(root).getPropertyValue('--scale')) || 1;
+      root.style.setProperty('--scale', String(clamp(s / 1.1, 0.1, 10)));
+    });
+    $('#rotL').addEventListener('click', () => {
+      const a = parseFloat(getComputedStyle(root).getPropertyValue('--ang')) || 0;
+      root.style.setProperty('--ang', (a - 10) + 'deg');
+    });
+    $('#rotR').addEventListener('click', () => {
+      const a = parseFloat(getComputedStyle(root).getPropertyValue('--ang')) || 0;
+      root.style.setProperty('--ang', (a + 10) + 'deg');
+    });
+    $('#close').addEventListener('click', () => window.overlayAPI?.closeSelf?.());
+
+    // keyboard: +/- rotate with [ and ]
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '+') $('#bigger').click();
+      if (e.key === '=') $('#bigger').click();
+      if (e.key === '-') $('#smaller').click();
+      if (e.key === '[') $('#rotL').click();
+      if (e.key === ']') $('#rotR').click();
+      if (e.key === 'Escape') $('#close').click();
+    });
+
+    // wheel to zoom
+    window.addEventListener('wheel', (e) => {
+      if (e.ctrlKey) return; // let OS-zoom alone
+      e.preventDefault();
+      (e.deltaY < 0 ? $('#bigger') : $('#smaller')).click();
+    }, { passive: false });
   </script>
 </body>
-</html>

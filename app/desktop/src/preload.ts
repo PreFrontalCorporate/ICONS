@@ -22,7 +22,7 @@ contextBridge.exposeInMainWorld('api', {
   },
 });
 
-// Back-compat for the library.html we host
+// Back-compat for the hosted library page (window.icon.*)
 const compat = {
   addSticker: (payload: { src?: string; url?: string }) => {
     const url = payload.url || payload.src;
@@ -34,7 +34,7 @@ const compat = {
 };
 Object.defineProperty(window, 'icon', { value: compat });
 
-// ---------- Inline overlay HUD (small, collapsible) ----------
+// ---------- Inline overlay HUD ----------
 const bootOverlayPanel = () => {
   if (document.getElementById('icon-overlay-panel')) return;
 
@@ -61,7 +61,7 @@ const bootOverlayPanel = () => {
     <div id="icon-overlay-body" style="padding:8px 10px; font-size:12px; line-height:1.4; color:#d9d9d9">
       <div>Manage overlay windows created from this app.</div>
       <div style="opacity:.7; font-size:11px; margin-top:6px">
-        Tip: <kbd>Ctrl/⌘+Shift+O</kbd> toggles this panel; <kbd>Ctrl/⌘+Shift+Backspace</kbd> clears them.
+        Tip: <kbd>Ctrl/⌘+Shift+O</kbd> or <kbd>Ctrl/⌘+Shift+0</kbd> toggles this panel; <kbd>Ctrl/⌘+Shift+Backspace</kbd> clears them.
       </div>
     </div>
   `;

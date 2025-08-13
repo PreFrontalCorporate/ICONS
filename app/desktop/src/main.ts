@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron';
+import { app, BrowserWindow, ipcMain, globalShortcut, shell } from 'electron';
 import * as path from 'node:path';
 
 let mainWin: BrowserWindow | null = null;
@@ -52,14 +52,13 @@ async function createWindow() {
     },
   });
 
-  // Load the hosted-library shell (our own HTML that hosts the webview)
   const lib = path.join(app.getAppPath(), 'windows', 'library.html');
   await mainWin.loadFile(lib);
 
-  // Global hotkeys
-  globalShortcut.register('CommandOrControl+Shift+0', () => {
-    mainWin?.webContents.send('overlay:panel/toggle');
-  });
+  // Global hotkeys (both O and 0)
+  const toggle = () => mainWin?.webContents.send('overlay:panel/toggle');
+  globalShortcut.register('CommandOrControl+Shift+O', toggle);
+  globalShortcut.register('CommandOrControl+Shift+0', toggle);
 
   globalShortcut.register('CommandOrControl+Shift+Backspace', () => {
     for (const w of [...overlays]) w.close();
@@ -84,3 +83,6 @@ ipcMain.handle('overlay/closeSelf', (e) => {
   const win = BrowserWindow.fromWebContents(e.sender);
   if (win && overlays.has(win)) win.close();
 });
+
+// Utility
+ipcMain.handle('app/openExternal', (_e, url: string) => shell.openExternal(url));

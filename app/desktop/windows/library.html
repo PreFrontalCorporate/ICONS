@@ -18,42 +18,36 @@
     </style>
   </head>
   <body>
-    <!-- NOTE: preload is critical to relay clicks back to host -->
     <webview id="libview"
-             src="https://icon-web-two.vercel.app/library"
-             preload="webview-preload.js"
-             allowpopups></webview>
+      src="https://icon-web-two.vercel.app/library"
+      preload="./webview-preload.js"
+      allowpopups></webview>
 
     <div id="hud" role="status" aria-live="polite">
       <strong>Overlays</strong> <span id="count">0</span>
       <button id="clear" title="Close all overlays">Clear</button>
       <div style="opacity:.7;margin-top:6px;font-size:12px">
-        Tip: Ctrl/⌘+Shift+0 toggles this panel; Ctrl/⌘+Shift+Backspace clears.
+        Tip: Ctrl/⌘+Shift+O or Ctrl/⌘+Shift+0 toggles; Ctrl/⌘+Shift+Backspace clears.
       </div>
     </div>
 
     <script>
-      // Use the compat bridge we expose in preload.
+      // use window.icon compat from preload
       const addSticker = (p) => window.icon?.addSticker?.(p);
       const clearOverlays = () => window.icon?.clearOverlays?.();
 
-      // Live counts
       window.icon?.onOverlayCount?.((n) => {
         const el = document.getElementById('count'); if (el) el.textContent = String(n);
       });
-
       document.getElementById('clear')?.addEventListener('click', clearOverlays);
 
       const libview = document.getElementById('libview');
       libview.addEventListener('ipc-message', (ev) => {
         if (ev.channel === 'icon:webview-sticker' && ev.args && ev.args[0]) {
-          addSticker(ev.args[0]); // { url | src }
+          addSticker(ev.args[0]); // { url }
         }
       });
-      libview.addEventListener('dom-ready', () => {
-        libview.focus();
-        console.debug('[icon:library] webview dom-ready');
-      });
+      libview.addEventListener('dom-ready', () => libview.focus());
     </script>
   </body>
 </html>
