@@ -42,11 +42,9 @@ async function createWindow() {
     webPreferences: {
       preload: path.join(app.getAppPath(), 'dist', 'preload.cjs'),
       sandbox: false,
-      // contextIsolation true by default; that’s fine for our preload
     },
   });
 
-  // Load the hosted Library directly (no <webview> needed)
   await mainWin.loadURL('https://icon-web-two.vercel.app/library');
 
   const toggle = () => mainWin?.webContents.send('overlay:panel/toggle');

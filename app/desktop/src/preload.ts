@@ -22,55 +22,86 @@ contextBridge.exposeInMainWorld('api', {
   },
 });
 
-// ---------- Click → overlay (works on the hosted Library directly) ----------
+// ---------- Ultra-robust click → overlay ----------
 (() => {
   const hostOK = () => {
-    try {
-      // allow whole site (login + library), harmless elsewhere too
-      const h = location.hostname;
-      return /icon-web-two\.vercel\.app$/i.test(h);
-    } catch { return false; }
+    try { return /icon-web-two\.vercel\.app$/i.test(location.hostname); }
+    catch { return false; }
   };
 
-  const findImageURL = (el: Element | null): string | null => {
-    if (!el) return null;
+  // Try to extract an image URL from a node or any of its ancestors
+  const extractUrl = (start: Element | null): string | null => {
+    let el: Element | null = start;
+    for (let depth = 0; el && depth < 8; depth++, el = el.parentElement) {
+      // 1) nearest <img>
+      const img = el.matches?.('img') ? (el as HTMLImageElement)
+                : el.querySelector?.('img') as HTMLImageElement | null;
+      if (img?.src) return img.src;
 
-    // 1) Direct IMG
-    const img = (el as HTMLElement).closest?.('img') || (el as HTMLElement).querySelector?.('img');
-    if (img && (img as HTMLImageElement).src) return (img as HTMLImageElement).src;
+      // 1b) <picture><source srcset>
+      if (el.matches?.('picture') || el.querySelector?.('source[srcset]')) {
+        const srcset = (el.querySelector('source[srcset]') as HTMLSourceElement | null)?.srcset;
+        if (srcset) {
+          // use first candidate
+          const first = srcset.split(',')[0]?.trim().split(' ')[0];
+          if (first) return first;
+        }
+      }
 
-    // 2) Background-image
-    const node = (el as HTMLElement).closest?.('[style]') as HTMLElement | null;
-    if (node) {
-      const bg = getComputedStyle(node).backgroundImage || '';
-      const m = bg.match(/url\(["']?(.*?)["']?\)/i);
-      if (m && m[1]) return m[1];
+      // 2) background-image
+      const styleTarget = (el as HTMLElement);
+      if (styleTarget && styleTarget instanceof HTMLElement) {
+        const bg = getComputedStyle(styleTarget).backgroundImage || '';
+        const m = bg.match(/url\(["']?(.*?)["']?\)/i);
+        if (m?.[1]) return m[1];
+      }
+
+      // 3) data hints
+      const d = (el as HTMLElement).dataset;
+      if (d) {
+        if (d.stickerSrc) return d.stickerSrc;
+        if (d.src) return d.src;
+        if (d.image) return d.image;
+        if (d.img) return d.img;
+      }
+
+      // 4) <a> with image href
+      if (el instanceof HTMLAnchorElement && el.href && /\.(png|jpe?g|gif|webp|svg)(\?|#|$)/i.test(el.href)) {
+        return el.href;
+      }
     }
-
-    // 3) data-* hints the site could set (future-proof)
-    const hinted = (el as HTMLElement).closest?.('[data-sticker-src],[data-src]') as HTMLElement | null;
-    if (hinted) return hinted.dataset.stickerSrc || hinted.dataset.src || null;
-
     return null;
   };
 
-  const onClick = async (ev: MouseEvent) => {
-    if (!hostOK()) return;
+  const tryPinFromEvent = async (ev: MouseEvent) => {
+    if (!hostOK()) return false;
     const target = ev.target as Element | null;
-    const url = findImageURL(target);
-    if (!url) return;
+    const url = extractUrl(target);
+    if (!url) return false;
 
-    // Prevent the site from navigating when we grab an image
+    // block library’s default navigation if any, and pin
     ev.preventDefault();
     ev.stopPropagation();
-
-    try {
-      await (window as any).api?.overlays?.pinFromUrl?.(url);
-    } catch {}
+    try { await (window as any).api?.overlays?.pinFromUrl?.(url); } catch {}
+    return true;
   };
 
-  // Capture phase so we beat app-level handlers
-  window.addEventListener('click', onClick, true);
+  // Capture early across multiple event types
+  const handler = (e: Event) => {
+    // Only left/aux mouse buttons matter for clicks; ignore modifier-heavy gestures
+    if (e instanceof MouseEvent) {
+      // If we managed to pin, swallow the event.
+      tryPinFromEvent(e as MouseEvent).then((ok) => {
+        if (ok) {
+          // nothing else
+        }
+      });
+    }
+  };
+
+  window.addEventListener('click', handler, true);
+  window.addEventListener('pointerdown', handler, true);
+  window.addEventListener('auxclick', handler, true);
 })();
 
 // ---------- Inline overlay HUD ----------
