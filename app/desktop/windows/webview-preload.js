@@ -5,13 +5,19 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 const sendToHost = (ch, payload) => {
-  try { ipcRenderer.sendToHost(ch, payload); } catch (e) { console.error('sendToHost failed', e); }
+  try {
+    ipcRenderer.sendToHost(ch, payload);
+  } catch (e) {
+    console.error('sendToHost failed', e);
+  }
 };
 
 const forwardSticker = (payload) => {
   // normalize: accept {url} or {src}
   const url = payload?.url || payload?.src;
-  if (url) sendToHost('icon:webview-sticker', { src: url });
+  if (url) {
+    sendToHost('icon:webview-sticker', { src: url });
+  }
 };
 
 // 1) Expose the bridges the Library may call
@@ -35,7 +41,7 @@ const extractUrl = (start) => {
     if (el.tagName === 'A' && el.href && /\.(png|jpe?g|gif|webp|svg)(\?|#|$)/i.test(el.href)) {
       return el.href;
     }
-    const bg = (el instanceof Element) ? getComputedStyle(el).backgroundImage || '' : '';
+    const bg = el instanceof Element ? getComputedStyle(el).backgroundImage || '' : '';
     const m = bg.match(/url\(["']?(.*?)["']?\)/i);
     if (m?.[1]) return m[1];
     const d = (el instanceof Element && el.dataset) || {};
@@ -49,28 +55,41 @@ const extractUrl = (start) => {
 
 let lastClick = 0;
 const clickHandler = (ev) => {
-  if (ev.button !== 0) return; // only main button (left-click)
-  if (ev.defaultPrevented) return; // respect site’s own handlers
+  // We only care about left-clicks
+  if (ev.button !== 0) return;
 
   const url = extractUrl(ev.target);
   if (!url) return;
 
   const now = Date.now();
-  if (now - lastClick < 500) { // basic debounce
+  if (now - lastClick < 300) { // throttle clicks
     ev.preventDefault();
     ev.stopImmediatePropagation();
     return;
   }
   lastClick = now;
 
-  ev.preventDefault();
-  ev.stopImmediatePropagation(); // prevent other listeners and default browser action
   forwardSticker({ src: url });
+
+  // Prevent default browser action and stop other handlers
+  ev.preventDefault();
+  ev.stopImmediatePropagation();
 };
 
-// Make listener idempotent: remove if exists, then add
-window.removeEventListener('click', clickHandler, true);
-window.addEventListener('click', clickHandler, true);
+// Use a more specific listener to avoid capturing clicks on UI elements
+// and ensure we only attach it once.
+const attachClickListener = () => {
+  window.removeEventListener('click', clickHandler, true);
+  window.addEventListener('click', clickHandler, true);
+};
+
+// Attach the listener once the DOM is loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', attachClickListener);
+} else {
+  attachClickListener();
+}
+
 
 // (Optional) sanity ping so the host can know preload is alive
 sendToHost('icon:webview-ready', null);
