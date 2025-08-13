@@ -8,7 +8,6 @@ function sendOverlayCount() {
   const n = overlays.size;
   BrowserWindow.getAllWindows().forEach(w => w.webContents.send('overlay:count', n));
 }
-
 function overlayHtmlPath() {
   return path.join(app.getAppPath(), 'windows', 'overlay.html');
 }
@@ -30,15 +29,9 @@ function createOverlay(imageUrl: string) {
       sandbox: false,
     },
   });
-
-  win.on('closed', () => {
-    overlays.delete(win);
-    sendOverlayCount();
-  });
-
+  win.on('closed', () => { overlays.delete(win); sendOverlayCount(); });
   win.loadFile(overlayHtmlPath(), { hash: encodeURIComponent(imageUrl) });
-  overlays.add(win);
-  sendOverlayCount();
+  overlays.add(win); sendOverlayCount();
   return win;
 }
 
@@ -48,18 +41,17 @@ async function createWindow() {
     height: 800,
     webPreferences: {
       preload: path.join(app.getAppPath(), 'dist', 'preload.cjs'),
-      webviewTag: true,
+      sandbox: false,
+      // contextIsolation true by default; that’s fine for our preload
     },
   });
 
-  const lib = path.join(app.getAppPath(), 'windows', 'library.html');
-  await mainWin.loadFile(lib);
+  // Load the hosted Library directly (no <webview> needed)
+  await mainWin.loadURL('https://icon-web-two.vercel.app/library');
 
-  // Global hotkeys (both O and 0)
   const toggle = () => mainWin?.webContents.send('overlay:panel/toggle');
   globalShortcut.register('CommandOrControl+Shift+O', toggle);
   globalShortcut.register('CommandOrControl+Shift+0', toggle);
-
   globalShortcut.register('CommandOrControl+Shift+Backspace', () => {
     for (const w of [...overlays]) w.close();
     sendOverlayCount();
@@ -69,20 +61,12 @@ async function createWindow() {
 app.whenReady().then(createWindow);
 app.on('will-quit', () => globalShortcut.unregisterAll());
 
-// IPC for overlays
-ipcMain.handle('overlay/pin', (_e, url: string) => {
-  createOverlay(url);
-  return overlays.size;
-});
+// IPC
+ipcMain.handle('overlay/pin', (_e, url: string) => { createOverlay(url); return overlays.size; });
 ipcMain.handle('overlay/count', () => overlays.size);
-ipcMain.handle('overlay/clearAll', () => {
-  for (const w of [...overlays]) w.close();
-  return overlays.size;
-});
+ipcMain.handle('overlay/clearAll', () => { for (const w of [...overlays]) w.close(); return overlays.size; });
 ipcMain.handle('overlay/closeSelf', (e) => {
   const win = BrowserWindow.fromWebContents(e.sender);
   if (win && overlays.has(win)) win.close();
 });
-
-// Utility
 ipcMain.handle('app/openExternal', (_e, url: string) => shell.openExternal(url));

@@ -1,7 +1,7 @@
 // app/desktop/src/preload.ts
 import { contextBridge, ipcRenderer } from 'electron';
 
-// ---------- public bridges ----------
+// ---------- public bridge ----------
 contextBridge.exposeInMainWorld('api', {
   overlays: {
     count: () => ipcRenderer.invoke('overlay/count') as Promise<number>,
@@ -22,17 +22,56 @@ contextBridge.exposeInMainWorld('api', {
   },
 });
 
-// Back-compat for the hosted library page (window.icon.*)
-const compat = {
-  addSticker: (payload: { src?: string; url?: string }) => {
-    const url = payload.url || payload.src;
+// ---------- Click → overlay (works on the hosted Library directly) ----------
+(() => {
+  const hostOK = () => {
+    try {
+      // allow whole site (login + library), harmless elsewhere too
+      const h = location.hostname;
+      return /icon-web-two\.vercel\.app$/i.test(h);
+    } catch { return false; }
+  };
+
+  const findImageURL = (el: Element | null): string | null => {
+    if (!el) return null;
+
+    // 1) Direct IMG
+    const img = (el as HTMLElement).closest?.('img') || (el as HTMLElement).querySelector?.('img');
+    if (img && (img as HTMLImageElement).src) return (img as HTMLImageElement).src;
+
+    // 2) Background-image
+    const node = (el as HTMLElement).closest?.('[style]') as HTMLElement | null;
+    if (node) {
+      const bg = getComputedStyle(node).backgroundImage || '';
+      const m = bg.match(/url\(["']?(.*?)["']?\)/i);
+      if (m && m[1]) return m[1];
+    }
+
+    // 3) data-* hints the site could set (future-proof)
+    const hinted = (el as HTMLElement).closest?.('[data-sticker-src],[data-src]') as HTMLElement | null;
+    if (hinted) return hinted.dataset.stickerSrc || hinted.dataset.src || null;
+
+    return null;
+  };
+
+  const onClick = async (ev: MouseEvent) => {
+    if (!hostOK()) return;
+    const target = ev.target as Element | null;
+    const url = findImageURL(target);
     if (!url) return;
-    (window as any).api?.overlays?.pinFromUrl(url);
-  },
-  clearOverlays: () => (window as any).api?.overlays?.clearAll(),
-  onOverlayCount: (fn: (n: number) => void) => (window as any).api?.onOverlayCount(fn),
-};
-Object.defineProperty(window, 'icon', { value: compat });
+
+    // Prevent the site from navigating when we grab an image
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    try {
+      await (window as any).api?.overlays?.pinFromUrl?.(url);
+    } catch {}
+  };
+
+  // Capture phase so we beat app-level handlers
+  window.addEventListener('click', onClick, true);
+})();
 
 // ---------- Inline overlay HUD ----------
 const bootOverlayPanel = () => {
@@ -61,7 +100,7 @@ const bootOverlayPanel = () => {
     <div id="icon-overlay-body" style="padding:8px 10px; font-size:12px; line-height:1.4; color:#d9d9d9">
       <div>Manage overlay windows created from this app.</div>
       <div style="opacity:.7; font-size:11px; margin-top:6px">
-        Tip: <kbd>Ctrl/⌘+Shift+O</kbd> or <kbd>Ctrl/⌘+Shift+0</kbd> toggles this panel; <kbd>Ctrl/⌘+Shift+Backspace</kbd> clears them.
+        Tip: <kbd>Ctrl/⌘+Shift+O</kbd> or <kbd>Ctrl/⌘+Shift+0</kbd> toggles; <kbd>Ctrl/⌘+Shift+Backspace</kbd> clears.
       </div>
     </div>
   `;
@@ -94,5 +133,5 @@ const bootOverlayPanel = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  try { bootOverlayPanel(); } catch { /* no-op */ }
+  try { bootOverlayPanel(); } catch {}
 });
