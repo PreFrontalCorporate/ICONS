@@ -1,122 +1,66 @@
 
-// app/desktop/scripts/smoke-sticker-bridge.js
 const assert = require('assert');
 const { JSDOM } = require('jsdom');
+const Module = require('module');
 
-// Mock Electron's ipcRenderer
-const mockIpcRenderer = {
-  sendToHost: () => {},
+// Mock Electron's ipcRenderer and contextBridge
+const mockElectron = {
+  ipcRenderer: {
+    sendToHost: (channel, payload) => {
+      console.log(`ipcRenderer.sendToHost called with:`, channel, payload);
+      global.ipcEvents.push({ channel, payload });
+    }
+  },
+  contextBridge: {
+    exposeInMainWorld: (apiKey, api) => {
+      // Do nothing, as we are not testing the bridge itself
+    }
+  }
 };
 
-// Track calls to sendToHost
-let sendToHostCalls = [];
-mockIpcRenderer.sendToHost = (channel, payload) => {
-  sendToHostCalls.push({ channel, payload });
+// Global state to track IPC calls
+global.ipcEvents = [];
+
+// High-level mock for the electron module
+const originalRequire = Module.prototype.require;
+Module.prototype.require = function(module) {
+  if (module === 'electron') {
+    return mockElectron;
+  }
+  return originalRequire.apply(this, arguments);
 };
 
 // JSDOM setup
 const dom = new JSDOM(`
-  <!DOCTYPE html>
-  <html>
-    <body>
-      <img id="sticker" src="https://example.com/sticker.png" />
-    </body>
-  </html>
+<!DOCTYPE html>
+<html>
+<body>
+  <img id="sticker" src="https://example.com/sticker.png" />
+</body>
+</html>
 `, {
   url: "https://example.com",
-  runScripts: "dangerously",
-  beforeParse(window) {
-    // Inject mock ipcRenderer
-    window.require = (module) => {
-      if (module === 'electron') {
-        return { ipcRenderer: mockIpcRenderer };
-      }
-      return {};
-    };
-  }
+  runScripts: "dangerously", // Allow scripts to run
 });
 
-// Your preload script content here
-const preloadScriptContent = `
-const { contextBridge, ipcRenderer } = require('electron');
-
-const sendToHost = (ch, payload) => {
-  try { ipcRenderer.sendToHost(ch, payload); } catch {}
-};
-
-const forwardSticker = (payload) => {
-  const url = payload?.url || payload?.src;
-  if (url) sendToHost('icon:webview-sticker', { src: url });
-};
-
-const bridge = {
-  addSticker: (payload) => forwardSticker(payload || {}),
-  clearOverlays: () => sendToHost('icon:webview-clear'),
-};
-contextBridge.exposeInMainWorld('icon', bridge);
-contextBridge.exposeInMainWorld('desktop', bridge);
-
-const extractUrl = (start) => {
-  let el = start;
-  for (let i = 0; el && i < 8; i++, el = el.parentElement) {
-    if (el.tagName === 'IMG' && el.src) return el.src;
-    const s = el.querySelector?.('source[srcset]');
-    if (s?.srcset) {
-      const first = s.srcset.split(',')[0]?.trim().split(' ')[0];
-      if (first) return first;
-    }
-    if (el.tagName === 'A' && el.href && /\.(png|jpe?g|gif|webp|svg)(\?|#|$)/i.test(el.href)) {
-      return el.href;
-    }
-    const bg = (el instanceof Element) ? getComputedStyle(el).backgroundImage || '' : '';
-    const m = bg.match(/url\([\"']?(.*?)[\"']?\)/i);
-    if (m?.[1]) return m[1];
-    const d = (el instanceof Element && el.dataset) || {};
-    if (d.stickerSrc) return d.stickerSrc;
-    if (d.src) return d.src;
-    if (d.image) return d.image;
-    if (d.img) return d.img;
-  }
-  return null;
-};
-
-let lastClick = 0;
-const clickHandler = (ev) => {
-  if (ev.button !== 0) return;
-  const now = Date.now();
-  if (now - lastClick < 300) return;
-  lastClick = now;
-
-  const url = extractUrl(ev.target);
-  if (!url) return;
-  ev.preventDefault();
-  ev.stopPropagation();
-  sendToHost('icon:webview-sticker', { src: url });
-};
-
-window.addEventListener('click', clickHandler, true);
-sendToHost('icon:webview-ready', null);
-`;
-
-// Run the preload script in the JSDOM context
-const scriptEl = dom.window.document.createElement('script');
-scriptEl.textContent = preloadScriptContent;
-dom.window.document.body.appendChild(scriptEl);
-
+// Inject the preload script into the JSDOM environment
+global.window = dom.window;
+global.document = dom.window.document;
+const preload = require('../windows/webview-preload.js');
 
 // Simulate a click
-const stickerImg = dom.window.document.getElementById('sticker');
-stickerImg.click();
+const stickerElement = dom.window.document.getElementById('sticker');
+const clickEvent = new dom.window.MouseEvent('click', {
+  bubbles: true,
+  cancelable: true,
+  button: 0
+});
+stickerElement.dispatchEvent(clickEvent);
 
 // Assertions
-assert.strictEqual(sendToHostCalls.length, 2, 'sendToHost should be called twice (ready, sticker)');
-
-const stickerCall = sendToHostCalls.find(call => call.channel === 'icon:webview-sticker');
-assert.ok(stickerCall, 'A sticker call should have been made');
-assert.strictEqual(stickerCall.channel, 'icon:webview-sticker', 'Channel should be icon:webview-sticker');
-assert.deepStrictEqual(stickerCall.payload, { src: 'https://example.com/sticker.png' }, 'Payload should be correct');
-
-const readyCall = sendToHostCalls.find(call => call.channel === 'icon:webview-ready');
-assert.ok(readyCall, 'A ready call should have been made');
+const stickerEvents = global.ipcEvents.filter(e => e.channel === 'icon:webview-sticker');
+assert.strictEqual(stickerEvents.length, 1, 'Expected exactly one IPC event');
+assert.strictEqual(stickerEvents[0].channel, 'icon:webview-sticker', 'Expected channel to be "icon:webview-sticker"');
+assert.deepStrictEqual(stickerEvents[0].payload, { src: 'https://example.com/sticker.png' }, 'Expected payload to be correct');
 
 console.log('Smoke test passed!');

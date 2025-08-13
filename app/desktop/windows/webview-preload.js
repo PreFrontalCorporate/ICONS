@@ -5,7 +5,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 const sendToHost = (ch, payload) => {
-  try { ipcRenderer.sendToHost(ch, payload); } catch {}
+  try { ipcRenderer.sendToHost(ch, payload); } catch (e) { console.error('sendToHost failed', e); }
 };
 
 const forwardSticker = (payload) => {
@@ -26,27 +26,18 @@ contextBridge.exposeInMainWorld('desktop', bridge);
 const extractUrl = (start) => {
   let el = start;
   for (let i = 0; el && i < 8; i++, el = el.parentElement) {
-    // <img>
     if (el.tagName === 'IMG' && el.src) return el.src;
-
-    // <source srcset>
     const s = el.querySelector?.('source[srcset]');
     if (s?.srcset) {
       const first = s.srcset.split(',')[0]?.trim().split(' ')[0];
       if (first) return first;
     }
-
-    // <a href="...png|jpg|webp">
     if (el.tagName === 'A' && el.href && /\.(png|jpe?g|gif|webp|svg)(\?|#|$)/i.test(el.href)) {
       return el.href;
     }
-
-    // background-image: url("...")
     const bg = (el instanceof Element) ? getComputedStyle(el).backgroundImage || '' : '';
     const m = bg.match(/url\(["']?(.*?)["']?\)/i);
     if (m?.[1]) return m[1];
-
-    // data attributes some UIs use
     const d = (el instanceof Element && el.dataset) || {};
     if (d.stickerSrc) return d.stickerSrc;
     if (d.src) return d.src;
@@ -58,20 +49,28 @@ const extractUrl = (start) => {
 
 let lastClick = 0;
 const clickHandler = (ev) => {
-  if (ev.button !== 0) return; // only main button
-  const now = Date.now();
-  if (now - lastClick < 300) return; // 300ms throttle
-  lastClick = now;
+  if (ev.button !== 0) return; // only main button (left-click)
+  if (ev.defaultPrevented) return; // respect site’s own handlers
 
   const url = extractUrl(ev.target);
   if (!url) return;
+
+  const now = Date.now();
+  if (now - lastClick < 500) { // basic debounce
+    ev.preventDefault();
+    ev.stopImmediatePropagation();
+    return;
+  }
+  lastClick = now;
+
   ev.preventDefault();
-  ev.stopPropagation();
-  sendToHost('icon:webview-sticker', { src: url });
+  ev.stopImmediatePropagation(); // prevent other listeners and default browser action
+  forwardSticker({ src: url });
 };
 
-// Capture early so we beat the site’s handlers
+// Make listener idempotent: remove if exists, then add
+window.removeEventListener('click', clickHandler, true);
 window.addEventListener('click', clickHandler, true);
 
-// (Optional) sanity ping so the host can know preload is alive (not required for functionality)
+// (Optional) sanity ping so the host can know preload is alive
 sendToHost('icon:webview-ready', null);
