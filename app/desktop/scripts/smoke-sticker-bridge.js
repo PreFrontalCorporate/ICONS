@@ -1,66 +1,77 @@
-
 const assert = require('assert');
 const { JSDOM } = require('jsdom');
 const Module = require('module');
 
 // Mock Electron's ipcRenderer and contextBridge
-const mockElectron = {
-  ipcRenderer: {
-    sendToHost: (channel, payload) => {
-      console.log(`ipcRenderer.sendToHost called with:`, channel, payload);
-      global.ipcEvents.push({ channel, payload });
-    }
+const mockIpcRenderer = {
+  sendToHost: (channel, payload) => {
+    mockIpcRenderer.sentMessages.push({ channel, payload });
   },
-  contextBridge: {
-    exposeInMainWorld: (apiKey, api) => {
-      // Do nothing, as we are not testing the bridge itself
-    }
-  }
+  sentMessages: [],
 };
 
-// Global state to track IPC calls
-global.ipcEvents = [];
+const mockContextBridge = {
+  exposeInMainWorld: (apiKey, api) => {
+    dom.window[apiKey] = api;
+  },
+};
 
-// High-level mock for the electron module
+// Intercept require('electron') and return our mock
 const originalRequire = Module.prototype.require;
 Module.prototype.require = function(module) {
   if (module === 'electron') {
-    return mockElectron;
+    return {
+      contextBridge: mockContextBridge,
+      ipcRenderer: mockIpcRenderer,
+    };
   }
   return originalRequire.apply(this, arguments);
 };
 
-// JSDOM setup
-const dom = new JSDOM(`
+// HTML content for the test
+const html = `
 <!DOCTYPE html>
 <html>
 <body>
   <img id="sticker" src="https://example.com/sticker.png" />
 </body>
 </html>
-`, {
-  url: "https://example.com",
-  runScripts: "dangerously", // Allow scripts to run
+`;
+
+// Create a JSDOM environment
+const dom = new JSDOM(html, {
+  url: 'https://example.com',
+  runScripts: 'dangerously',
+  pretendToBeVisual: true,
 });
 
-// Inject the preload script into the JSDOM environment
 global.window = dom.window;
 global.document = dom.window.document;
-const preload = require('../windows/webview-preload.js');
 
-// Simulate a click
-const stickerElement = dom.window.document.getElementById('sticker');
+// Load the webview-preload.js script
+require('../windows/webview-preload');
+
+// Manually attach the click listener
+dom.window.document.dispatchEvent(new dom.window.Event('DOMContentLoaded'));
+
+// Clear the initial 'webview-ready' message
+mockIpcRenderer.sentMessages = [];
+
+// --- Test Execution ---
+
+// 1. Simulate a single click
+const stickerImage = dom.window.document.getElementById('sticker');
 const clickEvent = new dom.window.MouseEvent('click', {
   bubbles: true,
   cancelable: true,
-  button: 0
+  button: 0, // Left click
 });
-stickerElement.dispatchEvent(clickEvent);
+stickerImage.dispatchEvent(clickEvent);
 
-// Assertions
-const stickerEvents = global.ipcEvents.filter(e => e.channel === 'icon:webview-sticker');
-assert.strictEqual(stickerEvents.length, 1, 'Expected exactly one IPC event');
-assert.strictEqual(stickerEvents[0].channel, 'icon:webview-sticker', 'Expected channel to be "icon:webview-sticker"');
-assert.deepStrictEqual(stickerEvents[0].payload, { src: 'https://example.com/sticker.png' }, 'Expected payload to be correct');
+// 2. Assertions
+assert.strictEqual(mockIpcRenderer.sentMessages.length, 1, 'Expected exactly one IPC message.');
+const [message] = mockIpcRenderer.sentMessages;
+assert.strictEqual(message.channel, 'icon:webview-sticker', 'IPC channel should be "icon:webview-sticker".');
+assert.deepStrictEqual(message.payload, { src: 'https://example.com/sticker.png' }, 'Payload should contain the correct sticker URL.');
 
 console.log('Smoke test passed!');

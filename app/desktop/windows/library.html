@@ -41,11 +41,16 @@
       document.getElementById('clear')?.addEventListener('click', clearOverlays);
 
       const libview = document.getElementById('libview');
-      libview.addEventListener('ipc-message', (ev) => {
-        if (ev.channel === 'icon:webview-sticker' && ev.args?.[0]) addSticker(ev.args[0]);
-        if (ev.channel === 'icon:webview-clear') clearOverlays();
-        // optional: console.debug('webview msg', ev.channel, ev.args);
-      });
+      let isIpcListenerAttached = false;
+      if (!isIpcListenerAttached) {
+        libview.addEventListener('ipc-message', (ev) => {
+          if (ev.channel === 'icon:webview-sticker' && ev.args?.[0]) addSticker(ev.args[0]);
+          if (ev.channel === 'icon:webview-clear') clearOverlays();
+          // optional: console.debug('webview msg', ev.channel, ev.args);
+        });
+        isIpcListenerAttached = true;
+      }
+
 
       libview.addEventListener('dom-ready', () => libview.focus());
     </script>

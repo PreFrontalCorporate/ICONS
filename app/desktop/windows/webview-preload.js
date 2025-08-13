@@ -55,8 +55,8 @@ const extractUrl = (start) => {
 
 let lastClick = 0;
 const clickHandler = (ev) => {
-  // We only care about left-clicks
-  if (ev.button !== 0) return;
+  // We only care about left-clicks, and only if another handler hasn't already processed it.
+  if (ev.button !== 0 || ev.defaultPrevented) return;
 
   const url = extractUrl(ev.target);
   if (!url) return;
@@ -79,8 +79,9 @@ const clickHandler = (ev) => {
 // Use a more specific listener to avoid capturing clicks on UI elements
 // and ensure we only attach it once.
 const attachClickListener = () => {
-  window.removeEventListener('click', clickHandler, true);
+  if (window.clickListenerAttached) return;
   window.addEventListener('click', clickHandler, true);
+  window.clickListenerAttached = true;
 };
 
 // Attach the listener once the DOM is loaded
