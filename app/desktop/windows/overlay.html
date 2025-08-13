@@ -1,88 +1,61 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>icon – overlay</title>
-    <style>
-      html, body { margin: 0; height: 100%; background: transparent; }
-      .titlebar {
-        -webkit-app-region: drag;
-        position: absolute; inset: 0 0 auto 0; height: 28px;
-        background: transparent;
-      }
-      .no-drag { -webkit-app-region: no-drag; }
+<head>
+  <meta charset="utf-8"/>
+  <title>overlay</title>
+  <style>
+    html, body { margin:0; height:100%; background: transparent; }
+    /* Make the whole window draggable unless explicitly opted-out */
+    .drag { -webkit-app-region: drag; position: absolute; inset: 0; }
+    .chrome { position: absolute; top: 8px; right: 8px; display: flex; gap: 6px; -webkit-app-region: no-drag; }
+    .btn {
+      border:0; padding:6px 8px; border-radius:8px; font:12px/1 ui-sans-serif, system-ui;
+      color:#fff; background:rgba(0,0,0,.55); cursor:pointer;
+    }
+    #wrap { position:absolute; inset:0; display:grid; place-items:center; -webkit-app-region: no-drag; }
+    #img { max-width:100%; max-height:100%; transform-origin:center center; image-rendering: auto; }
+  </style>
+</head>
+<body>
+  <div class="drag"></div>
+  <div class="chrome">
+    <button id="smaller" class="btn" title="Alt+-">–</button>
+    <button id="bigger" class="btn" title="Alt+=">+</button>
+    <button id="rotate" class="btn" title="Alt+R">⟳</button>
+    <button id="close"  class="btn" title="Close">✕</button>
+  </div>
+  <div id="wrap"><img id="img" alt="overlay"/></div>
 
-      .wrap { position: absolute; inset: 0; display: grid; place-items: center; user-select: none; }
-      .img {
-        will-change: transform;
-        transform-origin: center center;
-        max-width: 95vmin; max-height: 95vmin;
-        pointer-events: none; /* let window drag everywhere except the buttons */
-      }
+  <script>
+    const params = decodeURIComponent(location.hash.slice(1) || '');
+    const src = params || '';
+    const img = document.getElementById('img');
+    img.src = src;
 
-      .buttons { position: absolute; right: 8px; top: 8px; display: flex; gap: 6px; }
-      button{
-        border:0;border-radius:10px;padding:6px 10px;
-        font:12px/1.1 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-        background:rgba(0,0,0,.6);color:#fff;cursor:pointer;
-      }
-      button:hover{ background: rgba(0,0,0,.8); }
-    </style>
-  </head>
-  <body>
-    <div class="titlebar"></div>
+    const stateKey = 'overlay:state:' + (src || 'unknown');
+    const state = (() => {
+      try { return JSON.parse(localStorage.getItem(stateKey) || '{"scale":1,"rot":0}'); }
+      catch { return { scale:1, rot:0 }; }
+    })();
 
-    <div class="wrap">
-      <img id="img" class="img" alt="overlay" />
-      <div class="buttons no-drag">
-        <button id="rotL" title="Rotate -90°">⟲</button>
-        <button id="rotR" title="Rotate +90°">⟳</button>
-        <button id="close" title="Close">✕</button>
-      </div>
-    </div>
+    function apply() {
+      img.style.transform = `scale(${state.scale}) rotate(${state.rot}deg)`;
+      try { localStorage.setItem(stateKey, JSON.stringify(state)); } catch {}
+    }
+    apply();
 
-    <script>
-      const $ = (s) => document.querySelector(s);
-      const { ipcRenderer } = window.electron; // provided by overlay-preload.js
+    document.getElementById('close')?.addEventListener('click', () => window.electronAPI?.closeSelf?.());
+    document.getElementById('rotate')?.addEventListener('click', () => { state.rot = (state.rot + 90) % 360; apply(); });
+    document.getElementById('bigger')?.addEventListener('click', () => { state.scale = Math.min(5, state.scale + 0.1); apply(); });
+    document.getElementById('smaller')?.addEventListener('click', () => { state.scale = Math.max(0.1, state.scale - 0.1); apply(); });
 
-      const imgEl = $('#img');
-      let rotation = 0;
-      let scale = 1;
-
-      // Load image URL from hash
-      try {
-        const src = decodeURIComponent(location.hash.slice(1));
-        if (src) imgEl.src = src;
-      } catch {}
-
-      // Rotate buttons
-      $('#rotL').addEventListener('click', () => { rotation -= 90; apply(); });
-      $('#rotR').addEventListener('click', () => { rotation += 90; apply(); });
-
-      // Close just this overlay
-      $('#close').addEventListener('click', () => { ipcRenderer.invoke('overlay/closeSelf'); });
-
-      // Ctrl/⌘ + MouseWheel to resize
-      window.addEventListener('wheel', (e) => {
-        if (e.ctrlKey || e.metaKey) {
-          e.preventDefault();
-          scale += e.deltaY * -0.001;
-          scale = Math.max(0.1, Math.min(5, scale));
-          apply();
-        }
-      }, { passive:false });
-
-      // Ctrl/⌘+R rotate clockwise (prevent refresh)
-      window.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'r') {
-          e.preventDefault();
-          rotation += 90; apply();
-        }
-      });
-
-      function apply() {
-        imgEl.style.transform = `rotate(${rotation}deg) scale(${scale})`;
-      }
-    </script>
-  </body>
+    // Hotkeys
+    window.addEventListener('keydown', (e) => {
+      if (!e.altKey) return;
+      if (e.code === 'KeyR') { state.rot = (state.rot + 90) % 360; apply(); }
+      if (e.key === '=' || e.code === 'Equal') { state.scale = Math.min(5, state.scale + 0.1); apply(); }
+      if (e.key === '-' || e.code === 'Minus') { state.scale = Math.max(0.1, state.scale - 0.1); apply(); }
+    });
+  </script>
+</body>
 </html>

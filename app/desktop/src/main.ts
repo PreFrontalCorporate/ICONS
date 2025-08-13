@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, globalShortcut, WebContents } from 'electron';
+import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron';
 import * as path from 'node:path';
 
 let mainWin: BrowserWindow | null = null;
@@ -11,14 +11,6 @@ function sendOverlayCount() {
 
 function overlayHtmlPath() {
   return path.join(app.getAppPath(), 'windows', 'overlay.html');
-}
-
-function overlayPreloadPath() {
-  return path.join(app.getAppPath(), 'windows', 'overlay-preload.js');
-}
-
-function webviewPreloadPath() {
-  return path.join(app.getAppPath(), 'windows', 'webview-preload.js');
 }
 
 function createOverlay(imageUrl: string) {
@@ -34,7 +26,7 @@ function createOverlay(imageUrl: string) {
     hasShadow: false,
     focusable: true,
     webPreferences: {
-      preload: overlayPreloadPath(),
+      preload: path.join(app.getAppPath(), 'windows', 'overlay-preload.js'),
       sandbox: false,
     },
   });
@@ -57,33 +49,23 @@ async function createWindow() {
     webPreferences: {
       preload: path.join(app.getAppPath(), 'dist', 'preload.cjs'),
       webviewTag: true,
-      contextIsolation: true,
-      sandbox: false,
     },
   });
 
+  // Load the hosted-library shell (our own HTML that hosts the webview)
   const lib = path.join(app.getAppPath(), 'windows', 'library.html');
   await mainWin.loadFile(lib);
 
-  // HUD toggle — support both O and 0 (users press both!)
-  const toggle = () => mainWin?.webContents.send('overlay:panel/toggle');
-  const clearAll = () => { for (const w of [...overlays]) w.close(); sendOverlayCount(); };
-
-  globalShortcut.register('CommandOrControl+Shift+O', toggle);
-  globalShortcut.register('CommandOrControl+Shift+0', toggle);
-  globalShortcut.register('CommandOrControl+Shift+Backspace', clearAll);
-}
-
-// Force-attach absolute preload + persisted partition to every <webview>
-app.on('web-contents-created', (_evt, contents: WebContents) => {
-  contents.on('will-attach-webview', (_event, params) => {
-    params.preload = webviewPreloadPath();
-    params.partition = 'persist:icon-app';
-    try {
-      console.log('[will-attach-webview] preload=%s partition=%s', params.preload, params.partition);
-    } catch {}
+  // Global hotkeys
+  globalShortcut.register('CommandOrControl+Shift+0', () => {
+    mainWin?.webContents.send('overlay:panel/toggle');
   });
-});
+
+  globalShortcut.register('CommandOrControl+Shift+Backspace', () => {
+    for (const w of [...overlays]) w.close();
+    sendOverlayCount();
+  });
+}
 
 app.whenReady().then(createWindow);
 app.on('will-quit', () => globalShortcut.unregisterAll());
@@ -93,15 +75,11 @@ ipcMain.handle('overlay/pin', (_e, url: string) => {
   createOverlay(url);
   return overlays.size;
 });
-
 ipcMain.handle('overlay/count', () => overlays.size);
-
 ipcMain.handle('overlay/clearAll', () => {
   for (const w of [...overlays]) w.close();
   return overlays.size;
 });
-
-// Called from the overlay window itself to close just that one
 ipcMain.handle('overlay/closeSelf', (e) => {
   const win = BrowserWindow.fromWebContents(e.sender);
   if (win && overlays.has(win)) win.close();

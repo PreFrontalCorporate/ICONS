@@ -16,16 +16,16 @@ contextBridge.exposeInMainWorld('api', {
   },
   onOverlayCount: (fn: (n: number) => void) => {
     const ch = 'overlay:count';
-    ipcRenderer.on(ch, (_e, n: number) => fn(n));
-    return () => ipcRenderer.removeListener(ch, fn as any);
+    const h = (_e: unknown, n: number) => fn(n);
+    ipcRenderer.on(ch, h);
+    return () => ipcRenderer.removeListener(ch, h);
   },
 });
 
 // Back-compat for the library.html we host
-// (Lets it call window.icon.addSticker / clearOverlays, and receive count updates.)
 const compat = {
   addSticker: (payload: { src?: string; url?: string }) => {
-    const url = payload?.url || payload?.src;
+    const url = payload.url || payload.src;
     if (!url) return;
     (window as any).api?.overlays?.pinFromUrl(url);
   },
@@ -48,7 +48,7 @@ const bootOverlayPanel = () => {
     font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu;
   `;
   panel.innerHTML = `
-    <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; border-bottom:1px solid rgba(255,255,255,.15)">
+    <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; border-bottom:1px solid rgba(255,255,255,.12)">
       <strong style="font-size:13px; letter-spacing:.3px;">Overlays</strong>
       <span id="icon-overlay-count" style="opacity:.75; font-size:12px; margin-left:auto">0</span>
       <button id="icon-overlay-clear" title="Clear all overlays"
@@ -56,7 +56,7 @@ const bootOverlayPanel = () => {
         Clear
       </button>
       <button id="icon-overlay-close" title="Hide"
-        style="margin-left:6px; border:0; background:transparent; color:#aaa; font-size:18px; line-height:1; cursor:pointer">×</button>
+        style="margin-left:6px; border:0; background:transparent; color:#aaa; font-size:18px; line-height:1; cursor:pointer">✕</button>
     </div>
     <div id="icon-overlay-body" style="padding:8px 10px; font-size:12px; line-height:1.4; color:#d9d9d9">
       <div>Manage overlay windows created from this app.</div>
@@ -73,21 +73,18 @@ const bootOverlayPanel = () => {
     if (el && typeof n === 'number') el.textContent = String(n);
   };
 
-  // Button wires
   document.getElementById('icon-overlay-clear')?.addEventListener('click', async () => {
     await (window as any).api?.overlays?.clearAll?.();
     refreshCount();
   });
   document.getElementById('icon-overlay-close')?.addEventListener('click', () => {
-    (panel as HTMLDivElement).style.display = 'none';
+    (panel.style as any).display = 'none';
   });
 
-  // Hotkey-triggered toggle from main
   (window as any).api?.onToggleOverlayPanel?.(() => {
     panel.style.display = panel.style.display === 'none' ? '' : 'none';
   });
 
-  // Live count from main
   (window as any).api?.onOverlayCount?.((n: number) => {
     const el = document.getElementById('icon-overlay-count');
     if (el) el.textContent = String(n);

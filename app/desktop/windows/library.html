@@ -18,13 +18,11 @@
     </style>
   </head>
   <body>
-    <!-- NOTE: the 'preload' attribute is the crucial link -->
-    <webview
-      id="libview"
-      src="https://icon-web-two.vercel.app/library"
-      allowpopups
-      preload="./webview-preload.js"
-    ></webview>
+    <!-- NOTE: preload is critical to relay clicks back to host -->
+    <webview id="libview"
+             src="https://icon-web-two.vercel.app/library"
+             preload="webview-preload.js"
+             allowpopups></webview>
 
     <div id="hud" role="status" aria-live="polite">
       <strong>Overlays</strong> <span id="count">0</span>
@@ -35,7 +33,7 @@
     </div>
 
     <script>
-      // Use the compat bridge coming from preload.ts
+      // Use the compat bridge we expose in preload.
       const addSticker = (p) => window.icon?.addSticker?.(p);
       const clearOverlays = () => window.icon?.clearOverlays?.();
 
@@ -47,14 +45,11 @@
       document.getElementById('clear')?.addEventListener('click', clearOverlays);
 
       const libview = document.getElementById('libview');
-
-      // Receive relayed messages from the <webview> guest via webview-preload.js
       libview.addEventListener('ipc-message', (ev) => {
         if (ev.channel === 'icon:webview-sticker' && ev.args && ev.args[0]) {
           addSticker(ev.args[0]); // { url | src }
         }
       });
-
       libview.addEventListener('dom-ready', () => {
         libview.focus();
         console.debug('[icon:library] webview dom-ready');
