@@ -91,6 +91,6 @@ if (document.readyState === 'loading') {
   attachClickListener();
 }
 
-
+// Force a new commit
 // (Optional) sanity ping so the host can know preload is alive
 sendToHost('icon:webview-ready', null);
