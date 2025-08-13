@@ -8,6 +8,7 @@ function sendOverlayCount() {
   const n = overlays.size;
   BrowserWindow.getAllWindows().forEach(w => w.webContents.send('overlay:count', n));
 }
+
 function overlayHtmlPath() {
   return path.join(app.getAppPath(), 'windows', 'overlay.html');
 }
@@ -29,9 +30,11 @@ function createOverlay(imageUrl: string) {
       sandbox: false,
     },
   });
+
   win.on('closed', () => { overlays.delete(win); sendOverlayCount(); });
   win.loadFile(overlayHtmlPath(), { hash: encodeURIComponent(imageUrl) });
-  overlays.add(win); sendOverlayCount();
+  overlays.add(win);
+  sendOverlayCount();
   return win;
 }
 
@@ -41,11 +44,13 @@ async function createWindow() {
     height: 800,
     webPreferences: {
       preload: path.join(app.getAppPath(), 'dist', 'preload.cjs'),
+      webviewTag: true,              // <—— important: allow <webview>
       sandbox: false,
     },
   });
 
-  await mainWin.loadURL('https://icon-web-two.vercel.app/library');
+  // Load our local wrapper (contains <webview> that points at the hosted Library)
+  await mainWin.loadFile(path.join(app.getAppPath(), 'windows', 'library.html'));
 
   const toggle = () => mainWin?.webContents.send('overlay:panel/toggle');
   globalShortcut.register('CommandOrControl+Shift+O', toggle);
@@ -59,7 +64,7 @@ async function createWindow() {
 app.whenReady().then(createWindow);
 app.on('will-quit', () => globalShortcut.unregisterAll());
 
-// IPC
+// IPC endpoints used by preload + overlay windows
 ipcMain.handle('overlay/pin', (_e, url: string) => { createOverlay(url); return overlays.size; });
 ipcMain.handle('overlay/count', () => overlays.size);
 ipcMain.handle('overlay/clearAll', () => { for (const w of [...overlays]) w.close(); return overlays.size; });
