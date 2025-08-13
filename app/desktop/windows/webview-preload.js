@@ -56,7 +56,13 @@ const extractUrl = (start) => {
   return null;
 };
 
+let lastClick = 0;
 const clickHandler = (ev) => {
+  if (ev.button !== 0) return; // only main button
+  const now = Date.now();
+  if (now - lastClick < 300) return; // 300ms throttle
+  lastClick = now;
+
   const url = extractUrl(ev.target);
   if (!url) return;
   ev.preventDefault();
@@ -66,7 +72,6 @@ const clickHandler = (ev) => {
 
 // Capture early so we beat the site’s handlers
 window.addEventListener('click', clickHandler, true);
-window.addEventListener('pointerdown', clickHandler, true);
 
 // (Optional) sanity ping so the host can know preload is alive (not required for functionality)
 sendToHost('icon:webview-ready', null);

@@ -22,7 +22,8 @@
     "build:renderer": "vite build --config vite.config.ts",
     "build": "pnpm run build:main && pnpm run build:preload && pnpm run build:renderer",
     "postbuild": "node ../../scripts/desktop/write-dist-pkg.cjs",
-    "dist": "pnpm run build && electron-builder"
+    "dist": "pnpm run build && electron-builder",
+    "test:smoke": "node scripts/smoke-sticker-bridge.js"
   },
   "dependencies": {
     "archiver": "^6.0.2",
@@ -36,6 +37,7 @@
     "electron": "^29.4.6",
     "electron-builder": "^24.13.3",
     "electronmon": "^2.0.3",
+    "jsdom": "^24.0.0",
     "typescript": "^5.4.4",
     "vite": "^5.4.19"
   },
