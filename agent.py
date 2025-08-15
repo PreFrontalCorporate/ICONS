@@ -136,7 +136,7 @@ def _process_response(response):
 
     log("--- 🤖 Gemini's Full Response ---\n" + raw_text + "\n---------------------------------")
 
-    # **FIX**: Always generate a summary, even if the response is malformed.
+    # **GUARANTEED SUMMARY**: Always generate a summary, even if the response is malformed.
     plan_match = re.search(r"## Plan\n(.*?)(?=##|EDIT)", raw_text, re.DOTALL)
     plan_text = plan_match.group(1).strip() if plan_match else "No plan was provided."
     
@@ -151,22 +151,33 @@ def _process_response(response):
     edit_blocks = re.findall(r"EDIT ([\w/.-]+)\n```[\w]*\n(.*?)\n```", raw_text, re.DOTALL)
     
     if not edit_blocks:
-        log("🤔 Agent provided a plan but no EDIT blocks. This indicates it may be blocked or finished.")
+        log("🤔 Agent provided a plan but no EDIT blocks. This indicates it may be blocked or has completed its task.")
         return False, detailed_summary
 
     files_edited = False
     for filepath, content in edit_blocks:
-        filepath = filepath.strip()
+        filepath_str = filepath.strip()
+        log(f"✍️ Attempting to write to file: {filepath_str}")
         try:
-            p = Path(filepath)
+            p = Path(filepath_str)
+            log(f"   | 1. Created Path object: {p}")
             p.parent.mkdir(parents=True, exist_ok=True)
+            log(f"   | 2. Ensured parent directory exists: {p.parent}")
             p.write_text(content, encoding="utf-8")
-            log(f"✅ Applied edit to {filepath}")
+            log(f"   | 3. Successfully wrote content to file.")
+            log(f"✅ Applied edit to {filepath_str}")
             files_edited = True
         except Exception as e:
-            log(f"❌ CRITICAL ERROR: Failed to write to {filepath}: {e}")
-            log("   | This is a standard OS-level permission error. Check user/file permissions in the VM.")
-            summary = f"A critical OS-level permission error occurred. The agent could not write to `{filepath}`. Please check the file and user permissions on the VM.\n\n{detailed_summary}"
+            log("❌" * 20)
+            log(f"CRITICAL WRITE FAILURE trying to edit: {filepath_str}")
+            log(f"This is a standard OS-level file system error, NOT an agent sandbox issue.")
+            log(f"Python Exception Type: {type(e).__name__}")
+            log(f"Error Message: {e}")
+            log("Check the following:")
+            log(f"  - Does the user `sartorialsynapse` have write permissions on the directory `/srv/icon/{p.parent}`?")
+            log(f"  - Is the file system read-only?")
+            log("❌" * 20)
+            summary = f"A critical OS-level permission error occurred. The agent could not write to `{filepath_str}`. Please check the file and user permissions on the VM.\n\nError: {e}\n\n{detailed_summary}"
             return False, summary
 
     return files_edited, detailed_summary
@@ -177,7 +188,6 @@ def run_pass(run_id: str, user_prompt: str, passes_done: int):
     log(f"--- 🔁 Starting Pass {passes_done}/{MAX_PASSES} ---")
     repo_context = get_repo_context()
     
-    # **CRITICAL CHANGE**: New prompt forces the agent to address being blocked.
     prompt = textwrap.dedent(f"""
         You are an expert-level AI software engineer. Your task is to solve the user's request by editing files. You are methodical, careful, and you ALWAYS explain your reasoning.
 
@@ -195,7 +205,7 @@ def run_pass(run_id: str, user_prompt: str, passes_done: int):
 
         3.  **SUMMARY:** End with a `## Summary of Changes` section. Describe the changes you made. This section is MANDATORY.
 
-        **IMPORTANT**: If you determine you cannot edit files due to an environment error (like 'write_not_allowed'), your plan MUST state this as the primary obstacle. Your summary MUST explain that you were blocked and could not proceed. Do NOT attempt to use other tools. Simply report the blockage.
+        **IMPORTANT**: If you determine you cannot edit files due to an environment error (like 'write_not_allowed' from an internal tool), your plan MUST state this as the primary obstacle. Your summary MUST explain that you were blocked and could not proceed.
 
         ## Repository Context
         {repo_context}
@@ -242,7 +252,7 @@ def main():
                 commit_message = f"feat(agent): solve '{user_prompt[:50]}...'\n\n{summary}\n\nRun ID: {run_id}"
                 run_command(["git", "commit", "-m", commit_message])
                 if PUSH_MAIN:
-                    log(f"🚢 Pushing to {MAIN_BRANCH}..."); run_command(["git", "push", "origin", MAIN_BRANCH])
+                    log(f"� Pushing to {MAIN_BRANCH}..."); run_command(["git", "push", "origin", MAIN_BRANCH])
                 log("🎉 Agent finished successfully!"); break
             else:
                 log("❌ Tests failed. Reverting changes and retrying."); run_command(["git", "reset", "--hard", "HEAD"])
