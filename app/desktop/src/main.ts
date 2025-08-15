@@ -40,6 +40,7 @@ async function createMainWindow() {
   mainWin = new BrowserWindow({
     width: 1024,
     height: 768,
+    show: false, // Start hidden, show when ready
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       webviewTag: true,
@@ -47,6 +48,14 @@ async function createMainWindow() {
   });
 
   mainWin.loadFile(path.join(__dirname, '../windows/library.html'));
+
+  // More robust show logic
+  mainWin.once('ready-to-show', () => {
+    if (mainWin) {
+      mainWin.show();
+    }
+  });
+
   mainWin.on('closed', () => { mainWin = null; });
 
   // Forward events from the main window (hosting the webview) to the overlay

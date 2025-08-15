@@ -1,7 +1,7 @@
 {
   "name": "icon-desktop",
   "productName": "Icon Desktop",
-  "version": "1.0.131",
+  "version": "1.0.132",
   "description": "Overlay sticker client for Icon Suite – pin your stickers on top of any app.",
   "license": "MIT",
   "homepage": "https://github.com/PreFrontalCorporate/icon",
@@ -38,6 +38,7 @@
     "electron-builder": "^24.13.3",
     "electronmon": "^2.0.3",
     "jsdom": "^24.0.0",
+    "sinon": "^17.0.1",
     "typescript": "^5.4.4",
     "vite": "^5.4.19"
   },
