@@ -6,14 +6,6 @@
     <style>
       html, body { height: 100%; margin: 0; background: #111; }
       #libview { position: fixed; inset: 0; border: 0; }
-      #hud {
-        position: fixed; right: 16px; bottom: 16px; z-index: 10;
-        background: rgba(0,0,0,.8); color: #fff; padding: 12px 14px; border-radius: 12px;
-        font: 13px/1.35 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-        box-shadow: 0 10px 24px rgba(0,0,0,.35); max-width: 320px;
-      }
-      #hud button { appearance:none; border:0; border-radius:10px; padding:6px 10px; background:#ef4444; color:#fff; font-weight:600; cursor:pointer; }
-      #count { font-variant-numeric: tabular-nums; }
     </style>
   </head>
   <body>
@@ -26,33 +18,28 @@
       partition="persist:iconlib">
     </webview>
 
-    <div id="hud" role="status" aria-live="polite">
-      <strong>Overlays</strong> <span id="count">0</span>
-      <button id="clear">Clear</button>
-      <div style="opacity:.7;margin-top:6px;font-size:12px">
-        Tip: Ctrl/⌘+Shift+O or Ctrl/⌘+Shift+0 toggles; Ctrl/⌘+Shift+Backspace clears.
-      </div>
-    </div>
-
     <script>
-      const addSticker = (p) => window.icon?.addSticker?.(p);
-      const clearOverlays = () => window.icon?.clearOverlays?.();
-
-      document.getElementById('clear')?.addEventListener('click', clearOverlays);
-
       const libview = document.getElementById('libview');
-      let isIpcListenerAttached = false;
-      if (!isIpcListenerAttached) {
-        libview.addEventListener('ipc-message', (ev) => {
-          if (ev.channel === 'icon:webview-sticker' && ev.args?.[0]) addSticker(ev.args[0]);
-          if (ev.channel === 'icon:webview-clear') clearOverlays();
-          // optional: console.debug('webview msg', ev.channel, ev.args);
+
+      // Ensure we only attach this listener once.
+      if (!window.libraryListenerAttached) {
+        // The host renderer (this page) listens for IPC messages from the <webview> guest.
+        // The webview's own preload script sends this message.
+        libview.addEventListener('ipc-message', (event) => {
+          // GOAL:webview.single_ipc_message
+          if (event.channel === 'icon:webview-sticker' && event.args?.[0]?.src) {
+            // The main window's preload script (preload.ts) exposes `window.icon.addSticker`.
+            window.icon?.addSticker?.({ src: event.args[0].src });
+          }
         });
-        isIpcListenerAttached = true;
+        window.libraryListenerAttached = true;
       }
 
 
-      libview.addEventListener('dom-ready', () => libview.focus());
+      libview.addEventListener('dom-ready', () => {
+        // The webview is ready, give it focus.
+        libview.focus();
+      });
     </script>
   </body>
 </html>

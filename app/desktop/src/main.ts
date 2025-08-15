@@ -2,74 +2,105 @@ import { app, BrowserWindow, ipcMain, globalShortcut, shell } from 'electron';
 import * as path from 'node:path';
 
 let mainWin: BrowserWindow | null = null;
-const overlays = new Set<BrowserWindow>();
+let overlayWindow: BrowserWindow | null = null;
 
-function sendOverlayCount() {
-  const n = overlays.size;
-  BrowserWindow.getAllWindows().forEach(w => w.webContents.send('overlay:count', n));
-}
+// GOAL:main.single_overlay
+function getOverlayWindow() {
+  if (overlayWindow && !overlayWindow.isDestroyed()) {
+    return overlayWindow;
+  }
 
-function overlayHtmlPath() {
-  return path.join(app.getAppPath(), 'windows', 'overlay.html');
-}
-
-function createOverlay(imageUrl: string) {
-  const win = new BrowserWindow({
-    width: 480,
-    height: 480,
-    frame: false,
+  overlayWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
     transparent: true,
-    resizable: true,
-    movable: true,
+    frame: false,
+    focusable: false,
     alwaysOnTop: true,
     skipTaskbar: true,
     hasShadow: false,
-    focusable: true,
     webPreferences: {
-      preload: path.join(app.getAppPath(), 'windows', 'overlay-preload.js'),
-      sandbox: false,
+      preload: path.join(__dirname, 'preload.js'),
+      sandbox: false, // Overlay needs to live outside sandbox for some syscalls
     },
   });
 
-  win.on('closed', () => { overlays.delete(win); sendOverlayCount(); });
-  win.loadFile(overlayHtmlPath(), { hash: encodeURIComponent(imageUrl) });
-  overlays.add(win);
-  sendOverlayCount();
-  return win;
+  overlayWindow.setIgnoreMouseEvents(true, { forward: true });
+  overlayWindow.loadFile(path.join(__dirname, '../overlay/index.html'));
+  overlayWindow.on('closed', () => { overlayWindow = null; });
+
+  return overlayWindow;
 }
 
-async function createWindow() {
+function sendToOverlay(channel: string, ...args: any[]) {
+  getOverlayWindow()?.webContents.send(channel, ...args);
+}
+
+async function createMainWindow() {
   mainWin = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1024,
+    height: 768,
     webPreferences: {
-      preload: path.join(app.getAppPath(), 'dist', 'preload.cjs'),
-      webviewTag: true,              // <—— important: allow <webview>
-      sandbox: false,
+      preload: path.join(__dirname, 'preload.js'),
+      webviewTag: true,
     },
   });
 
-  // Load our local wrapper (contains <webview> that points at the hosted Library)
-  await mainWin.loadFile(path.join(app.getAppPath(), 'windows', 'library.html'));
+  mainWin.loadFile(path.join(__dirname, '../windows/library.html'));
+  mainWin.on('closed', () => { mainWin = null; });
 
-  const toggle = () => mainWin?.webContents.send('overlay:panel/toggle');
-  globalShortcut.register('CommandOrControl+Shift+O', toggle);
-  globalShortcut.register('CommandOrControl+Shift+0', toggle);
-  globalShortcut.register('CommandOrControl+Shift+Backspace', () => {
-    for (const w of [...overlays]) w.close();
-    sendOverlayCount();
+  // Forward events from the main window (hosting the webview) to the overlay
+  ipcMain.on('icon:webview-sticker', (_event, arg) => {
+    sendToOverlay('sticker:add', arg);
   });
 }
 
-app.whenReady().then(createWindow);
-app.on('will-quit', () => globalShortcut.unregisterAll());
+function registerGlobalShortcuts() {
+  const mapping = {
+    'CommandOrControl+Shift+O': () => sendToOverlay('overlay:toggle'),
+    'CommandOrControl+Shift+0': () => sendToOverlay('overlay:toggle'),
+    'CommandOrControl+Shift+Backspace': () => sendToOverlay('overlay:nuke'),
+    'CommandOrControl+Alt+M': () => sendToOverlay('overlay:nuke'),
+    'CommandOrControl+Alt+H': () => sendToOverlay('overlay:toggleHide'),
+    'CommandOrControl+Alt+S': () => sendToOverlay('overlay:shuffle'),
+    'CommandOrControl+Alt+R': () => sendToOverlay('overlay:rain', 30),
+    'CommandOrControl+Alt+1': () => sendToOverlay('overlay:mix', 'A'),
+    'CommandOrControl+Alt+2': () => sendToOverlay('overlay:mix', 'B'),
+    'CommandOrControl+Alt+3': () => sendToOverlay('overlay:mix', 'C'),
+  };
 
-// IPC endpoints used by preload + overlay windows
-ipcMain.handle('overlay/pin', (_e, url: string) => { createOverlay(url); return overlays.size; });
-ipcMain.handle('overlay/count', () => overlays.size);
-ipcMain.handle('overlay/clearAll', () => { for (const w of [...overlays]) w.close(); return overlays.size; });
-ipcMain.handle('overlay/closeSelf', (e) => {
-  const win = BrowserWindow.fromWebContents(e.sender);
-  if (win && overlays.has(win)) win.close();
+  for (const [accelerator, action] of Object.entries(mapping)) {
+    try {
+      globalShortcut.register(accelerator, action);
+    } catch (e) {
+      console.error(`Failed to register shortcut ${accelerator}:`, e);
+    }
+  }
+}
+
+app.whenReady().then(() => {
+  createMainWindow();
+  getOverlayWindow(); // Pre-warm the overlay
+  registerGlobalShortcuts();
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createMainWindow();
+    }
+  });
 });
-ipcMain.handle('app/openExternal', (_e, url: string) => shell.openExternal(url));
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll();
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+// Handle IPC from preload scripts
+ipcMain.on('app:open-external', (_event, url) => {
+  shell.openExternal(url);
+});
