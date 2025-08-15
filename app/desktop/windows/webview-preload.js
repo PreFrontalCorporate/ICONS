@@ -7,7 +7,6 @@ const { contextBridge, ipcRenderer } = require('electron');
 // Rate-limiting state
 let lastSentTime = 0;
 const THROTTLE_MS = 300; // Block sends within this window
-let isHandlingClick = false;
 
 // --- GOAL:webview.single_ipc_message ---
 // This is the single, throttled function responsible for sending the IPC message to the host.
@@ -77,32 +76,23 @@ const extractUrlFromTarget = (startNode) => {
 };
 
 const handleDocumentClick = (event) => {
-  if (isHandlingClick) return;
+  // Only act on primary (left) button clicks.
+  if (event.button !== 0) {
+    return;
+  }
 
-  // Check throttle first to avoid doing work if we're going to reject anyway.
+  // The throttle is the main gatekeeper. Check it early.
   if (Date.now() - lastSentTime < THROTTLE_MS) {
     return;
   }
-  // Only act on primary (left) button clicks.
-  if (event.button !== 0) return;
 
   const url = extractUrlFromTarget(event.target);
-  if (!url) return;
-
-  isHandlingClick = true;
-
-  // The click handler races with the library's own handlers.
-  // The `sendToHost` throttle is the final gatekeeper.
-  forwardSticker({ src: url });
-
-  // Prevent other listeners on this element from firing and mark as handled.
-  event.stopImmediatePropagation();
-  event.preventDefault();
-
-  // Reset the flag after a short delay
-  setTimeout(() => {
-    isHandlingClick = false;
-  }, 0);
+  if (url) {
+    // If we found a URL, send it and stop everything else.
+    forwardSticker({ src: url });
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
 };
 
 // Listen on the capture phase to be first in line.
