@@ -10,9 +10,6 @@
 # To run in ship mode (includes git push):
 #    SHIP=1 ./agent.py "your request"
 #
-# To run on a schedule (e.g., via cron):
-#    CRON=1 ./agent.py "your request"
-#
 # To see a dry run of the prompt:
 #    DRY_RUN=1 ./agent.py "your request"
 
@@ -28,32 +25,17 @@ import re
 from pathlib import Path
 
 # --- Configuration ---
-
-# To allow editing all files, use {""}.
-# This is now the default to grant the agent full access.
 ALLOWED_EDIT = {""}
-
-# Files and folders to ignore when building context.
 CONTEXT_IGNORE = {
     ".git", ".hg", ".svn", ".venv", "node_modules", "__pycache__",
     ".DS_Store", "*.pyc", "*.pyo", "*.so", ".next", "dist", "build",
     ".vscode-server", ".vscode-remote", ".ssh", ".local", ".turbo",
     ".cache", ".dotnet", ".agent", "pnpm-lock.yaml",
 }
-
-# Name of the main git branch
 MAIN_BRANCH = "main"
-
-# Max passes for the agent to attempt to solve the problem
 MAX_PASSES = 6
-
-# Set to 1 to run in ship mode (will push to main)
 PUSH_MAIN = os.environ.get("SHIP", "0") == "1"
-
-# Set to 1 for cron mode (quieter, exits on fail)
 CRON_MODE = os.environ.get("CRON", "0") == "1"
-
-# Set to 1 to see the prompt and exit
 DRY_RUN = os.environ.get("DRY_RUN", "0") == "1"
 
 # --- Constants ---
@@ -78,15 +60,15 @@ log_file_path = REPORTS_DIR / f"{run_id}-ship{int(PUSH_MAIN)}-{log_filename_safe
 log_file = open(log_file_path, "w", encoding="utf-8")
 
 def log(message):
-    """Prints to console and writes to the run's log file."""
+    """Prints to console and writes to the run's log file with emojis for clarity."""
     print(message, flush=True)
     log_file.write(f"[{datetime.datetime.now().isoformat()}] {message}\n")
     log_file.flush()
 
 # --- Utility Functions ---
 def run_command(command, check=True):
-    """Runs a command and returns its output."""
-    log(f"🏃 running: {' '.join(command)}")
+    """Runs a command and returns its output, logging everything."""
+    log(f"🏃 Running command: {' '.join(command)}")
     try:
         result = subprocess.run(
             command,
@@ -97,16 +79,20 @@ def run_command(command, check=True):
             errors="ignore",
         )
         if result.stdout:
-            log(result.stdout)
+            log(f"   | stdout: {result.stdout.strip()}")
         if result.stderr:
-            log(result.stderr)
+            log(f"   | stderr: {result.stderr.strip()}")
+        log(f"✅ Command successful: {' '.join(command)}")
         return True, result.stdout.strip()
     except subprocess.CalledProcessError as e:
-        log(f"❌ command failed with exit code {e.returncode}")
-        log(e.stderr)
+        log(f"❌ Command failed with exit code {e.returncode}: {' '.join(command)}")
+        if e.stdout:
+            log(f"   | stdout: {e.stdout.strip()}")
+        if e.stderr:
+            log(f"   | stderr: {e.stderr.strip()}")
         return False, e.stderr.strip()
     except Exception as e:
-        log(f"❌ command failed with exception: {e}")
+        log(f"❌ Command failed with exception: {e}")
         return False, str(e)
 
 def is_path_allowed(filepath: str, allowed_set: set) -> bool:
@@ -116,25 +102,25 @@ def is_path_allowed(filepath: str, allowed_set: set) -> bool:
     return any(filepath.startswith(prefix) for prefix in allowed_set)
 
 def _save_summary(run_id, summary_text):
-    """Saves the summary to the main summary file."""
+    """Saves a detailed summary to the main summary file."""
     try:
         with open(SUMMARY_FILE, "a", encoding="utf-8") as f:
             f.write(f"\n\n---\n\n### Run ID: {run_id}\n\n{summary_text}")
     except Exception as e:
-        log(f"⚠️ could not write to summary file: {e}")
+        log(f"⚠️ Could not write to summary file: {e}")
 
 # --- Core Agent Logic ---
 def get_repo_context():
     """Builds a string with file listings and contents for the prompt."""
+    log("🔍 Building repository context...")
     context = []
-    
-    # Use git to list all tracked files, which respects .gitignore
     ok, files = run_command(["git", "ls-files"])
     if not ok:
         log("⚠️ Could not list git files. Falling back to os.walk.")
         files = [str(p) for p in Path().rglob("*") if p.is_file()]
     
     file_list = files.splitlines()
+    log(f"   | Found {len(file_list)} files to analyze.")
 
     for filename in file_list:
         path = Path(filename)
@@ -143,29 +129,59 @@ def get_repo_context():
         
         context.append(f"----\n📄 {filename}\n----")
         try:
-            # Only include content of text files
             content = path.read_text(encoding="utf-8", errors="ignore")
             context.append(content)
         except Exception:
             context.append("(could not read file content)")
 
+    log("✅ Repository context built.")
     return "\n".join(context)
 
+def run_tests():
+    """Runs the project's test suite."""
+    log("🧪 Running build and test gate...")
+    
+    # These commands are based on the logs provided. Adjust if necessary.
+    ok, _ = run_command(["pnpm", "--dir", "app/desktop", "install"])
+    if not ok: return False
+    
+    ok, _ = run_command(["pnpm", "--dir", "app/desktop", "run", "build"])
+    if not ok: return False
+
+    ok, _ = run_command(["pnpm", "--dir", "app/desktop", "run", "test:smoke"])
+    if not ok: 
+        log("❌ Smoke tests failed.")
+        return False
+
+    log("🟢 Build/test gate GREEN.")
+    return True
+
 def _process_response(response):
-    """Parses Gemini's response and executes the commands."""
+    """
+    Parses Gemini's response, extracts the plan, and executes file edits.
+    Returns (edits_applied, detailed_summary)
+    """
     if not response or not response.text:
-        return False, "Empty response from model."
+        log("❌ Received empty response from model.")
+        return False, "Error: Empty response from model."
 
     text = response.text
-    log("--- 🤖 Gemini's response ---\n" + text + "\n--------------------------")
+    log("--- 🤖 Gemini's Full Response ---\n" + text + "\n---------------------------------")
 
-    # Regex to find all EDIT blocks
+    # Extract the plan for logging and summary
+    plan_match = re.search(r"## Plan\n(.*?)(?=##|EDIT)", text, re.DOTALL)
+    plan_text = plan_match.group(1).strip() if plan_match else "No plan was provided."
+    
+    summary_match = re.search(r"## Summary of Changes\n(.*?)$", text, re.DOTALL)
+    summary_text = summary_match.group(1).strip() if summary_match else "No summary was provided."
+    
+    detailed_summary = f"**Agent's Plan:**\n{plan_text}\n\n**Agent's Summary:**\n{summary_text}"
+
     edit_blocks = re.findall(r"EDIT ([\w/.-]+)\n```[\w]*\n(.*?)\n```", text, re.DOTALL)
     
     if not edit_blocks:
-        log("🤔 No EDIT blocks found in the response. Nothing to apply.")
-        # **FIX**: Return False if no edits are proposed to prevent empty commits.
-        return False, "No file edits were suggested by the agent."
+        log("🤔 Agent provided a plan but no EDIT blocks. Retrying.")
+        return False, detailed_summary
 
     files_edited = False
     for filepath, content in edit_blocks:
@@ -182,43 +198,44 @@ def _process_response(response):
             files_edited = True
         except Exception as e:
             log(f"❌ Failed to write to {filepath}: {e}")
-            return False, f"Failed to write to {filepath}"
+            return False, f"Failed to write to {filepath}.\n\n{detailed_summary}"
 
-    # **FIX**: Only return True if at least one file was successfully edited.
     if files_edited:
-        return True, "Edits applied successfully."
+        return True, detailed_summary
     else:
-        return False, "No valid edits were applied."
+        log("⚠️ No valid file edits were applied from the response.")
+        return False, detailed_summary
 
 
 def run_pass(run_id: str, user_prompt: str, passes_done: int):
-    """Runs a single pass of the agent."""
-    log(f"🔁 pass {passes_done}/{MAX_PASSES}")
+    """Runs a single, more verbose pass of the agent."""
+    log(f"--- 🔁 Starting Pass {passes_done}/{MAX_PASSES} ---")
 
-    # --- Build the prompt ---
     repo_context = get_repo_context()
     
-    # Check for feedback file
     feedback_file = STATE_DIR / "feedback.txt"
     feedback_context = ""
     if feedback_file.exists():
         feedback_context = feedback_file.read_text(encoding="utf-8").strip()
-        log(f"📝 Found feedback: {feedback_context}")
+        log(f"📝 Found feedback from previous run: {feedback_context}")
 
+    # **CRITICAL CHANGE**: New, much more demanding prompt.
     prompt = textwrap.dedent(f"""
-        You are an expert software engineer AI agent. Your goal is to solve the user's request by editing files in the repository.
+        You are an expert-level AI software engineer. Your task is to solve the user's request by editing files. You are methodical, careful, and you ALWAYS explain your reasoning.
 
         ## Instructions
-        1.  Analyze the user's request and the provided repository context.
-        2.  Think step-by-step about how to solve the problem.
-        3.  Output your plan and then the necessary file edits.
-        4.  To edit a file, use the format:
+        Your response MUST follow this exact structure. Do not deviate.
+
+        1.  **PLAN:** Start with a `## Plan` section. Explain your understanding of the problem, the root cause, and your step-by-step strategy for the fix. Detail which files you will modify and why. This section is MANDATORY.
+
+        2.  **CODE EDITS:** Provide the code edits using the `EDIT` block format. Ensure you provide the FULL, complete content for each file you edit. Do not use placeholders or omit code.
+            
             EDIT path/to/file.ext
             ```language
             (new file content here)
             ```
-        5.  You can edit multiple files. Ensure you provide the FULL, complete content for each file you edit. Do not use placeholders.
-        6.  If you don't need to edit any files, explain why.
+
+        3.  **SUMMARY:** End with a `## Summary of Changes` section. Briefly describe the changes you made and how they solve the user's request. This section is MANDATORY.
 
         ## Repository Context
         {repo_context}
@@ -231,11 +248,11 @@ def run_pass(run_id: str, user_prompt: str, passes_done: int):
     """).strip()
 
     if DRY_RUN:
-        print("--- DRY RUN PROMPT---")
+        print("--- 🕵️ DRY RUN PROMPT ---")
         print(prompt)
         sys.exit(0)
-
-    # --- Call Gemini ---
+    
+    log("🧠 Sending prompt to Gemini. Awaiting response...")
     try:
         api_key = os.environ.get("GOOGLE_API_KEY")
         if not api_key:
@@ -244,65 +261,64 @@ def run_pass(run_id: str, user_prompt: str, passes_done: int):
         model = genai.GenerativeModel('gemini-1.5-pro-latest')
         
         token_count = model.count_tokens(prompt).total_tokens
-        log(f"🧮 Token count: {token_count}")
+        log(f"   | Token count for this pass: {token_count}")
         
         resp = model.generate_content(
             prompt,
-            generation_config=genai.types.GenerationConfig(
-                temperature=0.1, # Lower temperature for more deterministic code output
-            )
+            generation_config=genai.types.GenerationConfig(temperature=0.05)
         )
     except Exception as e:
         log(f"❌ Gemini API call failed: {e}")
         return False, "Gemini API call failed."
 
-    # --- Execute Gemini's response ---
-    ok, result = _process_response(resp)
-    
-    # Save the summary text regardless of success
-    _save_summary(run_id, resp.text or "(no summary text)")
-    
-    return ok, result
+    ok, summary = _process_response(resp)
+    _save_summary(run_id, summary) # Always save the detailed summary
+    return ok, summary
 
 def main():
     """Main entry point for the agent."""
-    log(f"🧾 per-run logging enabled: {log_file_path}")
+    log(f"🚀 Agent starting. Run ID: {run_id}")
+    log(f"   | Logging to: {log_file_path}")
 
     if len(sys.argv) < 2:
         print("Usage: python agent.py \"<your request>\"")
         sys.exit(1)
     user_prompt = sys.argv[1]
+    log(f"   | User Request: \"{user_prompt}\"")
 
     passes_done = 0
     while passes_done < MAX_PASSES:
         passes_done += 1
         
-        ok, result = run_pass(run_id, user_prompt, passes_done)
+        edits_applied, summary = run_pass(run_id, user_prompt, passes_done)
 
-        if ok:
-            log("✅ Pass successful. Committing changes.")
+        if edits_applied:
+            log("✅ Edits applied. Proceeding to test gate.")
             
-            # Commit changes
-            run_command(["git", "add", "."])
-            commit_message = f"feat(agent): solve '{user_prompt[:50]}...'\n\nRun ID: {run_id}"
-            run_command(["git", "commit", "-m", commit_message])
-            
-            if PUSH_MAIN:
-                log(f"🚢 Pushing to {MAIN_BRANCH}...")
-                run_command(["git", "push", "origin", MAIN_BRANCH])
-            
-            log("🎉 Agent finished successfully!")
-            break  # Exit loop on success
-        else:
-            log(f"⚠️ Pass failed: {result}")
-            if passes_done >= MAX_PASSES:
-                log("❌ Max passes reached. Agent stopping.")
+            if run_tests():
+                log("✅ Tests passed! Committing changes.")
+                run_command(["git", "add", "."])
+                commit_message = f"feat(agent): solve '{user_prompt[:50]}...'\n\n{summary}\n\nRun ID: {run_id}"
+                run_command(["git", "commit", "-m", commit_message])
+                
+                if PUSH_MAIN:
+                    log(f"🚢 Pushing to {MAIN_BRANCH}...")
+                    run_command(["git", "push", "origin", MAIN_BRANCH])
+                
+                log("🎉 Agent finished successfully!")
                 break
-            log("Retrying...")
+            else:
+                log("❌ Tests failed after applying edits. The agent's fix was incorrect. Will retry.")
+                run_command(["git", "reset", "--hard", "HEAD"]) # Revert failed changes
+        else:
+            log(f"⚠️ Pass {passes_done} failed to produce a valid edit. Summary of attempt:\n{summary}")
     
-    # Cleanup
+    if passes_done >= MAX_PASSES:
+        log("❌ Max passes reached. Agent stopping.")
+    
     log_file.close()
     LOCK_FILE.unlink()
+    log("🏁 Agent finished.")
 
 if __name__ == "__main__":
     main()
