@@ -21,6 +21,8 @@ MAIN_BRANCH = "main"
 MAX_PASSES = 6
 PUSH_MAIN = os.environ.get("AGENT_SHIP", "0") == "1"
 DRY_RUN = os.environ.get("DRY_RUN", "0") == "1"
+# Set AGENT_VERBOSE to "1" for extremely detailed logging
+IS_VERBOSE = os.environ.get("AGENT_VERBOSE", "0") == "1"
 
 # --- Constants ---
 STATE_DIR = Path(".agent")
@@ -42,7 +44,9 @@ log_file_path = REPORTS_DIR / f"{run_id}-ship{int(PUSH_MAIN)}-{log_filename_safe
 log_file = open(log_file_path, "w", encoding="utf-8")
 
 def log(message):
-    print(message, flush=True)
+    """Logs a message to both the console and the log file with a prefix."""
+    log_message = f"[AGENT] {message}"
+    print(log_message, flush=True)
     log_file.write(f"[{datetime.datetime.now().isoformat()}] {message}\n")
     log_file.flush()
 
@@ -51,17 +55,19 @@ def run_command(command, check=True):
     log(f"🏃 Running command: {' '.join(command)}")
     try:
         result = subprocess.run(command, capture_output=True, text=True, check=check, encoding="utf-8", errors="ignore")
-        if result.stdout: log(f"   | stdout: {result.stdout.strip()}")
-        if result.stderr: log(f"   | stderr: {result.stderr.strip()}")
+        # Always log stdout and stderr for complete transparency
+        log(f"   | stdout: {result.stdout.strip()}")
+        log(f"   | stderr: {result.stderr.strip()}")
         log(f"✅ Command successful: {' '.join(command)}")
         return True, result.stdout.strip()
     except subprocess.CalledProcessError as e:
         log(f"❌ Command failed with exit code {e.returncode}: {' '.join(command)}")
-        if e.stdout: log(f"   | stdout: {e.stdout.strip()}")
-        if e.stderr: log(f"   | stderr: {e.stderr.strip()}")
+        # Log output even on failure
+        log(f"   | stdout: {e.stdout.strip()}")
+        log(f"   | stderr: {e.stderr.strip()}")
         return False, e.stderr.strip()
     except Exception as e:
-        log(f"❌ Command failed with exception: {e}")
+        log(f"❌ Command failed with an unexpected exception: {e}")
         return False, str(e)
 
 def _save_summary(run_id, summary_text):
@@ -77,20 +83,31 @@ def get_repo_context():
     context = []
     ok, files = run_command(["git", "ls-files"])
     if not ok:
-        log("⚠️ Could not list git files. Falling back to os.walk.")
+        log("⚠️ 'git ls-files' failed. Falling back to scanning all files in the directory.")
         files = [str(p) for p in Path().rglob("*") if p.is_file()]
     file_list = files.splitlines() if isinstance(files, str) else files
-    log(f"   | Found {len(file_list)} files to analyze.")
+    log(f"   | Found {len(file_list)} total files. Filtering against CONTEXT_IGNORE set.")
+    
+    included_count = 0
     for filename in file_list:
         path = Path(filename)
         if any(part in CONTEXT_IGNORE for part in path.parts):
+            if IS_VERBOSE:
+                log(f"   | -> Ignoring '{filename}' due to CONTEXT_IGNORE rule.")
             continue
+        
+        included_count += 1
         context.append(f"----\n📄 {filename}\n----")
         try:
-            context.append(path.read_text(encoding="utf-8", errors="ignore"))
-        except Exception:
+            content = path.read_text(encoding="utf-8", errors="ignore")
+            context.append(content)
+            if IS_VERBOSE:
+                log(f"   | -> Including '{filename}' ({len(content)} chars).")
+        except Exception as e:
+            log(f"   | -> ⚠️  Could not read '{filename}': {e}")
             context.append("(could not read file content)")
-    log("✅ Repository context built.")
+
+    log(f"✅ Repository context built. Included {included_count} files.")
     return "\n".join(context)
 
 def run_tests():
@@ -101,7 +118,7 @@ def run_tests():
     if not ok: return False
     ok, _ = run_command(["pnpm", "--dir", "app/desktop", "run", "postbuild"])
     if not ok:
-        log("❌ Post-build step failed.")
+        log("❌ Post-build step failed. This is a critical failure for the test gate.")
         return False
     log("🟢 Build/test gate GREEN.")
     return True
@@ -110,10 +127,12 @@ def run_tests():
 def _process_response(response, dry_run=False):
     raw_text = response.text if response and response.text else ""
     if not raw_text:
-        log("❌ Received empty response from model.")
+        log("❌ CRITICAL: Received empty response from the model.")
         return False, "Error: Agent returned an empty response."
 
-    log("--- 🤖 Gemini's Full Response ---\n" + raw_text + "\n---------------------------------")
+    log("--- 🤖 Gemini's Full Response ---")
+    log(raw_text)
+    log("---------------------------------")
 
     plan_match = re.search(r"## Plan\n(.*?)(?=##|EDIT)", raw_text, re.DOTALL)
     plan_text = plan_match.group(1).strip() if plan_match else "No plan was provided."
@@ -123,7 +142,7 @@ def _process_response(response, dry_run=False):
 
     edit_blocks = re.findall(r"EDIT ([\w/.\-]+)\n```[\w]*\n(.*?)\n```", raw_text, re.DOTALL)
     if not edit_blocks:
-        log("🤔 Agent provided a plan but no EDIT blocks.")
+        log("🤔 Agent provided a plan but no EDIT blocks were found. Cannot proceed.")
         return False, detailed_summary
 
     files_edited = False
@@ -131,28 +150,37 @@ def _process_response(response, dry_run=False):
         filepath_str = filepath.strip()
         
         if dry_run:
-            log(f"DRY RUN: Skipping write to {filepath_str}")
+            log(f"DRY RUN: Skipping write to '{filepath_str}'")
             continue
 
-        log(f"✍️ Attempting to write to file: {filepath_str}")
+        log(f"✍️ Attempting to write to file: '{filepath_str}'")
         try:
             p = Path(filepath_str)
             p.parent.mkdir(parents=True, exist_ok=True)
+            log(f"   | -> Absolute path: {p.resolve()}")
 
-            # To prevent write issues, try removing the file first, mimicking the 'rm' then 'edit' flow.
+            # To prevent write issues, try removing the file first.
             if p.exists():
                 try:
                     p.unlink()
-                    log(f"   | Removed existing file: {filepath_str}")
+                    log(f"   | -> Successfully removed existing file.")
                 except Exception as e:
-                    log(f"   | ⚠️ Could not remove existing file, proceeding with write anyway: {e}")
+                    log(f"   | -> ⚠️ Could not remove existing file, proceeding to write anyway. Error: {e}")
 
             p.write_text(content, encoding="utf-8")
-            log(f"✅ Applied edit to {filepath_str}")
+            log(f"   | -> Wrote {len(content)} characters.")
+            log(f"✅ Applied edit to '{filepath_str}' successfully.")
             files_edited = True
         except Exception as e:
-            log(f"❌ CRITICAL WRITE FAILURE for {p.resolve()}: {e}")
-            return False, f"Permission error editing {filepath_str}: {e}\n\n{detailed_summary}"
+            log(f"❌ CRITICAL WRITE FAILURE for '{p.resolve()}'")
+            log(f"   | -> Error Type: {type(e).__name__}")
+            log(f"   | -> Error Details: {e}")
+            log(f"   | -> Current working directory: {Path.cwd()}")
+            try:
+                log(f"   | -> Current user: {os.getlogin()}")
+            except Exception:
+                log("   | -> Could not determine current user.")
+            return False, f"FATAL: Permission error editing '{filepath_str}': {e}\n\n{detailed_summary}"
 
     return files_edited, detailed_summary
 
@@ -182,14 +210,21 @@ def run_pass(run_id, user_prompt, passes_done):
         {user_prompt}
     """).strip()
 
-    log("🧠 Sending prompt to Gemini...")
+    if IS_VERBOSE:
+        log("--- 🧠 Prompt to be sent to Gemini ---")
+        log(prompt)
+        log("--------------------------------------")
+    else:
+        log("🧠 Sending prompt to Gemini... (Set AGENT_VERBOSE=1 to see the full prompt)")
+
     try:
         api_key = os.environ.get("GOOGLE_API_KEY")
-        if not api_key: raise ValueError("GOOGLE_API_KEY not found.")
+        if not api_key: raise ValueError("GOOGLE_API_KEY environment variable not found.")
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel('gemini-1.5-pro-latest')
         resp = model.generate_content(prompt, generation_config=genai.types.GenerationConfig(temperature=0.05))
     except Exception as e:
+        log(f"❌ Gemini API call failed: {e}")
         return False, f"Gemini API call failed: {e}"
 
     ok, summary = _process_response(resp, dry_run=DRY_RUN)
@@ -203,9 +238,10 @@ def main():
         print("Usage: python agent.py \"<your request>\"")
         sys.exit(1)
     user_prompt = sys.argv[1]
+    log(f"   | User Prompt: '{user_prompt}'")
 
     if DRY_RUN:
-        log("🕵️ DRY RUN — will query Gemini and show the plan, but will not edit files.")
+        log("🕵️ DRY RUN MODE: Will query Gemini and show the plan, but will not edit any files.")
         _, summary = run_pass(run_id, user_prompt, 1)
         print("\n" + "="*20 + " AGENT DRY RUN SUMMARY " + "="*20)
         print(summary)
@@ -217,26 +253,31 @@ def main():
     passes_done = 0
     while passes_done < MAX_PASSES:
         passes_done += 1
+        log(f"Starting pass {passes_done} of {MAX_PASSES}...")
         edits_applied, summary = run_pass(run_id, user_prompt, passes_done)
+        
         if edits_applied:
+            log("✅ Edits were applied by the agent. Proceeding to tests.")
             if run_tests():
                 log("✅ Tests passed! Committing changes.")
                 run_command(["git", "add", "."])
                 commit_message = f"feat(agent): solve '{user_prompt[:50]}...'\n\n{summary}\n\nRun ID: {run_id}"
                 run_command(["git", "commit", "-m", commit_message])
                 if PUSH_MAIN:
+                    log("🚢 Pushing changes to main branch...")
                     run_command(["git", "push", "origin", MAIN_BRANCH])
                 log("🎉 Agent finished successfully!")
                 break
             else:
-                log("❌ Tests failed. Reverting changes and retrying.")
+                log("❌ Tests failed after applying edits. Reverting changes and preparing for next pass.")
                 run_command(["git", "reset", "--hard", "HEAD"])
         else:
-            log(f"⚠️ Pass {passes_done} did not apply any edits. Reason:\n{summary}")
+            log(f"⚠️ Pass {passes_done} completed without applying any edits. Agent's reason:\n{summary}")
 
     if passes_done >= MAX_PASSES:
-        log("❌ Max passes reached. Agent stopping.")
+        log(f"❌ Max passes ({MAX_PASSES}) reached. Agent stopping without a solution.")
         
+    log("🛑 Agent shutting down.")
     log_file.close()
     LOCK_FILE.unlink()
 
