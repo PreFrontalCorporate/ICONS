@@ -84,7 +84,7 @@ def get_repo_context():
     log(f"   | Found {len(file_list)} files to analyze.")
     for filename in file_list:
         path = Path(filename)
-        if any(part in CONTEXT_IGNORE for part in path.parts): 
+        if any(part in CONTEXT_IGNORE for part in path.parts):
             continue
         context.append(f"----\n📄 {filename}\n----")
         try:
@@ -108,7 +108,7 @@ def run_tests():
     return True
 
 # --- Response handling ---
-def _process_response(response):
+def _process_response(response, dry_run=False):
     raw_text = response.text if response and response.text else ""
     if not raw_text:
         log("❌ Received empty response from model.")
@@ -130,15 +130,15 @@ def _process_response(response):
     files_edited = False
     for filepath, content in edit_blocks:
         filepath_str = filepath.strip()
+        
+        if dry_run:
+            log(f"DRY RUN: Skipping write to {filepath_str}")
+            continue # Skip to the next file block
+
         log(f"✍️ Attempting to write to file: {filepath_str}")
         try:
             p = Path(filepath_str)
             p.parent.mkdir(parents=True, exist_ok=True)
-            if not os.access(p.parent, os.W_OK):
-                log(f"⚠️ Directory {p.parent} not writable, attempting chmod...")
-                run_command(["chmod", "u+w", str(p.parent)], check=False)
-            if not os.access(p.parent, os.W_OK):
-                raise PermissionError(f"Directory {p.parent} is still not writable.")
             p.write_text(content, encoding="utf-8")
             log(f"✅ Applied edit to {filepath_str}")
             files_edited = True
@@ -153,16 +153,30 @@ def run_pass(run_id, user_prompt, passes_done):
     log(f"--- 🔁 Starting Pass {passes_done}/{MAX_PASSES} ---")
     repo_context = get_repo_context()
     prompt = textwrap.dedent(f"""
-        You are an expert AI software engineer...
+        You are an expert-level AI software engineer. Your task is to solve the user's request by editing files. You are methodical, careful, and you ALWAYS explain your reasoning.
+
+        ## Instructions
+        Your response MUST follow this exact structure. Do not deviate.
+
+        1.  **PLAN:** Start with a `## Plan` section. Explain your understanding of the problem and your step-by-step strategy. This section is MANDATORY.
+
+        2.  **CODE EDITS:** If you can fix the code, provide edits using the `EDIT` block format. Ensure you provide the FULL, complete content for each file you edit.
+            
+            EDIT path/to/file.ext
+            ```language
+            (new file content here)
+            ```
+
+        3.  **SUMMARY:** End with a `## Summary of Changes` section. Describe the changes you made. This section is MANDATORY.
+
+        **IMPORTANT**: If you determine you cannot edit files due to an environment error (like 'write_not_allowed' from an internal tool), your plan MUST state this as the primary obstacle. Your summary MUST explain that you were blocked and could not proceed.
+
         ## Repository Context
         {repo_context}
+        
         ## User Request
         {user_prompt}
     """).strip()
-
-    if DRY_RUN:
-        print(prompt)
-        sys.exit(0)
 
     log("🧠 Sending prompt to Gemini...")
     try:
@@ -174,7 +188,8 @@ def run_pass(run_id, user_prompt, passes_done):
     except Exception as e:
         return False, f"Gemini API call failed: {e}"
 
-    ok, summary = _process_response(resp)
+    # Pass the DRY_RUN flag to the processing function
+    ok, summary = _process_response(resp, dry_run=DRY_RUN)
     _save_summary(run_id, summary)
     return ok, summary
 
@@ -185,20 +200,41 @@ def main():
         print("Usage: python agent.py \"<your request>\"")
         sys.exit(1)
     user_prompt = sys.argv[1]
+
+    # Handle the new DRY_RUN logic at the start
+    if DRY_RUN:
+        log("🕵️ DRY RUN — will query Gemini and show the plan, but will not edit files.")
+        _, summary = run_pass(run_id, user_prompt, 1)
+        print("\n" + "="*20 + " AGENT DRY RUN SUMMARY " + "="*20)
+        print(summary)
+        print("="*63)
+        log_file.close()
+        LOCK_FILE.unlink()
+        sys.exit(0)
+
     passes_done = 0
     while passes_done < MAX_PASSES:
         passes_done += 1
         edits_applied, summary = run_pass(run_id, user_prompt, passes_done)
         if edits_applied:
             if run_tests():
+                log("✅ Tests passed! Committing changes.")
                 run_command(["git", "add", "."])
                 commit_message = f"feat(agent): solve '{user_prompt[:50]}...'\n\n{summary}\n\nRun ID: {run_id}"
                 run_command(["git", "commit", "-m", commit_message])
                 if PUSH_MAIN:
                     run_command(["git", "push", "origin", MAIN_BRANCH])
+                log("🎉 Agent finished successfully!")
                 break
             else:
+                log("❌ Tests failed. Reverting changes and retrying.")
                 run_command(["git", "reset", "--hard", "HEAD"])
+        else:
+            log(f"⚠️ Pass {passes_done} did not apply any edits. Reason:\n{summary}")
+
+    if passes_done >= MAX_PASSES:
+        log("❌ Max passes reached. Agent stopping.")
+        
     log_file.close()
     LOCK_FILE.unlink()
 
