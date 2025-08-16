@@ -1,0 +1,351 @@
+#!/usr/bin/env python3
+import os, json, argparse, sys
+import time, random
+from tools.linear.linear_client import gql
+
+# ---------- Constants & caches ----------
+MAX_LABELS_PAGE = 250  # Linear hard cap per query
+LABEL_CACHE = {}       # (lower_name, team_id_or_None) -> label_id
+
+# ---------- Label helpers ----------
+def _prime_label_cache():
+    """Fetch all labels (paginated) once; cache by lowercase name + team_id."""
+    if LABEL_CACHE:
+        return
+    cursor = None
+    while True:
+        q = """
+        query($n:Int!, $after:String){
+          issueLabels(first:$n, after:$after){
+            nodes { id name team { id } }
+            pageInfo { hasNextPage endCursor }
+          }
+        }"""
+        data = gql(q, {"n": MAX_LABELS_PAGE, "after": cursor})
+        conn = data["issueLabels"]
+        for n in conn["nodes"]:
+            nm = (n.get("name") or "").strip().lower()
+            tid = (n.get("team") or {}).get("id")
+            if not nm:
+                continue
+            LABEL_CACHE[(nm, tid)] = n["id"]
+            if tid is None:
+                LABEL_CACHE[(nm, None)] = n["id"]
+        if not conn["pageInfo"]["hasNextPage"]:
+            break
+        cursor = conn["pageInfo"]["endCursor"]
+
+def label_ids_for(names, team_id):
+    """Return de-duplicated label IDs for provided label names (case-insensitive)."""
+    if not names:
+        return []
+    _prime_label_cache()
+    out, seen = [], set()
+    for name in names:
+        key = (name or "").strip().lower()
+        lid = LABEL_CACHE.get((key, team_id)) or LABEL_CACHE.get((key, None))
+        if lid and lid not in seen:
+            out.append(lid); seen.add(lid)
+    return out
+
+def ensure_label(name, team_id, color="#7950f2"):
+    """Return ID for a label; create it on the team if missing."""
+    if not name:
+        return None
+    _prime_label_cache()
+    nm = name.strip().lower()
+    existing = LABEL_CACHE.get((nm, team_id)) or LABEL_CACHE.get((nm, None))
+    if existing:
+        return existing
+    q = """
+    mutation($input: IssueLabelCreateInput!) {
+      issueLabelCreate(input: $input) { success issueLabel { id name team { id } } }
+    }"""
+    created = gql(q, {"input": {"name": name, "color": color, "teamId": team_id}})["issueLabelCreate"]["issueLabel"]
+    lid = created["id"]
+    tid = (created.get("team") or {}).get("id")
+    LABEL_CACHE[(nm, tid)] = lid
+    if tid is None:
+        LABEL_CACHE[(nm, None)] = lid
+    return lid
+
+# ---------- Teams, projects, milestones ----------
+def find_team_by_key(key: str):
+    data = gql("query($n:Int){ teams(first:$n){ nodes { id name key } } }", {"n": 200})
+    for t in data["teams"]["nodes"]:
+        if t.get("key") == key:
+            return t
+    got = ", ".join(sorted([t.get("key","?") for t in data["teams"]["nodes"]]))
+    sys.exit(f"Team key '{key}' not found. Available: {got}")
+
+def find_project_by_name_exact(name: str):
+    data = gql("query($n:Int){ projects(first:$n){ nodes { id name url } } }", {"n": 200})
+    for p in data["projects"]["nodes"]:
+        if p.get("name") == name:
+            return p
+    return None
+
+def create_project(name, description=None, team_id=None, start_date=None, target_date=None):
+    """
+    Create a project. Some workspaces/schemas reject date fields via API;
+    if that happens, retry without dates.
+    """
+    q = """
+    mutation($input: ProjectCreateInput!) {
+      projectCreate(input: $input) { success project { id name url } }
+    }"""
+    base = {"name": name, "teamIds": [team_id] if team_id else []}
+    if description:
+        base["description"] = description
+    if start_date:
+        base["startDate"] = start_date
+    if target_date:
+        base["targetDate"] = target_date
+
+    last_err = None
+    for try_dates in (True, False):
+        inp = dict(base)
+        if not try_dates:
+            inp.pop("startDate", None)
+            inp.pop("targetDate", None)
+        try:
+            return gql(q, {"input": inp})["projectCreate"]["project"]
+        except Exception as e:
+            last_err = e
+            continue
+    raise last_err
+
+def list_existing_milestones_map(project_id):
+    """
+    Return {name -> id} for milestones belonging to the project, using the
+    root-level projectMilestones connection (filtering by project id).
+    """
+    out = {}
+    cursor = None
+    while True:
+        q = """
+        query($pid:String!, $n:Int!, $after:String){
+          projectMilestones(
+            first:$n, after:$after,
+            filter: { project: { id: { eq: $pid } } }
+          ){
+            nodes { id name }
+            pageInfo { hasNextPage endCursor }
+          }
+        }"""
+        try:
+            data = gql(q, {"pid": project_id, "n": 50, "after": cursor})
+        except Exception:
+            break
+        conn = data["projectMilestones"]
+        for m in conn["nodes"]:
+            nm = (m.get("name") or "").strip()
+            if nm:
+                out[nm] = m["id"]
+        if not conn["pageInfo"]["hasNextPage"]:
+            break
+        cursor = conn["pageInfo"]["endCursor"]
+    return out
+
+def create_project_milestone(project_id, name, target_date=None, description=None):
+    q = """
+    mutation($input: ProjectMilestoneCreateInput!) {
+      projectMilestoneCreate(input: $input) {
+        success projectMilestone { id name targetDate }
+      }
+    }"""
+    inp = {"projectId": project_id, "name": name}
+    if target_date: inp["targetDate"] = target_date
+    if description: inp["description"] = description
+    return gql(q, {"input": inp})["projectMilestoneCreate"]["projectMilestone"]
+
+# ---------- Workflow state helpers ----------
+def _team_states(team_id):
+    """Fetch workflow states for a team, schema‑tolerant (states vs workflowStates)."""
+    q1 = """
+    query($id:String!){
+      team(id:$id){
+        workflowStates(first:100){ nodes { id name type } }
+      }
+    }"""
+    try:
+        data = gql(q1, {"id": team_id})
+        st = (data.get("team") or {}).get("workflowStates", {}).get("nodes") or []
+        if st:
+            return st
+    except Exception:
+        pass
+    q2 = """
+    query($id:String!){
+      team(id:$id){
+        states(first:100){ nodes { id name type } }
+      }
+    }"""
+    try:
+        data = gql(q2, {"id": team_id})
+        return (data.get("team") or {}).get("states", {}).get("nodes") or []
+    except Exception:
+        return []
+
+def find_completed_state_id(team_id):
+    """Return the ID of a 'completed'/'done' state for the given team, if any."""
+    for s in _team_states(team_id):
+        t = (s.get("type") or "").lower()
+        n = (s.get("name") or "").lower()
+        if t == "completed" or n in ("done", "completed", "closed", "shipped"):
+            return s["id"]
+    return None
+
+def mark_issue_completed(issue_id, team_id):
+    """Mark an issue completed by moving it to a completed state."""
+    done = find_completed_state_id(team_id)
+    if not done:
+        return False
+    q = """
+    mutation($id:String!, $input:IssueUpdateInput!){
+      issueUpdate(id:$id, input:$input){ success }
+    }"""
+    gql(q, {"id": issue_id, "input": {"stateId": done}})
+    time.sleep(0.05 + random.random() * 0.05)
+    return True
+
+# ---------- Issue helpers ----------
+def create_issue(team_id, title, description=None, project_id=None, project_milestone_id=None):
+    q = """
+    mutation($input: IssueCreateInput!) {
+      issueCreate(input: $input) { success issue { id identifier url } }
+    }"""
+    inp = {"teamId": team_id, "title": (title or "")[:240]}
+    if description:           inp["description"] = description
+    if project_id:            inp["projectId"] = project_id
+    if project_milestone_id:  inp["projectMilestoneId"] = project_milestone_id
+    return gql(q, {"input": inp})["issueCreate"]["issue"]
+
+def issue_update(issue_id, input_obj):
+    q = """
+    mutation($id:String!, $input: IssueUpdateInput!) {
+      issueUpdate(id:$id, input:$input) { success issue { id } }
+    }"""
+    return gql(q, {"id": issue_id, "input": input_obj})
+
+def attach_external_link(entity_id, title, url):
+    if not url:
+        return
+    q = """
+    mutation($input: EntityExternalLinkCreateInput!) {
+      entityExternalLinkCreate(input:$input){ success }
+    }"""
+    gql(q, {"input": {"entityId": entity_id, "title": (title or "Link"), "url": url}})
+
+# ---------- Main ----------
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--plan", required=True, help="Path to enriched plan JSON")
+    ap.add_argument("--team-key", required=True, help="Linear team key, e.g. PRE")
+    ap.add_argument("--reuse-project-if-exists", action="store_true")
+    ap.add_argument("--skip-milestones", action="store_true", help="Do not create milestones from plan")
+    ap.add_argument("--no-backdate", action="store_true", help="Do not set completedAt or move to done state")
+    args = ap.parse_args()
+
+    plan = json.load(open(args.plan, "r", encoding="utf-8"))
+
+    # Team
+    team = find_team_by_key(args.team_key)
+    team_id = team["id"]
+
+    # Project metadata
+    proj_meta = plan.get("project", {}) or {}
+    proj_name = proj_meta.get("name") or "Imported Project"
+    desc = (proj_meta.get("description") or "").strip()
+    overview = (plan.get("overview") or "").strip()
+    if overview:
+        desc = (desc + ("\n\n---\nOverview:\n" if desc else "Overview:\n") + overview).strip()
+
+    # Create or reuse project
+    project = find_project_by_name_exact(proj_name) if args.reuse_project_if_exists else None
+    if not project:
+        project = create_project(
+            name=proj_name,
+            description=desc if desc else None,
+            team_id=team_id,
+            start_date=proj_meta.get("start_date"),
+            target_date=proj_meta.get("target_date"),
+        )
+    print(f"Project: {project['name']}  {project['url']}")
+
+    # Milestones
+    ms_map = list_existing_milestones_map(project["id"]) if not args.skip_milestones else {}
+    ms_failed, ms_skipped = 0, 0
+    if not args.skip_milestones:
+        for m in (proj_meta.get("milestones") or []):
+            name = (m.get("name") or "").strip()
+            if not name:
+                continue
+            if name in ms_map:
+                ms_skipped += 1
+                continue
+            try:
+                pm = create_project_milestone(
+                    project_id=project["id"],
+                    name=name,
+                    target_date=m.get("target_date"),
+                    description=m.get("description"),
+                )
+                ms_map[name] = pm["id"]
+                dt = pm.get("targetDate") or ""
+                print(f"Milestone created: {pm['name']} ({dt})")
+            except Exception as e:
+                ms_failed += 1
+                print(f"WARNING: milestone failed: {name} — {e}", file=sys.stderr)
+
+    # Issues
+    created, failed = 0, 0
+    for idx, it in enumerate(plan.get("issues") or [], 1):
+        try:
+            # Optional milestone mapping by name
+            ms_id = None
+            ms_name = (it.get("milestone") or "").strip()
+            if ms_name:
+                ms_id = ms_map.get(ms_name)
+
+            issue = create_issue(
+                team_id=team_id,
+                title=it.get("title"),
+                description=it.get("description"),
+                project_id=project["id"],
+                project_milestone_id=ms_id,
+            )
+            created += 1
+
+            # Labels + due date
+            wanted = list(dict.fromkeys([(l or "").strip() for l in (it.get("labels") or []) if l]))
+            label_ids = [lid for lid in (ensure_label(n, team_id) for n in wanted) if lid]
+            updates = {}
+            if label_ids:           updates["labelIds"] = label_ids
+            if it.get("due_date"):  updates["dueDate"] = it["due_date"]  # YYYY-MM-DD
+            if updates:
+                issue_update(issue["id"], updates)
+
+            # Backdate completion if requested
+            if (it.get("completed_at") and not args.no_backdate):
+                try:
+                    issue_update(issue["id"], {"completedAt": it["completed_at"]})
+                except Exception:
+                    # Fallback: move to a completed state
+                    mark_issue_completed(issue["id"], team_id)
+
+            # External links
+            for link in (it.get("external_links") or []):
+                attach_external_link(issue["id"], link.get("title"), link.get("url"))
+
+            if created % 20 == 0:
+                print(f"...created {created} issues so far")
+        except Exception as e:
+            failed += 1
+            print(f"WARNING: issue failed ({it.get('title','(no title)')[:80]}): {e}", file=sys.stderr)
+
+    print(f"Done. Milestones created: {len(ms_map)} (skipped existing: {ms_skipped}, failed: {ms_failed}). "
+          f"Issues created: {created}. Issues failed: {failed}.")
+
+if __name__ == "__main__":
+    main()

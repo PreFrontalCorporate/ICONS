@@ -1,0 +1,1 @@
+this is the first run, good luck. The last agent that tried editing the code left it passing the pnpm tests, but when it opened the .exe on windows that github actions released, it would open in the background and never populated an electron window. Please fix! Thank you. 
