@@ -21,7 +21,6 @@ MAIN_BRANCH = "main"
 MAX_PASSES = 6
 PUSH_MAIN = os.environ.get("AGENT_SHIP", "0") == "1"
 DRY_RUN = os.environ.get("DRY_RUN", "0") == "1"
-# Set AGENT_VERBOSE to "1" for extremely detailed logging
 IS_VERBOSE = os.environ.get("AGENT_VERBOSE", "0") == "1"
 
 # --- Constants ---
@@ -55,14 +54,15 @@ def run_command(command, check=True):
     log(f"🏃 Running command: {' '.join(command)}")
     try:
         result = subprocess.run(command, capture_output=True, text=True, check=check, encoding="utf-8", errors="ignore")
-        # Always log stdout and stderr for complete transparency
         log(f"   | stdout: {result.stdout.strip()}")
         log(f"   | stderr: {result.stderr.strip()}")
+        if check and result.returncode != 0:
+             log(f"❌ Command failed with exit code {result.returncode}: {' '.join(command)}")
+             return False, result.stderr.strip()
         log(f"✅ Command successful: {' '.join(command)}")
         return True, result.stdout.strip()
     except subprocess.CalledProcessError as e:
         log(f"❌ Command failed with exit code {e.returncode}: {' '.join(command)}")
-        # Log output even on failure
         log(f"   | stdout: {e.stdout.strip()}")
         log(f"   | stderr: {e.stderr.strip()}")
         return False, e.stderr.strip()
@@ -125,14 +125,26 @@ def run_tests():
 
 # --- Response handling ---
 def _process_response(response, dry_run=False):
-    raw_text = response.text if response and response.text else ""
+    log("🔎 Inspecting full model response object...")
+    try:
+        if response and response.candidates:
+            log(f"   | Full Candidate [0]: {response.candidates[0]}")
+            log(f"   | -> Accessing .content.parts:")
+            for i, part in enumerate(response.candidates[0].content.parts):
+                log(f"      | Part {i}: {part}")
+        else:
+            log("   | -> Model response or candidates list is empty.")
+    except Exception as e:
+        log(f"   | ⚠️  Could not inspect response object: {e}")
+
+    raw_text = response.text if response and hasattr(response, 'text') else ""
     if not raw_text:
-        log("❌ CRITICAL: Received empty response from the model.")
+        log("❌ CRITICAL: Received empty response from the model after processing.")
         return False, "Error: Agent returned an empty response."
 
-    log("--- 🤖 Gemini's Full Response ---")
+    log("--- 🤖 Gemini's Full Response (as processed text) ---")
     log(raw_text)
-    log("---------------------------------")
+    log("----------------------------------------------------")
 
     plan_match = re.search(r"## Plan\n(.*?)(?=##|EDIT)", raw_text, re.DOTALL)
     plan_text = plan_match.group(1).strip() if plan_match else "No plan was provided."
@@ -159,7 +171,6 @@ def _process_response(response, dry_run=False):
             p.parent.mkdir(parents=True, exist_ok=True)
             log(f"   | -> Absolute path: {p.resolve()}")
 
-            # To prevent write issues, try removing the file first.
             if p.exists():
                 try:
                     p.unlink()
@@ -177,7 +188,11 @@ def _process_response(response, dry_run=False):
             log(f"   | -> Error Details: {e}")
             log(f"   | -> Current working directory: {Path.cwd()}")
             try:
-                log(f"   | -> Current user: {os.getlogin()}")
+                user = os.getlogin()
+                log(f"   | -> Current user: {user}")
+                if isinstance(e, PermissionError):
+                     log("   | -> RECOMMENDATION: This is a permission error. Please try running the agent script with sudo:")
+                     log(f"   | -> sudo ./.venv/bin/python {' '.join(sys.argv)}")
             except Exception:
                 log("   | -> Could not determine current user.")
             return False, f"FATAL: Permission error editing '{filepath_str}': {e}\n\n{detailed_summary}"
@@ -239,9 +254,11 @@ def main():
         sys.exit(1)
     user_prompt = sys.argv[1]
     log(f"   | User Prompt: '{user_prompt}'")
+    log(f"   | Verbose Mode: {'ON' if IS_VERBOSE else 'OFF'}")
+    log(f"   | Dry Run Mode: {'ON' if DRY_RUN else 'OFF'}")
 
     if DRY_RUN:
-        log("🕵️ DRY RUN MODE: Will query Gemini and show the plan, but will not edit any files.")
+        log("🕵️ DRY RUN MODE ACTIVE: Will query Gemini and show the plan, but will not edit any files.")
         _, summary = run_pass(run_id, user_prompt, 1)
         print("\n" + "="*20 + " AGENT DRY RUN SUMMARY " + "="*20)
         print(summary)
@@ -253,7 +270,7 @@ def main():
     passes_done = 0
     while passes_done < MAX_PASSES:
         passes_done += 1
-        log(f"Starting pass {passes_done} of {MAX_PASSES}...")
+        log(f"--- Starting pass {passes_done} of {MAX_PASSES} ---")
         edits_applied, summary = run_pass(run_id, user_prompt, passes_done)
         
         if edits_applied:
@@ -270,9 +287,14 @@ def main():
                 break
             else:
                 log("❌ Tests failed after applying edits. Reverting changes and preparing for next pass.")
-                run_command(["git", "reset", "--hard", "HEAD"])
+                run_command(["git", "reset", "--hard", "HEAD"], check=False) # Allow reset to fail if nothing to reset
         else:
             log(f"⚠️ Pass {passes_done} completed without applying any edits. Agent's reason:\n{summary}")
+            # If the agent is blocked by a write error, stop retrying.
+            if "FATAL: Permission error" in summary:
+                log("   | -> Halting due to fatal permission error. No further passes will be attempted.")
+                break
+
 
     if passes_done >= MAX_PASSES:
         log(f"❌ Max passes ({MAX_PASSES}) reached. Agent stopping without a solution.")
