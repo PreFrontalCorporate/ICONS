@@ -13,9 +13,7 @@ from dotenv import load_dotenv
 
 # --- Configuration ---
 CONTEXT_IGNORE = {".git", ".venv", "node_modules", "__pycache__", ".agent"}
-MAIN_BRANCH = "main"
-MAX_PASSES = 10 # Increased for retry logic
-PUSH_MAIN = os.environ.get("AGENT_SHIP", "0") == "1"
+MAX_PASSES = 10
 IS_VERBOSE = os.environ.get("AGENT_VERBOSE", "0") == "1"
 
 # --- Constants ---
@@ -60,16 +58,19 @@ def run_command(command, check=True):
 def get_repo_context():
     log("🔍 Building repository context...")
     context = []
+    # Use 'git ls-files' as the primary method for accuracy
     ok, files = run_command(["git", "ls-files"])
     if not ok:
         log("⚠️ 'git ls-files' failed. Falling back to directory scan.")
+        # Fallback to scanning all files if git is not available or fails
         files = [str(p) for p in Path().rglob("*") if p.is_file() and not any(part in CONTEXT_IGNORE for part in p.parts)]
+    
     file_list = files.splitlines() if isinstance(files, str) else files
     for filename in file_list:
         try:
             context.append(f"----\n📄 {filename}\n----\n{Path(filename).read_text(encoding='utf-8', errors='ignore')}")
-        except Exception:
-            context.append(f"----\n📄 {filename}\n----\n(could not read file)")
+        except Exception as e:
+            context.append(f"----\n📄 {filename}\n----\n(could not read file: {e})")
     log("✅ Repository context built.")
     return "\n".join(context)
 
@@ -89,6 +90,7 @@ def run_tests():
     return True
 
 def process_response(response):
+    log("🔎 Processing Gemini's response...")
     raw_text = response.text if response and hasattr(response, 'text') else ""
     if not raw_text:
         log("❌ CRITICAL: Received empty response from model.")
@@ -99,30 +101,26 @@ def process_response(response):
         log(raw_text)
         log("---------------------------------")
     
-    plan_match = re.search(r"## Plan\n(.*?)(?=##|EDIT)", raw_text, re.DOTALL)
     summary_match = re.search(r"## Summary of Changes\n(.*?)$", raw_text, re.DOTALL)
     edit_blocks = re.findall(r"EDIT ([\w/.\-]+)\n```[\w]*\n(.*?)\n```", raw_text, re.DOTALL)
 
     if not summary_match or not summary_match.group(1).strip():
-        return {"error": "No summary was provided."}
+        return {"error": "Response was missing a '## Summary of Changes' section."}
     if not edit_blocks:
-        return {"error": "No EDIT blocks were found."}
+        return {"error": "Response did not contain any valid 'EDIT' blocks."}
 
-    return {
-        "plan": plan_match.group(1).strip() if plan_match else "No plan provided.",
-        "summary": summary_match.group(1).strip(),
-        "edits": edit_blocks
-    }
+    log("✅ Response processed successfully.")
+    return {"summary": summary_match.group(1).strip(), "edits": edit_blocks}
 
 def apply_edits(edits):
-    log("✍️ Applying edits...")
+    log("✍️ Applying edits to filesystem...")
     for filepath, content in edits:
         try:
             p = Path(filepath.strip())
             p.parent.mkdir(parents=True, exist_ok=True)
             if p.exists(): p.unlink()
             p.write_text(content, encoding="utf-8")
-            log(f"   | ✅ Wrote to {p.resolve()}")
+            log(f"   | ✅ Wrote {len(content)} chars to {p.resolve()}")
         except Exception as e:
             log(f"❌ CRITICAL WRITE FAILURE for '{p.resolve()}': {e}")
             return False, f"FATAL: Error writing to '{p.resolve()}': {e}"
@@ -150,7 +148,9 @@ def run_pass(user_prompt, memory):
         log("--- 🧠 Prompt to be sent to Gemini ---")
         log(prompt)
         log("--------------------------------------")
-    
+    else:
+        log("🧠 Sending prompt to Gemini...")
+
     try:
         model = genai.GenerativeModel('gemini-1.5-pro-latest')
         return model.generate_content(prompt, generation_config=genai.types.GenerationConfig(temperature=0.0))
@@ -175,7 +175,7 @@ def main():
 
     user_prompt = sys.argv[1] if len(sys.argv) > 1 else ""
     if not user_prompt:
-        log("❌ FATAL: No user prompt provided.")
+        log("❌ FATAL: No user prompt provided. Usage: python agent.py \"<your request>\"")
         sys.exit(1)
 
     pass_count = 0
@@ -186,28 +186,28 @@ def main():
         
         response = run_pass(user_prompt, memory_string)
         if not response:
-            memory_string = f"## Memory\nThe last attempt failed due to an API call error. Please try again."
+            memory_string = f"## Memory\nThe previous attempt failed due to an API call error. Please try again."
             continue
 
         processed_data = process_response(response)
         if "error" in processed_data:
             log(f"⚠️ Pass failed: {processed_data['error']}")
-            memory_string = f"## Memory\nYour last response was invalid: '{processed_data['error']}'. Please re-read the instructions and try again."
+            memory_string = f"## Memory\nYour last response was invalid: '{processed_data['error']}'. Please re-read the instructions carefully and try again."
             continue
 
         ok, message = apply_edits(processed_data["edits"])
         if not ok:
             log(f"⚠️ Pass failed: {message}")
-            memory_string = f"## Memory\nThe last attempt failed with a critical file write error: '{message}'. The environment is likely locked. Please state this in your summary and do not provide an EDIT block."
+            memory_string = f"## Memory\nThe last attempt failed with a critical file write error: '{message}'. This is an environment issue. Please state this in your summary and do not provide an EDIT block."
             continue
 
         if run_tests():
             log("🎉 Agent finished successfully!")
             break
         else:
-            log("❌ Tests failed. Reverting changes and retrying.")
+            log("❌ Tests failed. Reverting changes and preparing for the next attempt.")
             run_command(["git", "reset", "--hard", "HEAD"], check=False)
-            memory_string = f"## Memory\nYour last code edit was applied, but the tests failed. Please analyze the code and propose a different fix."
+            memory_string = f"## Memory\nYour last code edit was correctly applied, but the test suite failed. Please analyze the code and the context again to propose a different solution."
 
     if pass_count >= MAX_PASSES:
         log(f"❌ Max passes ({MAX_PASSES}) reached. Agent stopping.")
