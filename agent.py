@@ -15,8 +15,9 @@ from google.api_core import exceptions as google_exceptions
 
 # --- Configuration ---
 MAX_EXECUTION_PASSES = 25
-MODEL_NAME = "gemini-2.5-pro"  # Explicitly set as requested.
+MODEL_NAME = "gemini-2.5-pro"
 CONTEXT_IGNORE = {".git", ".venv", "node_modules", "__pycache__", ".agent", "dist", "build"}
+AUTO_PUSH = True # SET TO TRUE TO AUTOMATICALLY PUSH CHANGES AND TAGS
 
 # --- Logging & Safety ---
 STATE_DIR = Path(".agent")
@@ -117,10 +118,10 @@ def call_gemini_api(prompt, pass_type):
         return None
 
 def perform_release_steps(goal, summary):
-    """Bumps the version, commits, and tags the release."""
+    """Bumps the version, commits, tags, and optionally pushes the release."""
     log("📦 Starting automated release process...")
     try:
-        # 1. Add all changed files to staging
+        # 1. Add all changed files to staging first
         run_command(["git", "add", "."])
 
         # 2. Read and bump version in package.json
@@ -143,8 +144,16 @@ def perform_release_steps(goal, summary):
         run_command(["git", "tag", tag_name])
         log(f"   | Created Git tag: {tag_name}")
         
-        log("✅ Release steps completed. Ready to push.")
-        log(f"   | To publish and trigger the GitHub Action, run: git push && git push --tags")
+        # 5. Conditionally push to remote
+        if AUTO_PUSH:
+            log("🚀 Auto-push enabled. Pushing changes and tags to remote...")
+            run_command(["git", "push"])
+            run_command(["git", "push", "--tags"])
+            log("✅ Push complete. GitHub Actions should be triggered.")
+        else:
+            log("✅ Release steps completed. Manual push required.")
+            log(f"   | To publish and trigger the GitHub Action, run: git push && git push --tags")
+        
         return new_version, commit_message
     except Exception as e:
         log(f"❌ An error occurred during the release process: {e}")
